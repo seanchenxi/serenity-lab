@@ -1,0 +1,32 @@
+<module>
+	<inherits name="com.google.gwt.i18n.I18N" />
+	<inherits name="com.google.gwt.logging.Logging" />
+	
+	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
+	
+	<replace-with class="com.seanchenxi.gwt.logging.core.handler.SCXConsoleLogHandler">
+		<when-type-is class="com.google.gwt.logging.client.ConsoleLogHandler" />
+		<when-property-is name="gwt.logging.enabled" value="TRUE" />
+	</replace-with>
+	<replace-with
+		class="com.seanchenxi.gwt.logging.core.handler.SCXDevelopmentModeLogHandler">
+		<when-type-is
+			class="com.google.gwt.logging.client.DevelopmentModeLogHandler" />
+		<when-property-is name="gwt.logging.enabled" value="TRUE" />
+	</replace-with>
+	<replace-with
+		class="com.seanchenxi.gwt.logging.core.handler.SCXSystemLogHandler">
+		<when-type-is
+			class="com.google.gwt.logging.client.SystemLogHandler" />
+		<when-property-is name="gwt.logging.enabled" value="TRUE" />
+	</replace-with>
+	<replace-with
+		class="com.seanchenxi.gwt.logging.core.handler.SCXFirebugLogHandler">
+		<when-type-is
+			class="com.google.gwt.logging.client.FirebugLogHandler" />
+		<when-property-is name="gwt.logging.enabled" value="TRUE" />
+	</replace-with>
+	
+	<source path='api' />
+	<source path='core' />
+</module>

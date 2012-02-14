@@ -1,0 +1,31 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+			 xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations"
+			 xmlns:my="urn:import:com.seanchenxi.gwt.serenity.client.view">
+	<g:LayoutPanel>
+		<g:layer left="0px" right="0px" top="0px" height="60px">
+			<g:HTML styleName="post-header top-corner-radius">
+				<h2 class="post-title" ui:field="titleField" />
+				<ul class="post-meta" style="position:absolute;bottom:0;left:0;right:0;">
+					<li class="date" style="position:absolute;bottom:0;left:0;width:190px;" ui:field="dateField" />
+					<li class="comments" style="position:absolute;bottom:0;right:0;width:190px;" ui:field="commentCountField" />
+					<li class="categories" style="position:absolute;bottom:0;left:190px;right:190px;" ui:field="categoryList" />
+				</ul>
+			</g:HTML>
+		</g:layer>
+		<g:layer left="0px" right="0px" top="60px" bottom="0px">
+			<g:ScrollPanel styleName="bottom-corner-radius post-body">
+				<g:HTMLPanel>
+					<div class="post-content" ui:field="contentField"></div>
+					<div class="post-tags" style="margin:10px 0;" ui:field="tagList"></div>
+					<my:DiscussionView ui:field="discussion"/>
+					<my:RespondView ui:field="respond"/>
+				</g:HTMLPanel>
+			</g:ScrollPanel>
+		</g:layer>
+		<g:layer right="0px" top="0px" width="32px" height="32px">
+			<g:Label styleName="close-lbl" ui:field="closeLbl">X</g:Label>
+		</g:layer>
+	</g:LayoutPanel>
+</ui:UiBinder>

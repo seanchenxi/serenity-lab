@@ -1,0 +1,38 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations">
+	<g:HTMLPanel>
+		<h3>Leave a Comment</h3>
+		<p class="desc">
+			Yay! You've decided to leave a comment. That's fantastic! Please keep
+			in mind that comments are moderated.Thanks for dropping by!
+		</p>
+		<div class="clearfix">
+			<p class="input-half">
+				<label for="commentAuthor" class="respond-label">
+					Your name
+					<span class="required">*</span>
+				</label>
+				<g:TextBox styleName="respond-input" tabIndex="1" ui:field="authorField" />
+			</p>
+			<p class="input-half">
+				<label for="email" class="respond-label">
+					Your email
+					<span class="required">*</span>
+				</label>
+				<g:TextBox styleName="respond-input" tabIndex="2" ui:field="emailField" />
+			</p>
+		</div>
+		<div id="message-box">
+			<label for="comment" class="respond-label">
+				Your message
+				<span class="required">*</span>
+			</label>
+			<g:TextArea styleName="respond-input-textarea" tabIndex="3" ui:field="commentField" />
+		</div>
+		<p id="submit-form">
+			<g:Button ui:field="submit" tabIndex="4" >Submit comment</g:Button>
+		</p>
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+	</g:HTMLPanel>
+</ui:UiBinder>

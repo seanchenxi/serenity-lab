@@ -1,0 +1,42 @@
+<module rename-to='serenity'>
+
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name="com.google.gwt.activity.Activity"/>
+  <inherits name="com.google.gwt.place.Place"/>
+  <inherits name="com.google.gwt.i18n.I18N"/>
+  
+  <inherits name='com.seanchenxi.gwt.effect.Effects' />
+  <inherits name="com.seanchenxi.gwt.logging.Logging"/>
+  <inherits name='com.seanchenxi.gwt.wordpress.WpJson'/>
+  <inherits name="com.seanchenxi.gwt.ui.UI"/>
+  
+  <entry-point class='com.seanchenxi.gwt.serenity.client.Serenity'/>
+  
+  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.SerenityLayoutImpl">
+    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.SerenityLayout"/>
+  </replace-with>
+  
+  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.SidebarImpl">
+    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.Sidebar"/>
+  </replace-with>
+  
+  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.ContentListViewImpl">
+    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.ContentListView"/>
+  </replace-with>
+  
+  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.ArticleViewImpl">
+    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.ArticleView"/>
+  </replace-with>
+  
+  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.RespondViewImpl">
+    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.RespondView"/>
+  </replace-with>
+  
+  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.DiscussionViewImpl">
+    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.DiscussionView"/>
+  </replace-with>
+  
+  <source path='client'/>
+  <source path='share'/>
+  
+</module>
