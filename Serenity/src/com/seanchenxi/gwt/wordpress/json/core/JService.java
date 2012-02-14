@@ -15,51 +15,52 @@ abstract class JService {
   private Dictionary jServiceConfig;
   private JsonpRequestBuilder builder;
   private String jServicePath;
- 
-  protected JService(){
+
+  protected JService() {
     builder = new JsonpRequestBuilder();
     builder.setTimeout(20000);
-    try{
-    	jServiceConfig = Dictionary.getDictionary("WPJsonAPIConfig");
-    	jServicePath = jServiceConfig.get("servicePath").trim();
-    	Log.info("[JService] initialized the service path with WPJsonAPIConfig : " + jServicePath);
-    }catch (Exception e) {
-    	jServiceConfig = null;
-    	jServicePath = "/wordpress/rest";
-    	Log.info("[JService] initialized the service path with defaut value : " + jServicePath);
-	}
+    try {
+      jServiceConfig = Dictionary.getDictionary("WPJsonAPIConfig");
+      jServicePath = jServiceConfig.get("servicePath").trim();
+      Log.info("[JService] initialized the service path with WPJsonAPIConfig : " + jServicePath);
+    } catch (Exception e) {
+      jServiceConfig = null;
+      jServicePath = "/api";
+      Log.info("[JService] initialized the service path with defaut value : " + jServicePath);
+    }
   }
-  
-  protected String getServicePath(){
+
+  protected String getServicePath() {
     return jServicePath;
   }
-  
-  protected final <M extends JModel> JRequest request(RequestURL url, AsyncCallback<M> callback){
-    if(url == null || callback == null) throw new NullPointerException();  
+
+  protected final <M extends JModel> JRequest request(RequestURL url, AsyncCallback<M> callback) {
+    if (url == null || callback == null)
+      throw new NullPointerException();
     JsonpRequest<JavaScriptObject> req = null;
     req = builder.requestObject(encode(url), new JAsyncCallback<M>(callback));
     return new JRequestImpl(req);
   }
-  
-  private String encode(RequestURL url){
+
+  private String encode(RequestURL url) {
     String encodedUrl = null;
-    try{
+    try {
       return encodedUrl = URL.encode(url.create(getServicePath()));
-    }finally{
-      Log.finest("["+this.getSimpleClassName()+"] - " + url.getMethod() + " -> " + encodedUrl);
+    } finally {
+      Log.finest("[" + this.getSimpleClassName() + "] - " + url.getMethod() + " -> " + encodedUrl);
     }
   }
-  
-  private String getSimpleClassName(){
+
+  private String getSimpleClassName() {
     String[] name = this.getClass().getName().split("\\.");
-    if(name != null && name.length > 0){
+    if (name != null && name.length > 0) {
       return name[name.length - 1];
     }
     return "JService";
   }
-  
-  private class JAsyncCallback<M extends JModel> implements AsyncCallback<JavaScriptObject>{
-    
+
+  private class JAsyncCallback<M extends JModel> implements AsyncCallback<JavaScriptObject> {
+
     private AsyncCallback<M> callback;
 
     private JAsyncCallback(AsyncCallback<M> callback) {
@@ -68,13 +69,13 @@ abstract class JService {
 
     @Override
     public void onFailure(Throwable caught) {
-      if(callback != null)
+      if (callback != null)
         callback.onFailure(caught);
     }
 
     @Override
     public void onSuccess(JavaScriptObject result) {
-      if(callback != null && result != null){
+      if (callback != null && result != null) {
         JResponse<M> resp = new JResponse<M>(result);
         switch (resp.getStatus()) {
           case OK:
@@ -85,26 +86,28 @@ abstract class JService {
             callback.onFailure(new Throwable(resp.getError()));
             break;
           case UNKNOW:
-        	callback.onFailure(new Throwable(resp.toString()));
-        	break;
+            callback.onFailure(new Throwable(resp.toString()));
+            break;
         }
-      }else{
+      } else {
         callback.onFailure(new Throwable("The returned result is null !"));
       }
     }
-    
+
   }
-  
-  private class JRequestImpl implements JRequest {  
-    private JsonpRequest<JavaScriptObject> requset;  
-    private JRequestImpl(JsonpRequest<JavaScriptObject> requset){
+
+  private class JRequestImpl implements JRequest {
+    private JsonpRequest<JavaScriptObject> requset;
+
+    private JRequestImpl(JsonpRequest<JavaScriptObject> requset) {
       this.requset = requset;
-    }  
+    }
+
     @Override
     public void cancel() {
-      if(requset != null)
+      if (requset != null)
         requset.cancel();
     }
   }
-  
+
 }

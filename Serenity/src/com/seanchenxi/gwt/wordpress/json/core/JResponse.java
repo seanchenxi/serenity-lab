@@ -5,46 +5,46 @@ import com.google.gwt.json.client.JSONObject;
 
 class JResponse<M extends JavaScriptObject> extends JSONObject {
 
-	enum Status {
-		
-		UNKNOW(""), OK("ok"), ERROR("error"), PENDING("pending");
-		
-		private String val;
+  enum Status {
 
-		private Status(String val) {
-			this.val = val;
-		}
+    UNKNOW(""), OK("ok"), ERROR("error"), PENDING("pending");
 
-		public static Status parseValue(String value) {
-			for (Status state : values()) {
-				if (state.val.equalsIgnoreCase(value)) {
-					return state;
-				}
-			}
-			return UNKNOW;
-		}
-	}
+    private String val;
 
-	JResponse(JavaScriptObject result) {
-		super(result);
-	}
+    private Status(String val) {
+      this.val = val;
+    }
 
-	final Status getStatus() {
-		return Status.parseValue(get("status").isString().stringValue());
-	}
+    public static Status parseValue(String value) {
+      for (Status state : values()) {
+        if (state.val.equalsIgnoreCase(value)) {
+          return state;
+        }
+      }
+      return UNKNOW;
+    }
+  }
 
-	final String getError() {
-		return get("error").isString().stringValue();
-	}
+  JResponse(JavaScriptObject result) {
+    super(result);
+  }
 
-	final M getResult() {
-		if (containsKey("post")) {
-			return get("post").isObject().getJavaScriptObject().cast();
-		}
-		if (containsKey("page")) {
-			return get("page").isObject().getJavaScriptObject().cast();
-		}
-		return getJavaScriptObject().cast();
-	}
+  final Status getStatus() {
+    return Status.parseValue(get("status").isString().stringValue());
+  }
+
+  final String getError() {
+    return get("error").isString().stringValue();
+  }
+
+  final M getResult() {
+    if (containsKey("post")) {
+      return get("post").isObject().getJavaScriptObject().cast();
+    }
+    if (containsKey("page")) {
+      return get("page").isObject().getJavaScriptObject().cast();
+    }
+    return getJavaScriptObject().cast();
+  }
 
 }
