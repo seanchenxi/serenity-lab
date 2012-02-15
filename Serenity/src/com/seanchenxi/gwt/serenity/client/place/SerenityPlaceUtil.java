@@ -1,6 +1,5 @@
 package com.seanchenxi.gwt.serenity.client.place;
 
-import com.google.gwt.http.client.URL;
 import com.seanchenxi.gwt.serenity.share.StringPool;
 
 public class SerenityPlaceUtil {
@@ -81,7 +80,7 @@ public class SerenityPlaceUtil {
 			sb.append(PPRE);
 			sb.append(page);
 		}
-		return URL.encode(sb.toString());
+		return sb.toString();
 	}
 	
 	private enum PlaceBuilder {

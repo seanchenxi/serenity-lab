@@ -1,6 +1,0 @@
-<module>
-	<inherits name='com.google.gwt.json.JSON' />
-	<inherits name='com.google.gwt.jsonp.Jsonp' />
-	<inherits name='com.google.gwt.i18n.I18N' />
-	<source path='json' />
-</module>
