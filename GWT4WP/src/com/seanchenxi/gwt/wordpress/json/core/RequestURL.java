@@ -3,6 +3,7 @@ package com.seanchenxi.gwt.wordpress.json.core;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.seanchenxi.gwt.wordpress.json.api.JMethod;
 import com.seanchenxi.gwt.wordpress.json.api.JParameter;
@@ -19,6 +20,7 @@ public class RequestURL {
   private JMethod method;
   private HashMap<String, Object> params;
 
+  private boolean encode;
   private String request;
 
   public RequestURL(JMethod submitcomment) {
@@ -51,6 +53,14 @@ public class RequestURL {
     return this;
   }
 
+  public void setEncode(boolean encode) {
+    this.encode = encode;
+  }
+  
+  public boolean isEncode() {
+    return encode;
+  }
+  
   public String create(String servicePath) {
     if (request == null) {
       StringBuilder sb = new StringBuilder(servicePath);
@@ -68,6 +78,9 @@ public class RequestURL {
         sb.deleteCharAt(sb.lastIndexOf(AND));
       }
       request = sb.toString();
+      if(encode){
+        request = URL.encode(request);
+      }
     }
     return request;
   }

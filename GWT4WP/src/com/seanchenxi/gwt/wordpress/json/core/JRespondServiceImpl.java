@@ -13,7 +13,7 @@ public class JRespondServiceImpl extends JService implements JRespondService {
   public JRequest submitComment(int postId, String name, String email, String content, AsyncCallback<Comment> callback) {
     RequestURL url = new RequestURL(JMethod.SubmitComment);
     url.setParameter(JParameter.POST_ID, postId).setParameter(JParameter.NAME, name).setParameter(
-        JParameter.EMAIL, email).setParameter(JParameter.CONTENT, content);
+        JParameter.EMAIL, email).setParameter(JParameter.CONTENT, content).setEncode(true);
     return request(url, callback);
   }
 

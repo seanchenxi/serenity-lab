@@ -3,7 +3,6 @@ package com.seanchenxi.gwt.wordpress.json.core;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.Dictionary;
 import com.google.gwt.jsonp.client.JsonpRequest;
 import com.google.gwt.jsonp.client.JsonpRequestBuilder;
@@ -28,7 +27,9 @@ abstract class JService {
     if (url == null || callback == null)
       throw new NullPointerException();
     JsonpRequest<JavaScriptObject> req = null;
-    req = builder.requestObject(encode(url), new JAsyncCallback<M>(callback));
+    String urlString = url.create(jServicePath);
+    Log.finest("encode " + url.getMethod() + " call: " + urlString);
+    req = builder.requestObject(urlString, new JAsyncCallback<M>(callback));
     return new JRequestImpl(req);
   }
   
@@ -44,19 +45,6 @@ abstract class JService {
       jServicePath = "/api";
       builder.setTimeout(20000);
       Log.info("initialized the service path with defaut value: " + jServicePath + ", Request Timeout: 20000ms.");
-    }
-  }
-
-  private String getServicePath() {
-    return jServicePath;
-  }
-
-  private String encode(RequestURL url) {
-    String encodedUrl = null;
-    try {
-      return encodedUrl = URL.encode(url.create(getServicePath()));
-    } finally {
-      Log.finest("encode " + url.getMethod() + " call: " + encodedUrl);
     }
   }
 
