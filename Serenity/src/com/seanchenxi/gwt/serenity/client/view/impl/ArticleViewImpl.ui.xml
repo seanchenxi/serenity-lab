@@ -24,7 +24,7 @@
 				</g:HTMLPanel>
 			</g:ScrollPanel>
 		</g:layer>
-		<g:layer right="0px" top="0px" width="32px" height="32px">
+		<g:layer right="0px" top="0px" width="24px" height="24px">
 			<g:Label styleName="close-lbl" ui:field="closeLbl">X</g:Label>
 		</g:layer>
 	</g:LayoutPanel>

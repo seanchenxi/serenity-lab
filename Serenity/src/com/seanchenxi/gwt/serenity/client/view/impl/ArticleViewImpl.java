@@ -101,6 +101,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@Override
 	public void setCommentsCount(int count) {
 		commentCountField.setInnerHTML(count + " comments");
+		discussion.setDiscussionsCount(count);
 	}
 
 	@Override

@@ -8,5 +8,6 @@ public interface DiscussionView extends IsWidget {
 
 	void clearAll();
 	void addDiscussion(int id, String name, Date date, String content);
+  void setDiscussionsCount(int count);
 	
 }

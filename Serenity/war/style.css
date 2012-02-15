@@ -157,6 +157,17 @@ h4 {
 	cursor: default;
 }
 
+#respond h3{
+	margin-top: 1em;
+	border-bottom: 1px solid #CCC;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+	padding-bottom: 0.1em;
+}
+
+#respond .desc{
+	margin: 1em 0;
+}
+
 .respond-label {
 	display: block;
 	font-weight: bold;
@@ -166,6 +177,7 @@ h4 {
 .respond-input-textarea,.respond-input {
 	-moz-transition: border-color 0.3s ease 0s;
 	background-color: #FFFFFF;
+	border: 1px solid #CCC;
 	border: 1px solid rgba(0, 0, 0, 0.1);
 	border-radius: 5px 5px 5px 5px;
 	color: #333333;
@@ -190,6 +202,7 @@ h4 {
 
 .comment-author {
 	display: inline-block;
+	position: relative;
 }
 
 .comment-date {
@@ -198,6 +211,20 @@ h4 {
 	line-height: 1.3em;
 	color: #BCBCBC;
 	margin-left: 20px;
+}
+
+.comment-content {
+	position: relative;
+	border: #CCC;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	padding: 10px 10% 0 2.5%;
+	white-space: pre-line;
+	word-wrap: break-word;
+}
+
+.comment-content.odd {
+	background-color: #FEFEFE;
+	background-color: rgba(0, 0, 0, 0.024);
 }
 
 .unSelectable {
@@ -335,7 +362,7 @@ h4 {
 	-webkit-border-top-right-radius: 8px;
 	-moz-border-radius-bottomleft: 8px;
 	-moz-border-radius-topright: 8px;
-	line-height: 32px;
+	line-height: 24px;
 	cursor: pointer;
 	text-align: center;
 	color: #FFF;
