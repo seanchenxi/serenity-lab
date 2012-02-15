@@ -15,7 +15,7 @@
 			</g:HTML>
 		</g:layer>
 		<g:layer left="0px" right="0px" top="60px" bottom="0px">
-			<g:ScrollPanel styleName="bottom-corner-radius post-body">
+			<g:ScrollPanel styleName="bottom-corner-radius post-body" ui:field="scroller">
 				<g:HTMLPanel>
 					<div class="post-content" ui:field="contentField"></div>
 					<div class="post-tags" style="margin:10px 0;" ui:field="tagList"></div>

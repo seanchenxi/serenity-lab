@@ -14,6 +14,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
 import com.seanchenxi.gwt.serenity.client.view.DiscussionView;
@@ -33,6 +34,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@UiField DivElement contentField;
 	@UiField DivElement tagList;
 	
+	@UiField ScrollPanel scroller;
 	@UiField DiscussionView discussion;
 	@UiField RespondView respond;
 

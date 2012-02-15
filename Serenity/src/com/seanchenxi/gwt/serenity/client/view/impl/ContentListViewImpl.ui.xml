@@ -8,7 +8,7 @@
 			<g:HTML styleName="list-title top-corner-radius" ui:field="titleField" />
 		</g:layer>
 		<g:layer left="0px" right="0px" top="32px" bottom="0px">
-			<g:ScrollPanel styleName="list-body">
+			<g:ScrollPanel styleName="list-body" ui:field="scroller">
 				<g:FlowPanel ui:field="listBody" />
 			</g:ScrollPanel>
 		</g:layer>

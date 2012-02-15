@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
@@ -30,6 +31,7 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	@UiField Label pagingInfoLbl;
 	@UiField Label newer;
 	@UiField Label older;
+	@UiField ScrollPanel scroller;
 	
 	private Presenter presenter;
 	private String highlightId;
@@ -78,6 +80,7 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	
 	@Override
 	public void setPagingInfo(String titleHtml, int offset, int size, int total){
+	  scroller.scrollToTop();
 		titleField.setHTML(titleHtml);
 		int end = Math.min(offset + size, total);
 		pagingInfoLbl.setText(offset + "-" + end + " of " + total);
