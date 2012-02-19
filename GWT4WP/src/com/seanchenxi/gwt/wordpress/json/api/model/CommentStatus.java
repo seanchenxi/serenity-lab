@@ -2,7 +2,7 @@ package com.seanchenxi.gwt.wordpress.json.api.model;
 
 public enum CommentStatus {
   
-  UNKNOW(""), PENDING("pending");
+  UNKNOW(""), PENDING("pending"), OK("ok");
   
   private String value;
 
