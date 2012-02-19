@@ -46,11 +46,27 @@ body {
 	text-shadow: 1px 1px #000;
 }
 
-h1,h2,h3,h4,h5,h6,div {
+h1,h2,h3,h4,h5,h6,div,p {
 	display: block;
 }
 
-a,a:hover {
+ul li{
+	margin-left: 20px;
+}
+
+p{
+	line-height:1.5em;
+	margin-top:3px;
+	margin-bottom: 5px;
+}
+
+a,a:visited {
+    color: #0071BB;
+    text-decoration: underline;
+}
+
+a:hover{
+	color: #ED1E24;
 	text-decoration: none;
 }
 
@@ -87,6 +103,18 @@ h4 {
 .post-body {
 	padding: 10px 15px;
 	background-color: #FFF;
+}
+
+.post-tags {
+	background: transparent url("images/tag.png") left center no-repeat;
+	margin:10px 0;
+	padding-left: 18px;
+}
+
+.post-tags div,
+.post-tags a {
+	display: inline-block;
+	margin:0 3px 0 2px;
 }
 
 .top-corner-radius {

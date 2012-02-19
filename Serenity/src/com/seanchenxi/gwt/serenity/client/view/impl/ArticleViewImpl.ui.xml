@@ -18,7 +18,7 @@
 			<g:ScrollPanel styleName="bottom-corner-radius post-body" ui:field="scroller">
 				<g:HTMLPanel ui:field="mainField">
 					<div class="post-content" ui:field="contentField"></div>
-					<div class="post-tags" style="margin:10px 0;" ui:field="tagList"></div>
+					<g:FlowPanel styleName="post-tags" ui:field="tagList" />
 				</g:HTMLPanel>
 			</g:ScrollPanel>
 		</g:layer>

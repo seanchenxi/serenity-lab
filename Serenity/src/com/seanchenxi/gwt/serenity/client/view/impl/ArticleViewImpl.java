@@ -10,10 +10,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
 import com.seanchenxi.gwt.serenity.client.view.DiscussionView;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
@@ -30,10 +34,10 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@UiField LIElement categoryList;
 	@UiField LIElement commentCountField;
 	@UiField DivElement contentField;
-	@UiField DivElement tagList;
-	
+
 	@UiField ScrollPanel scroller;
 	@UiField HTMLPanel mainField;
+	@UiField FlowPanel tagList;
 	
 	private DiscussionView discussion;
 	private RespondView respond;
@@ -43,6 +47,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	public ArticleViewImpl(){
 		initWidget(uiBinder.createAndBindUi(this));
+		tagList.getElement().getStyle().setBackgroundImage(SerenityResources.IMG.icon_Tag_black().getSafeUri().asString());
 	}
 	
 	@Override
@@ -52,7 +57,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 		categoryList.setInnerHTML(StringPool.BLANK);
 		commentCountField.setInnerHTML(StringPool.BLANK);
 		contentField.setInnerHTML(StringPool.BLANK);
-		tagList.setInnerHTML(StringPool.BLANK);
+		tagList.clear();
 		if(discussion != null){
       mainField.remove(discussion);
       discussion = null;
@@ -94,10 +99,13 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 
 	@Override
 	public void addTag(String anchorHref, String name) {
-		AnchorElement tag = Document.get().createAnchorElement();
+	  if(tagList.getWidgetCount() < 1){
+	    tagList.add(new HTML("<i>Tags:&nbsp;</i>"));
+	  }
+		Anchor tag = new Anchor();
 		tag.setHref(anchorHref);
-		tag.setInnerHTML(name);
-		tagList.appendChild(tag);
+		tag.setHTML(name);
+		tagList.add(tag);
 	}
 	
 	@Override
