@@ -1,7 +1,5 @@
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
-import java.util.Date;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.DivElement;
@@ -9,11 +7,11 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.LIElement;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
@@ -35,20 +33,16 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@UiField DivElement tagList;
 	
 	@UiField ScrollPanel scroller;
-	@UiField DiscussionView discussion;
-	@UiField RespondView respond;
+	@UiField HTMLPanel mainField;
+	
+	private DiscussionView discussion;
+	private RespondView respond;
 
 	private Presenter presenter;
 	private int articleId;
 	
 	public ArticleViewImpl(){
 		initWidget(uiBinder.createAndBindUi(this));
-		respond.getSubmitButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				submitComment();
-			}
-		});
 	}
 	
 	@Override
@@ -59,8 +53,14 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 		commentCountField.setInnerHTML(StringPool.BLANK);
 		contentField.setInnerHTML(StringPool.BLANK);
 		tagList.setInnerHTML(StringPool.BLANK);
-		discussion.clearAll();
-		respond.reset();
+		if(discussion != null){
+      mainField.remove(discussion);
+      discussion = null;
+    }
+		if(respond != null){
+      mainField.remove(respond);
+      respond = null;
+    }
 	}
 	
 	@Override
@@ -103,14 +103,18 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@Override
 	public void setCommentsCount(int count) {
 		commentCountField.setInnerHTML(count + " comments");
-		discussion.setDiscussionsCount(count);
 	}
 
-	@Override
-	public void addComment(int id, String name, Date date, String content) {
-		discussion.addDiscussion(id, name, date, content);
-	}
+  @Override
+  public void setDiscussionView(DiscussionView discussionView) {
+    mainField.add(discussion = discussionView);
+  }
 
+  @Override
+  public void setRespondView(RespondView respondView) {
+    mainField.add(respond = respondView);
+  }
+  
 	@Override
 	public void bindPresenter(Presenter presenter) {
 		this.presenter = presenter;
@@ -120,6 +124,12 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	protected void onLoad() {
 		super.onLoad();
 		getElement().getParentElement().addClassName("shadow corner-radius");
+		if(discussion != null){
+		  mainField.add(discussion);
+		}
+		if(respond != null){
+		  mainField.add(respond);
+		}
 	}
 	
 	@UiHandler("closeLbl")
@@ -127,13 +137,4 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 		presenter.closeView();
 	}
 	
-	private void submitComment(){
-		String name = respond.getAuthorField().getValue();
-		String emailAdr = respond.getEmailField().getValue();
-		String content = respond.getCommentField().getValue();
-		if(name.isEmpty() || emailAdr.isEmpty() || content.isEmpty()){
-			return;
-		}
-		presenter.submitComment(articleId, name, emailAdr, content);
-	}
 }

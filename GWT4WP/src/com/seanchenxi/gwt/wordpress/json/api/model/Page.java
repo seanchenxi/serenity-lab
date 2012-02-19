@@ -115,22 +115,6 @@ public class Page extends JModel {
     setModifiedDateString(JUtil.format(modifiedDate));
   }
 
-  public final native JsArray<Category> getJsArrayCategories()/*-{
-		return this.categories;
-  }-*/;
-
-  public final native void setJsArrayCategories(JsArray<Category> categories)/*-{
-		this.categories = categories;
-  }-*/;
-
-  public final native JsArray<Tag> getJsArrayTags()/*-{
-		return this.tags;
-  }-*/;
-
-  public final native void setJsArrayTags(JsArray<Tag> tags)/*-{
-		this.tags = tags;
-  }-*/;
-
   public final native Author getAuthor()/*-{
 		return this.author;
   }-*/;
@@ -147,14 +131,6 @@ public class Page extends JModel {
     throw new UnsupportedOperationException();
   }
 
-  public final native JsArray<Comment> getJsArrayComments() /*-{
-		return this.comments;
-  }-*/;
-
-  public final native void setJsArrayComments(JsArray<Comment> comments)/*-{
-		this.comments = comments;
-  }-*/;
-
   public final ArrayList<Attachment> getAttachments() {
     return JUtil.convert(getJsArrayAttachments());
   }
@@ -164,14 +140,6 @@ public class Page extends JModel {
     throw new UnsupportedOperationException();
   }
 
-  public final native JsArray<Attachment> getJsArrayAttachments() /*-{
-		return this.attachments;
-  }-*/;
-
-  public final native void setJsArrayAttachments(JsArray<Attachment> attachments)/*-{
-		this.attachments = attachments;
-  }-*/;
-
   public final native int getCommentCount()/*-{
 		return this.comment_count;
   }-*/;
@@ -179,13 +147,53 @@ public class Page extends JModel {
   public final native void setCommentCount(int number)/*-{
 		this.comment_count = number;
   }-*/;
+  
+  public final PostCommentStatus getCommentStatus(){
+    return PostCommentStatus.parseValue(getCommentStatusString());
+  }
 
-  public final native String getCommentStatus()/*-{
-		return this.comment_status;
+  public final void setPostCommentStatus(PostCommentStatus status){
+    setCommentStatusString(status.getValue());
+  }
+  
+  protected final native JsArray<Category> getJsArrayCategories()/*-{
+    return this.categories;
+  }-*/;
+  
+  protected final native void setJsArrayCategories(JsArray<Category> categories)/*-{
+    this.categories = categories;
+  }-*/;
+  
+  protected final native JsArray<Tag> getJsArrayTags()/*-{
+    return this.tags;
+  }-*/;
+  
+  protected final native void setJsArrayTags(JsArray<Tag> tags)/*-{
+    this.tags = tags;
+  }-*/;
+  
+  protected final native JsArray<Comment> getJsArrayComments() /*-{
+    return this.comments;
+  }-*/;
+  
+  protected final native void setJsArrayComments(JsArray<Comment> comments)/*-{
+    this.comments = comments;
+  }-*/;
+  
+  protected final native JsArray<Attachment> getJsArrayAttachments() /*-{
+    return this.attachments;
+  }-*/;
+  
+  protected final native void setJsArrayAttachments(JsArray<Attachment> attachments)/*-{
+    this.attachments = attachments;
   }-*/;
 
-  public final native void setCommentStatus(String commentStatus)/*-{
-		this.comment_status = commentStatus;
+  protected final native String getCommentStatusString()/*-{
+    return this.comment_status;
   }-*/;
-
+  
+  protected final native void setCommentStatusString(String commentStatus)/*-{
+    this.comment_status = commentStatus;
+  }-*/;
+  
 }
