@@ -95,7 +95,6 @@ class JSON_API_Response {
   }
   
   function callback($callback, $result) {
-    if (substr_count($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')) ob_start("ob_gzhandler"); else ob_start();
     $charset = get_option('blog_charset');
     if (!headers_sent()) {
       header('HTTP/1.1 200 OK', true);
