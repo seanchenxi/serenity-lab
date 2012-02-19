@@ -8,6 +8,7 @@ import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.i18n.client.Dictionary;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.resource.message.MessageResources;
+import com.seanchenxi.gwt.serenity.client.util.MD5;
 
 public class SerenityUtil {
 	
@@ -35,6 +36,12 @@ public class SerenityUtil {
 	
 	public static String toDateTimeString(Date date) {
 		return TimerFormatter.format(date);
+	}
+	
+	public static String getMD5(String string){
+	  if(string == null || string.isEmpty())
+	    return null;
+	  return MD5.encode(string.trim().toLowerCase());
 	}
 	
 }
