@@ -113,7 +113,6 @@ public class SidebarImpl implements Sidebar {
 	@Override
 	public void setSeachValue(String slug) {
 		searchBox.setSeachValue(slug);
-		updateSelectionForPlace("search", null);
 	}
 	
 }

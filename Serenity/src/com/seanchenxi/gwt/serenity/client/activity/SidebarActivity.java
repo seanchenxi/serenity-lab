@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.SerenityFactory;
 import com.seanchenxi.gwt.serenity.client.place.AboutPlace;
+import com.seanchenxi.gwt.serenity.client.place.ArticlePlace;
 import com.seanchenxi.gwt.serenity.client.place.CategoryPlace;
 import com.seanchenxi.gwt.serenity.client.place.HomePlace;
 import com.seanchenxi.gwt.serenity.client.place.SearchPlace;
@@ -68,10 +69,15 @@ public class SidebarActivity extends AbstractActivity implements Sidebar.Present
 		this.place = place;
 		if (place instanceof SearchPlace){
 			sidebar.setSeachValue(((SearchPlace) place).getSlug());
+			sidebar.updateSelectionForPlace("search", null);
 		} else {
 			sidebar.setSeachValue("");
 			if(place instanceof SlugPlace) {
-				sidebar.updateSelectionForPlace(place.getPrefix(), ((SlugPlace) place).getSlug());
+			  String prefix = place.getPrefix();
+			  if(place instanceof ArticlePlace){
+			    prefix = "home";
+			  }
+				sidebar.updateSelectionForPlace(prefix, ((SlugPlace) place).getSlug());
 			}else{
 				sidebar.updateSelectionForPlace(place.getPrefix(), null);
 			}
