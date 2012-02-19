@@ -1,0 +1,4 @@
+1. Treat the logged in user post comments case. Logged in user can be found in cookies.
+2. Treat comment error case: 
+   - Duplicate comment (click submit twice), server returned an error html page.
+3. Maybe show differently for logged in user.

@@ -227,6 +227,12 @@ h4 {
 	background-color: rgba(0, 0, 0, 0.024);
 }
 
+.pending-msg{
+	font-size: small;
+	font-style: oblique;
+	color: red;	
+}
+
 .unSelectable {
 	-webkit-user-select: none;
 	-khtml-user-select: none;

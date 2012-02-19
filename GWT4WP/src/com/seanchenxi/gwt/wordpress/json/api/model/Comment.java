@@ -73,4 +73,20 @@ public class Comment extends JModel {
 		this.author = author;
   }-*/;
 
+  public final native String getStatusString()/*-{
+    return this.status;
+  }-*/;
+
+  public final native void setStatusString(String status)/*-{
+    this.status = status;
+  }-*/;
+  
+  public final CommentStatus getStatus(){
+    return CommentStatus.parseValue(getStatusString());
+  }
+  
+  public final void setStatus(CommentStatus status){
+    setStatusString(status.getValue());
+  }
+
 }

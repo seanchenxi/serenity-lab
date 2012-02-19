@@ -14,6 +14,7 @@ import com.seanchenxi.gwt.serenity.client.view.ArticleView;
 import com.seanchenxi.gwt.wordpress.json.WPJsonAPI;
 import com.seanchenxi.gwt.wordpress.json.api.model.Category;
 import com.seanchenxi.gwt.wordpress.json.api.model.Comment;
+import com.seanchenxi.gwt.wordpress.json.api.model.CommentStatus;
 import com.seanchenxi.gwt.wordpress.json.api.model.Post;
 import com.seanchenxi.gwt.wordpress.json.api.model.Tag;
 import com.seanchenxi.gwt.wordpress.json.api.service.JCoreService;
@@ -44,11 +45,15 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
 	public void submitComment(int articleId, String name, String email,
 			String content) {
 		WPJsonAPI.get().getRespondService().submitComment(articleId, name, email, content, new AsyncCallback<Comment>() {
-			
+		  
 			@Override
 			public void onSuccess(Comment result) {
 				ArticleView view = clientFactory.getArticleView();
-				view.addComment(result.getId(), result.getName(), result.getDate(), result.getContent());
+				String content = result.getContent();
+				if(result.getStatus().equals(CommentStatus.PENDING)){
+				  content = "<p class=\"pending-msg\">Your comment is awaiting moderation.</p>" + content;
+				}
+				view.addComment(result.getId(), result.getName(), result.getDate(), content);
 			}
 			
 			@Override
