@@ -5,7 +5,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
@@ -22,7 +21,6 @@ public class SidebarImpl implements Sidebar {
 	
 	private NavigationBar menu;
 	private PopupLabelBox catPopup;
-	private PopupPanel searchPop = new PopupPanel(true, true);
 	private SearchBox searchBox;
 	
 	public SidebarImpl(){
@@ -33,10 +31,8 @@ public class SidebarImpl implements Sidebar {
 		item.setId("home");
 		menu.addItem(item);
 		
-		searchPop = new PopupPanel(true, true);
-		searchPop.setStyleName("popSearchBox");
 		searchBox = new SearchBox();
-		searchPop.setWidget(searchBox);
+		searchBox.setFieldWidth("250px");
 		searchBox.addSearchHandler(new SearchEvent.Handler() {
 			@Override
 			public void onSearch(SearchEvent event) {
@@ -48,8 +44,8 @@ public class SidebarImpl implements Sidebar {
 		item.addClickHandler(new ClickHandler() {			
 			@Override
 			public void onClick(ClickEvent event) {
-				searchPop.show();
-				searchPop.center();
+			  searchBox.show();
+        searchBox.center();
 			}
 		});
 		menu.addItem(item);

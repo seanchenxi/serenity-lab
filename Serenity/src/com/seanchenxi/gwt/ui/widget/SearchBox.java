@@ -12,13 +12,13 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.seanchenxi.gwt.ui.event.SearchEvent;
 import com.seanchenxi.gwt.ui.event.SearchEvent.HasSearchHandlers;
 
-public class SearchBox extends Composite implements FocusHandler,
+public class SearchBox extends PopupPanel implements FocusHandler,
 		KeyUpHandler, ClickHandler, HasSearchHandlers, SearchEvent.Handler {
 
 	private FlowPanel container;
@@ -27,8 +27,10 @@ public class SearchBox extends Composite implements FocusHandler,
 	private Button button;
 
 	public SearchBox() {
-		super();
-		initWidget(container = new FlowPanel());
+		super(true, true);
+		setWidget(container = new FlowPanel());
+		setStyleName("popSearchBox");
+		
 		container.add(field = new TextBox());
 		container.add(button = new Button("Search"));
 		
@@ -91,9 +93,16 @@ public class SearchBox extends Composite implements FocusHandler,
 
 	@Override
 	public void onKeyUp(KeyUpEvent event) {
-		if(KeyCodes.KEY_ENTER == event.getNativeKeyCode()){
-			button.click();
-		}
+	  switch (event.getNativeKeyCode()) {
+      case KeyCodes.KEY_ENTER:
+        if(field.getValue() != null && !field.getValue().isEmpty()){
+          button.click();
+        }
+        break;
+      case KeyCodes.KEY_ESCAPE:
+        hide();
+        break;
+    }
 	}
 
 	@Override
@@ -106,4 +115,10 @@ public class SearchBox extends Composite implements FocusHandler,
 		return addHandler(handler, SearchEvent.getType());
 	}
 	
+	@Override
+	public void show() {
+	  super.show();
+	  setFocus(true);
+	}
+
 }
