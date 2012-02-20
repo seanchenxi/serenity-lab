@@ -32,6 +32,10 @@ public class Comment extends JModel {
   public final native void setURL(String url)/*-{
 		this.url = url;
   }-*/;
+  
+  public final native String getGravatarURL() /*-{
+    return this.gravatar;
+  }-*/;
 
   public final native String getContent()/*-{
 		return this.content;
