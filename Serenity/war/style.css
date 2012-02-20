@@ -100,6 +100,28 @@ h4 {
 	background-color: #FFF;
 }
 
+.post-meta .date{
+	position:absolute;
+	bottom:0;
+	left:0;
+	width:190px;
+}
+
+.post-meta .comments{
+	position:absolute;
+	bottom:0;
+	right:0;
+	width:190px;
+	cursor: pointer;
+}
+
+.post-meta .categories{
+	position:absolute;
+	bottom:0;
+	left:190px;
+	right:190px;
+}
+
 .post-body {
 	padding: 10px 15px;
 	background-color: #FFF;

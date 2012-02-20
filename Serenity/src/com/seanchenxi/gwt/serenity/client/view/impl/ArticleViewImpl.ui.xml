@@ -5,14 +5,14 @@
 			 xmlns:my="urn:import:com.seanchenxi.gwt.serenity.client.view">
 	<g:LayoutPanel>
 		<g:layer left="0px" right="0px" top="0px" height="60px">
-			<g:HTML styleName="post-header top-corner-radius">
+			<g:HTMLPanel styleName="post-header top-corner-radius">
 				<h2 class="post-title" ui:field="titleField" />
-				<ul class="post-meta" style="position:absolute;bottom:0;left:0;right:0;">
-					<li class="date" style="position:absolute;bottom:0;left:0;width:190px;" ui:field="dateField" />
-					<li class="comments" style="position:absolute;bottom:0;right:0;width:190px;" ui:field="commentCountField" />
-					<li class="categories" style="position:absolute;bottom:0;left:190px;right:190px;" ui:field="categoryList" />
-				</ul>
-			</g:HTML>
+				<div class="post-meta" style="text-align:center;">
+					<g:Label styleName="date" ui:field="dateField" />
+					<g:Label styleName="comments" ui:field="commentCountField"/>
+					<g:FlowPanel styleName="categories" ui:field="categoryList" />
+				</div>
+			</g:HTMLPanel>
 		</g:layer>
 		<g:layer left="0px" right="0px" top="60px" bottom="0px">
 			<g:ScrollPanel styleName="bottom-corner-radius post-body" ui:field="scroller">
