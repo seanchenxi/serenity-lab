@@ -2,3 +2,4 @@
 2. Treat comment error case: 
    - Duplicate comment (click submit twice), server returned an error html page.
 3. Maybe show differently for logged in user.
+4. Prepare Google Ajax Crawl
