@@ -82,7 +82,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       discussionView.clearAll();
       discussionView.setDiscussionsCount(post.getCommentCount());
       for(Comment cmt : post.getComments()){
-        discussionView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getDate(), cmt.getContent());
+        discussionView.addDiscussion(cmt.getId(), cmt.getName(), cmt.getDate(), cmt.getContent());
       }
       view.setDiscussionView(discussionView);
     }
@@ -111,9 +111,9 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
         DiscussionView view = clientFactory.getDiscussionView();
         String content = result.getContent();
         if(result.getStatus().equals(CommentStatus.PENDING)){
-          content = "<p class=\"pending-discussion\">Your comment is awaiting moderation.</p>" + content;
+          content = "<p class=\"pending-msg\">Your comment is awaiting moderation.</p>" + content;
         }
-        view.addDiscussion(result.getId(), result.getGravatarURL(), result.getName(), result.getDate(), content);
+        view.addDiscussion(result.getId(), result.getName(), result.getDate(), content);
       }
       
       @Override

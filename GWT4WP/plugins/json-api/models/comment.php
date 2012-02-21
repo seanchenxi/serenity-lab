@@ -5,7 +5,6 @@ class JSON_API_Comment {
   var $id;      // Integer
   var $name;    // String
   var $url;     // String
-  var $gravatar;// String
   var $date;    // String
   var $content; // String
   var $parent;  // Integer
@@ -26,7 +25,6 @@ class JSON_API_Comment {
     $this->id = (int) $wp_comment->comment_ID;
     $this->name = $wp_comment->comment_author;
     $this->url = $wp_comment->comment_author_url;
-    $this->gravatar = "http://www.gravatar.com/avatar/".md5(strtolower($comment->comment_author_email));
     $this->date = date($date_format, strtotime($wp_comment->comment_date));
     $this->content = $content;
     $this->parent = (int) $wp_comment->comment_parent;
