@@ -7,7 +7,7 @@
 		<g:layer left="0px" right="0px" top="0px" height="60px">
 			<g:HTMLPanel styleName="post-header top-corner-radius">
 				<h2 class="post-title" ui:field="titleField" />
-				<div class="post-meta" style="text-align:center;">
+				<div class="post-meta">
 					<g:Label styleName="date" ui:field="dateField" />
 					<g:Label styleName="comments" ui:field="commentCountField"/>
 					<g:FlowPanel styleName="categories" ui:field="categoryList" />
