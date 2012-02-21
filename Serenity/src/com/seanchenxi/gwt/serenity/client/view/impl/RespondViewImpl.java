@@ -20,9 +20,11 @@ public class RespondViewImpl extends Composite implements RespondView {
 
 	@UiField TextBox authorField;
 	@UiField TextBox emailField;
+	@UiField TextBox urlField;
 	@UiField TextArea commentField;
 	
 	private int articleId;
+	private int commentId;
 	
 	private Presenter presenter;
 	
@@ -35,13 +37,19 @@ public class RespondViewImpl extends Composite implements RespondView {
 	public void setArticleId(int articleId) {
     this.articleId = articleId;
   }
-
+	
+	@Override
+	public void setCommentId(int commentId) {
+    this.commentId = commentId;
+  }
+	 
 	@Override
 	public void reset() {
 		authorField.setValue(StringPool.BLANK);
 		emailField.setValue(StringPool.BLANK);
 		commentField.setValue(StringPool.BLANK);
 		articleId = -1;
+		commentId = 0;
 	}
 
   @Override
@@ -55,10 +63,11 @@ public class RespondViewImpl extends Composite implements RespondView {
       String name = authorField.getValue();
       String emailAdr = emailField.getValue();
       String content = commentField.getValue();
+      String url = urlField.getValue();
       if(name.isEmpty() || emailAdr.isEmpty() || content.isEmpty()){
         return;
       }
-      presenter.submitResponse(articleId, name, emailAdr, content);
+      presenter.sendResponse(articleId, name, emailAdr, url, content, commentId);
     }
   }
 	

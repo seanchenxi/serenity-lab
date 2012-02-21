@@ -48,17 +48,29 @@ public enum JParameter {
     public String toString() {
       return "name";
     }
-  }, 
+  },
   EMAIL {
     @Override
     public String toString() {
       return "email";
     }
   }, 
+  URL {
+    @Override
+    public String toString() {
+      return "url";
+    }
+  }, 
   CONTENT {
     @Override
     public String toString() {
       return "content";
+    }
+  }, 
+  PARENT {
+    @Override
+    public String toString() {
+      return "parent";
     }
   }, 
   POST_ID {

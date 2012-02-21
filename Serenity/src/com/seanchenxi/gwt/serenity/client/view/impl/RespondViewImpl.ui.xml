@@ -22,6 +22,12 @@
 				</label>
 				<g:TextBox styleName="respond-input" tabIndex="2" ui:field="emailField" />
 			</p>
+			<p class="input-half">
+				<label for="url" class="respond-label">
+					Your website
+				</label>
+				<g:TextBox styleName="respond-input" tabIndex="2" ui:field="urlField" />
+			</p>
 		</div>
 		<div id="message-box">
 			<label for="comment" class="respond-label">

@@ -103,8 +103,8 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
   }
 	 
   @Override
-  public void submitResponse(int articleId, String name, String email, String content) {
-    WPJsonAPI.get().getRespondService().submitComment(articleId, name, email, content, new AsyncCallback<Comment>() {
+  public void sendResponse(int articleId, String name, String email, String url, String content, int parentId) {
+    WPJsonAPI.get().getRespondService().submitComment(articleId, name, email, url, content, parentId, new AsyncCallback<Comment>() {
       
       @Override
       public void onSuccess(Comment result) {
