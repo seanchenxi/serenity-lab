@@ -1,4 +1,5 @@
 <module>
   <source path='event'/>
   <source path='widget'/>
+  <source path='resource'/>
 </module>

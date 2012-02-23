@@ -253,6 +253,12 @@ h2.post-title {
 	position: relative;
 	margin: 0 0 1.625em 0;
 }
+.discussion-meta {
+	margin:0 0 2px 2px;
+	padding:0;
+	height:32px;
+	clear:both;
+}
 
 .discussion-meta img.avatar {
 	display: inline-block;
@@ -264,17 +270,25 @@ h2.post-title {
 	-moz-border-radius: 2px;
 }
 
-.discussion-author {
+.discussion-meta h4.discussion-author {
 	display: inline-block;
 	position: relative;
+	bottom: 5px;
+	padding: 0;
+}
+
+.discussion-meta h4 a{
+	text-decoration: none;
 }
 
 .discussion-date {
 	display: inline-block;
+	position: relative;
 	font-size: 0.9em;
 	line-height: 1.3em;
 	color: #BCBCBC;
-	margin-left: 20px;
+	margin-left: 15px;
+	bottom: 5px;
 }
 
 .discussion-content {
@@ -305,6 +319,22 @@ h2.post-title {
 	line-height:1em;
 	color:#F0F0F0; 
 	color:rgba(0, 0, 0, 0.05);
+}
+
+.discussion.child-1 {
+	margin-left:20px;
+}
+
+.discussion.child-2 {
+	margin-left:40px;
+}
+
+.discussion.child-3 {
+	margin-left:60px;
+}
+
+.discussion.child-4 {
+	margin-left:80px;
 }
 
 /*
@@ -518,4 +548,27 @@ h2.post-title {
 
 .popLabelBox-label:hover,.popLabelBox-label.selected {
 	background-color: #668CFF;
+}
+
+
+/*
+ Message Box
+*/
+.MessageBox {
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	box-shadow: 1px 1px 8px 1px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 1px 1px 8px 1px rgba(0, 0, 0, 0.4);
+	-webkit-box-shadow: 1px 1px 8px 1px rgba(0, 0, 0, 0.4);
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	background-color: #222;
+	background-color: rgba(25, 25, 25, 0.92);
+	color: #FFFFFF;
+}
+
+.MessageBox .Caption {
+	cursor: move;
+	padding-left: 10px;
+	font-weight: bold;
 }

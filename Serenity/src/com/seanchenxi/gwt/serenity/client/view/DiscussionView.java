@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface DiscussionView extends IsWidget {
 
 	void clearAll();
-	void addDiscussion(int id, String gravatar, String name, Date date, String content);
+	void addDiscussion(int id, String gravatar, String name, String url, String content, Date date, int parentId);
   void setDiscussionsCount(int count);
 	
 }

@@ -241,6 +241,37 @@ class JSON_API_Introspector {
       $this->attach_child_posts($child);
     }
   }
+
+  public function get_cookie_name() {
+    if ( isset($_COOKIE['comment_author_'.COOKIEHASH]) ) {
+      $cookie_author = apply_filters('pre_comment_author_name', $_COOKIE['comment_author_'.COOKIEHASH]);
+      $cookie_author = stripslashes($cookie_author);
+      $cookie_author = esc_attr($cookie_author);
+      return $comment_author;
+    }
+    return null;
+  }
+
+  public function get_cookie_email() {
+    if ( isset($_COOKIE['comment_author_email_'.COOKIEHASH]) ) {
+      $cookie_author_email = apply_filters('pre_comment_author_email', $_COOKIE['comment_author_email_'.COOKIEHASH]);
+      $cookie_author_email = stripslashes($comment_author_email);
+      $cookie_author_email = esc_attr($comment_author_email);
+      return $cookie_author_email;
+    }
+    return null;
+  }
+
+  public function get_gravatar($email) {
+    $hash = md5($email);
+    $uri = 'http://www.gravatar.com/avatar/' . $hash;
+    $headers = @get_headers($uri.'?d=404');
+    if (!preg_match("|200|", $headers[0])) {
+      return "";
+    } else {
+      return $uri;
+    }
+  }
   
   protected function get_category_object($wp_category) {
     if (!$wp_category) {

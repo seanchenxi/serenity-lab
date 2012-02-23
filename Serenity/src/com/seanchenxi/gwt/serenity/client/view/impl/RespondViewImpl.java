@@ -1,6 +1,7 @@
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -9,8 +10,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
 import com.seanchenxi.gwt.serenity.share.StringPool;
+import com.seanchenxi.gwt.ui.widget.MessageBox;
 
 public class RespondViewImpl extends Composite implements RespondView {
 
@@ -60,14 +63,36 @@ public class RespondViewImpl extends Composite implements RespondView {
   @UiHandler("submit")
   void onSubmintResponse(ClickEvent event){
     if(presenter != null && articleId != -1 && isVisible()){
-      String name = authorField.getValue();
-      String emailAdr = emailField.getValue();
-      String content = commentField.getValue();
-      String url = urlField.getValue();
-      if(name.isEmpty() || emailAdr.isEmpty() || content.isEmpty()){
-        return;
+      if(validate()){
+        presenter.sendResponse(articleId, authorField.getValue(), emailField.getValue(), urlField.getValue(), commentField.getValue(), commentId);
       }
-      presenter.sendResponse(articleId, name, emailAdr, url, content, commentId);
+    }
+  }
+  
+  private boolean validate(){
+    final String name = authorField.getValue();
+    final String emailAdr = emailField.getValue();
+    final String content = commentField.getValue();
+    if(name.isEmpty() || content.isEmpty() || !SerenityUtil.isValidEmail(emailAdr)){
+      MessageBox.alert(
+          "Requires Information", 
+          "Please correctly fill the required fields (name, email, message)", 
+          new ScheduledCommand() { 
+            @Override
+            public void execute() {
+              if(name.isEmpty()) {
+                authorField.setFocus(true);
+              } else if(!SerenityUtil.isValidEmail(emailAdr)) {
+                emailField.setFocus(true);
+                emailField.selectAll();
+              } else if(content.isEmpty()) {
+                commentField.setFocus(true);
+              } 
+            }
+      });
+      return false;
+    }else{
+      return true;
     }
   }
 	

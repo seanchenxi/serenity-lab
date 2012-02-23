@@ -44,4 +44,12 @@ public class SerenityUtil {
 	  return MD5.encode(string.trim().toLowerCase());
 	}
 	
+	public static boolean isValidEmail(String email){
+	  if(email == null || email.isEmpty()) return false;
+	  if(email.length() < 6) return false;
+	  if(email.indexOf("@") == -1) return false;
+	  if(email.indexOf(".") == -1) return false;
+	  return true;
+	}
+	
 }

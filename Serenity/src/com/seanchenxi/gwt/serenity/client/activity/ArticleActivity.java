@@ -4,6 +4,7 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.Image;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.SerenityFactory;
 import com.seanchenxi.gwt.serenity.client.SerenityUtil;
@@ -82,7 +83,8 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       discussionView.clearAll();
       discussionView.setDiscussionsCount(post.getCommentCount());
       for(Comment cmt : post.getComments()){
-        discussionView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getDate(), cmt.getContent());
+        Image.prefetch(cmt.getGravatarURL()); // prefetch gravatar  
+        discussionView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getURL(), cmt.getContent(), cmt.getDate(), cmt.getParentId());
       }
       view.setDiscussionView(discussionView);
     }
@@ -113,7 +115,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
         if(result.getStatus().equals(CommentStatus.PENDING)){
           content = "<p class=\"pending-discussion\">Your comment is awaiting moderation.</p>" + content;
         }
-        view.addDiscussion(result.getId(), result.getGravatarURL(), result.getName(), result.getDate(), content);
+        view.addDiscussion(result.getId(), result.getGravatarURL(), result.getName(), result.getURL(), content, result.getDate(), result.getParentId());
       }
       
       @Override
