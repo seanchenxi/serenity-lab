@@ -6,7 +6,7 @@ import com.google.gwt.place.shared.PlaceController;
 import com.google.web.bindery.event.shared.EventBus;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
-import com.seanchenxi.gwt.serenity.client.view.DiscussionView;
+import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
 import com.seanchenxi.gwt.serenity.client.view.SerenityLayout;
 import com.seanchenxi.gwt.serenity.client.view.Sidebar;
@@ -20,7 +20,7 @@ public class SerenityFactory {
 	private final Sidebar sidebar;
 	private final ContentListView contentList;
 	private final ArticleView article;
-	private final DiscussionView discussion;
+	private final DiscussionListView discussion;
 	private final RespondView respond;
 
 	public SerenityFactory() {	
@@ -31,7 +31,7 @@ public class SerenityFactory {
 		sidebar = GWT.create(Sidebar.class);
 		contentList = GWT.create(ContentListView.class);
 		article = GWT.create(ArticleView.class);
-		discussion = GWT.create(DiscussionView.class);
+		discussion = GWT.create(DiscussionListView.class);
 		respond = GWT.create(RespondView.class);
 	}
 
@@ -63,7 +63,7 @@ public class SerenityFactory {
     return respond;
   }
 	
-	public DiscussionView getDiscussionView() {
+	public DiscussionListView getDiscussionView() {
     return discussion;
   }
 

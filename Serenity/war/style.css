@@ -1,3 +1,16 @@
+/* 
+
+Theme Name: Serenity-X
+Theme URI: http://seanchenxi.com/
+Description: CHEN Xi's GWT made themplate
+Version: 1
+Author: CHEN Xi	
+Author URI: http://seanchenxi.com/
+
+*/
+
+@charset "utf-8";
+
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
 	{
 	font-family: inherit;
@@ -312,6 +325,7 @@ h2.post-title {
 }
 
 .discussion-content .discussion-counter{
+	display:none;
 	position:absolute;
 	right:10px;
 	top:10px;

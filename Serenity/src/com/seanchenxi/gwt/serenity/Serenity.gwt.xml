@@ -31,8 +31,8 @@
     <when-type-is class="com.seanchenxi.gwt.serenity.client.view.RespondView"/>
   </replace-with>
   
-  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.DiscussionViewImpl">
-    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.DiscussionView"/>
+  <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.DiscussionListViewImpl">
+    <when-type-is class="com.seanchenxi.gwt.serenity.client.view.DiscussionListView"/>
   </replace-with>
   
   <source path='client'/>

@@ -19,12 +19,4 @@ public interface MessageResources extends Constants {
 	@DefaultStringValue("Content:")
 	String lbl_content();
 	
-	@DefaultStringValue("auto")
-	String css_auto();
-	
-	@DefaultStringValue("100%")
-	String css_100();
-	
-	@DefaultStringValue("0")
-	String css_0();
 }

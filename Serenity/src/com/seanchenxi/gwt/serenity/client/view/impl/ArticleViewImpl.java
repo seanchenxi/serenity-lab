@@ -16,7 +16,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
-import com.seanchenxi.gwt.serenity.client.view.DiscussionView;
+import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
 import com.seanchenxi.gwt.serenity.share.StringPool;
 
@@ -36,7 +36,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@UiField DivElement contentField;
 	@UiField FlowPanel tagList;
 	
-	private DiscussionView discussion;
+	private DiscussionListView discussion;
 	private RespondView respond;
 
 	private Presenter presenter;
@@ -102,7 +102,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	}
 
   @Override
-  public void setDiscussionView(DiscussionView discussionView) {
+  public void setDiscussionView(DiscussionListView discussionView) {
     mainField.add(discussion = discussionView);
   }
 

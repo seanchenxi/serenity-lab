@@ -12,7 +12,7 @@ import com.seanchenxi.gwt.serenity.client.event.ArticleCloseEvent;
 import com.seanchenxi.gwt.serenity.client.place.ArticlePlace;
 import com.seanchenxi.gwt.serenity.client.place.SerenityPlaceUtil;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
-import com.seanchenxi.gwt.serenity.client.view.DiscussionView;
+import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
 import com.seanchenxi.gwt.wordpress.json.WPJsonAPI;
 import com.seanchenxi.gwt.wordpress.json.api.model.Category;
@@ -50,7 +50,6 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
 			public void onFailure(Throwable caught) {
 			  showError();
 			}
-
 		});
 	}
 
@@ -79,7 +78,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
     if(PostCommentStatus.OPEN.equals(post.getCommentStatus())
         || (PostCommentStatus.CLOSED.equals(post.getCommentStatus()) 
             && post.getCommentCount() > 0)){
-      DiscussionView discussionView = clientFactory.getDiscussionView();
+      DiscussionListView discussionView = clientFactory.getDiscussionView();
       discussionView.clearAll();
       discussionView.setDiscussionsCount(post.getCommentCount());
       for(Comment cmt : post.getComments()){
@@ -88,7 +87,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       }
       view.setDiscussionView(discussionView);
     }
- // Check and show comment list
+    // Check and show comment list
     if(PostCommentStatus.OPEN.equals(post.getCommentStatus())){
       RespondView respondView = clientFactory.getRespondView();
       respondView.reset();
@@ -110,7 +109,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       
       @Override
       public void onSuccess(Comment result) {
-        DiscussionView view = clientFactory.getDiscussionView();
+        DiscussionListView view = clientFactory.getDiscussionView();
         String content = result.getContent();
         if(result.getStatus().equals(CommentStatus.PENDING)){
           content = "<p class=\"pending-discussion\">Your comment is awaiting moderation.</p>" + content;

@@ -10,7 +10,7 @@ public interface ArticleView extends IsWidget {
 	void setContent(String content);
 	void setCommentsCount(int count);
 	
-  void setDiscussionView(DiscussionView discussionView);
+  void setDiscussionView(DiscussionListView discussionView);
   void setRespondView(RespondView respondView);
 
 	void addCategory(String slug, String name);
