@@ -334,18 +334,39 @@ h2.post-title {
 	color:rgba(0, 0, 0, 0.05);
 }
 
+.discussion-content .discussion-reply{
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	cursor: pointer;
+	text-align: center;
+	background-color: #EEE;
+	color:#666;
+	width:56px;
+	margin-bottom:5px;
+}
+
+.discussion-content .discussion-reply:hover {
+	background-color: #888;
+	color: #FFF;
+}
+
+#respond .child-1,
 .discussion.child-1 {
 	margin-left:20px;
 }
 
+#respond .child-2,
 .discussion.child-2 {
 	margin-left:40px;
 }
 
+#respond .child-3,
 .discussion.child-3 {
 	margin-left:60px;
 }
 
+#respond .child-4,
 .discussion.child-4 {
 	margin-left:80px;
 }
@@ -368,6 +389,7 @@ h2.post-title {
 	display: block;
 	font-weight: bold;
 	padding-bottom: 0.25em;
+	margin-left: 6px;
 }
 
 .respond-input-textarea,.respond-input {
@@ -378,6 +400,7 @@ h2.post-title {
 	border-radius: 5px 5px 5px 5px;
 	color: #333333;
 	font-size: 1em;
+	margin-left: 6px;
 	margin-bottom: 1em;
 	outline: medium none;
 	padding: 0.5em;
@@ -387,7 +410,7 @@ h2.post-title {
 }
 
 .respond-input-textarea {
-	width: 500px;
+	width: 450px;
 	height: 125px;
 	max-width: 600px;
 }

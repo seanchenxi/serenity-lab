@@ -5,13 +5,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface RespondView extends IsWidget {
 
   void setArticleId(int articleId);
-  void setCommentId(int commentId);
+  void setDiscussionId(int discussionId);
 	void reset();
 	
 	void bindPresenter(Presenter presenter);
 	
 	public interface Presenter {
-    void sendResponse(int articleId, String name, String email, String url, String content, int parentId);
+    void sendResponse(int articleId, String name, String email, String url, String content, int discussionId);
+    void cancelReply(int articleId, int discussionId);
   }
 
 }

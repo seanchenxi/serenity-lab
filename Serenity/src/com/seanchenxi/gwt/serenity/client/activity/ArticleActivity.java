@@ -9,6 +9,7 @@ import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.SerenityFactory;
 import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.event.ArticleCloseEvent;
+import com.seanchenxi.gwt.serenity.client.event.ReplyDiscussionEvent;
 import com.seanchenxi.gwt.serenity.client.place.ArticlePlace;
 import com.seanchenxi.gwt.serenity.client.place.SerenityPlaceUtil;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
@@ -74,27 +75,23 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       String anchorHref = SerenityPlaceUtil.getTagAnchor(tag.getSlug(), 0);
       view.addTag(anchorHref, tag.getTitle());
     }
-    // Check and show comment list
-    if(PostCommentStatus.OPEN.equals(post.getCommentStatus())
-        || (PostCommentStatus.CLOSED.equals(post.getCommentStatus()) 
-            && post.getCommentCount() > 0)){
-      DiscussionListView discussionView = clientFactory.getDiscussionView();
-      discussionView.clearAll();
-      discussionView.setDiscussionsCount(post.getCommentCount());
-      for(Comment cmt : post.getComments()){
-        Image.prefetch(cmt.getGravatarURL()); // prefetch gravatar  
-        discussionView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getURL(), cmt.getContent(), cmt.getDate(), cmt.getParentId());
-      }
-      view.setDiscussionView(discussionView);
+    // Show comments
+    DiscussionListView discussionView = clientFactory.getDiscussionView();
+    discussionView.clearAll();
+    discussionView.setDiscussionsCount(post.getCommentCount());
+    for(Comment cmt : post.getComments()){
+      Image.prefetch(cmt.getGravatarURL()); // prefetch gravatar  
+      discussionView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getURL(), cmt.getContent(), cmt.getDate(), cmt.getParentId());
     }
-    // Check and show comment list
+    // check and show respond view
     if(PostCommentStatus.OPEN.equals(post.getCommentStatus())){
       RespondView respondView = clientFactory.getRespondView();
       respondView.reset();
       respondView.setArticleId(post.getId());
       respondView.bindPresenter(ArticleActivity.this);
-      view.setRespondView(respondView);
+      discussionView.setRespondView(respondView);
     }
+    view.setDiscussionListView(discussionView);    
     panel.setWidget(view);
 	}
 	
@@ -104,8 +101,8 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
   }
 	 
   @Override
-  public void sendResponse(int articleId, String name, String email, String url, String content, int parentId) {
-    WPJsonAPI.get().getRespondService().submitComment(articleId, name, email, url, content, parentId, new AsyncCallback<Comment>() {
+  public void sendResponse(int articleId, String name, String email, String url, String content, int discussionId) {
+    WPJsonAPI.get().getRespondService().submitComment(articleId, name, email, url, content, discussionId, new AsyncCallback<Comment>() {
       
       @Override
       public void onSuccess(Comment result) {
@@ -123,6 +120,12 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
         
       }
     });
+  }
+
+  @Override
+  public void cancelReply(int articleId, int discussionId) {
+    if(articleId != -1)
+      clientFactory.getEventBus().fireEvent(new ReplyDiscussionEvent(discussionId, true));
   }
 	
 }

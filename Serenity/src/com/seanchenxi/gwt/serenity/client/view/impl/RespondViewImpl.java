@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
@@ -25,9 +26,10 @@ public class RespondViewImpl extends Composite implements RespondView {
 	@UiField TextBox emailField;
 	@UiField TextBox urlField;
 	@UiField TextArea commentField;
+	@UiField Anchor cancel;
 	
 	private int articleId;
-	private int commentId;
+	private int discussionId;
 	
 	private Presenter presenter;
 	
@@ -42,17 +44,19 @@ public class RespondViewImpl extends Composite implements RespondView {
   }
 	
 	@Override
-	public void setCommentId(int commentId) {
-    this.commentId = commentId;
+	public void setDiscussionId(int discussionId) {
+    this.discussionId = discussionId;
+    this.cancel.setVisible(discussionId != 0);
   }
 	 
 	@Override
 	public void reset() {
+	  cancel.setVisible(false);
 		authorField.setValue(StringPool.BLANK);
 		emailField.setValue(StringPool.BLANK);
 		commentField.setValue(StringPool.BLANK);
 		articleId = -1;
-		commentId = 0;
+		discussionId = 0;
 	}
 
   @Override
@@ -64,7 +68,7 @@ public class RespondViewImpl extends Composite implements RespondView {
   void onSubmintResponse(ClickEvent event){
     if(presenter != null && articleId != -1 && isVisible()){
       if(validate()){
-        presenter.sendResponse(articleId, authorField.getValue(), emailField.getValue(), urlField.getValue(), commentField.getValue(), commentId);
+        presenter.sendResponse(articleId, authorField.getValue(), emailField.getValue(), urlField.getValue(), commentField.getValue(), discussionId);
       }
     }
   }
@@ -95,5 +99,5 @@ public class RespondViewImpl extends Composite implements RespondView {
       return true;
     }
   }
-	
+
 }
