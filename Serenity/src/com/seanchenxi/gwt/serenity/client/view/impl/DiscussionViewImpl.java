@@ -3,8 +3,6 @@ package com.seanchenxi.gwt.serenity.client.view.impl;
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
@@ -24,7 +22,7 @@ import com.seanchenxi.gwt.serenity.client.event.ReplyDiscussionEvent;
 import com.seanchenxi.gwt.serenity.client.event.ReplyDiscussionEvent.HasReplyDiscussionHandlers;
 import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
 
-public class DiscussionView extends Composite implements HasReplyDiscussionHandlers {
+public class DiscussionViewImpl extends Composite implements HasReplyDiscussionHandlers {
   
   interface Template extends SafeHtmlTemplates {
 
@@ -41,13 +39,13 @@ public class DiscussionView extends Composite implements HasReplyDiscussionHandl
     SafeHtml AuthorMetaWithUrl(SafeUri gravatar, int size, String name, String dateString, SafeUri url);
   }
   
-  interface DiscussionViewUiBinder extends UiBinder<Widget, DiscussionView>{}
+  interface DiscussionViewImplUiBinder extends UiBinder<Widget, DiscussionViewImpl>{}
   
   protected static final String PREFIX = "discussion";
   protected static final String SUB_PREFIX = "child-";
   protected static final int AVATAR_SIZE = 32;
   protected static final Template TEMPLATE = GWT.create(Template.class);
-  protected static final DiscussionViewUiBinder uiBinder = GWT.create(DiscussionViewUiBinder.class);
+  protected static final DiscussionViewImplUiBinder uiBinder = GWT.create(DiscussionViewImplUiBinder.class);
   
   @UiField HTML author;
   @UiField HTMLPanel contentWrap;
@@ -58,7 +56,7 @@ public class DiscussionView extends Composite implements HasReplyDiscussionHandl
   private int id;
   private int level;
   
-  public DiscussionView(int id){
+  public DiscussionViewImpl(int id){
     initWidget(uiBinder.createAndBindUi(this));
     setStyleName(PREFIX);
     getElement().setId(PREFIX + "-" + id);
@@ -109,12 +107,7 @@ public class DiscussionView extends Composite implements HasReplyDiscussionHandl
   
   @UiHandler("reply")
   public void onClickReply(ClickEvent event){
-    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-      @Override
-      public void execute() {
-        ReplyDiscussionEvent.fireReply(getId(), DiscussionView.this);
-      }
-    });
+    ReplyDiscussionEvent.fire(this.id, this);
   }
   
   @Override

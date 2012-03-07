@@ -51,10 +51,8 @@ public class RespondViewImpl extends Composite implements RespondView {
 	 
 	@Override
 	public void reset() {
+	  clear();
 	  cancel.setVisible(false);
-		authorField.setValue(StringPool.BLANK);
-		emailField.setValue(StringPool.BLANK);
-		commentField.setValue(StringPool.BLANK);
 		articleId = -1;
 		discussionId = 0;
 	}
@@ -68,8 +66,16 @@ public class RespondViewImpl extends Composite implements RespondView {
   void onSubmintResponse(ClickEvent event){
     if(presenter != null && articleId != -1 && isVisible()){
       if(validate()){
-        presenter.sendResponse(articleId, authorField.getValue(), emailField.getValue(), urlField.getValue(), commentField.getValue(), discussionId);
+        presenter.reply(articleId, authorField.getValue(), emailField.getValue(), urlField.getValue(), commentField.getValue(), discussionId);
       }
+    }
+  }
+  
+  @UiHandler("cancel")
+  void onCancel(ClickEvent event){
+    clear();
+    if(presenter != null){
+      presenter.cancel(articleId, 0);
     }
   }
   
@@ -98,6 +104,12 @@ public class RespondViewImpl extends Composite implements RespondView {
     }else{
       return true;
     }
+  }
+  
+  private void clear(){
+    authorField.setValue(StringPool.BLANK);
+    emailField.setValue(StringPool.BLANK);
+    commentField.setValue(StringPool.BLANK);
   }
 
 }

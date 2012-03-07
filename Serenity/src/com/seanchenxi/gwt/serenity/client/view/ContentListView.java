@@ -14,8 +14,8 @@ public interface ContentListView extends IsWidget {
   
   public interface Presenter {
     void goForPost(String slug);
-	void nextPage();
-	void prevPage();
+    void nextPage();
+    void prevPage();
   }
   
 }

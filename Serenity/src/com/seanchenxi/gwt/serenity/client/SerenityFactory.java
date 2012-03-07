@@ -63,7 +63,7 @@ public class SerenityFactory {
     return respond;
   }
 	
-	public DiscussionListView getDiscussionView() {
+	public DiscussionListView getDiscussionListView() {
     return discussion;
   }
 

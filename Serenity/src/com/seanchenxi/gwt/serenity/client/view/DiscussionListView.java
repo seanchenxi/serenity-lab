@@ -6,9 +6,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface DiscussionListView extends IsWidget {
 
-	void clearAll();
-	void addDiscussion(int id, String gravatar, String name, String url, String content, Date date, int parentId);
-  void setDiscussionsCount(int count);
+  void intView(int discussionCount);
+  void addDiscussion(int id, String gravatar, String name, String url, String content, Date date, int parentId);
   void setRespondView(RespondView respondView);
-	
+  void updateReponseViewPosition(int discussionId);
+  
 }

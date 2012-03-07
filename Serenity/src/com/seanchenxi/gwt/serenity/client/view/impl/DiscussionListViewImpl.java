@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.event.ReplyDiscussionEvent;
 import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
+import com.seanchenxi.gwt.serenity.share.StringPool;
 
 public class DiscussionListViewImpl extends Composite implements DiscussionListView, ReplyDiscussionEvent.Handler {
 
@@ -21,11 +22,11 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   private FlowPanel main;
   private RespondView respond;
   
-  private HashMap<Integer, DiscussionView> discussions;
+  private HashMap<Integer, DiscussionViewImpl> discussions;
   private int total;
   
   public DiscussionListViewImpl() {
-    discussions = new HashMap<Integer, DiscussionView>();
+    discussions = new HashMap<Integer, DiscussionViewImpl>();
     initWidget(main = new FlowPanel());
     main.add(title = new HTML());
     title.setStyleName("discussions-title");
@@ -33,8 +34,9 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   }
 
   @Override
-  public void setDiscussionsCount(int count) {
-    title.setText((total = count) + " Comments:");
+  public void intView(int discussionCount) {
+    clearAll();
+    title.setText((total = discussionCount) + " Comments:");
   }
 
   @Override
@@ -47,12 +49,12 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   
   @Override
   public void addDiscussion(int id, String gravatar, String name, String url, String content, Date date, int parentId) {
-    DiscussionView discussion = new DiscussionView(id);
+    DiscussionViewImpl discussion = new DiscussionViewImpl(id);
     discussion.setAthorInfo(gravatar, name, url, date);
     discussion.setMessage(content);
     discussion.addReplyDiscussionHandler(this);
     
-    DiscussionView parent = null;
+    DiscussionViewImpl parent = null;
     if (parentId > 0 && (parent = discussions.get(parentId)) != null) {
       discussion.setLevel(parent.getLevel() + 1);
       main.insert(discussion, main.getWidgetIndex(parent) + 1);
@@ -65,7 +67,26 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   }
 
   @Override
-  public void clearAll() {
+  public void updateReponseViewPosition(int discussionId) {
+    if(respond == null) return;
+    DiscussionViewImpl discussion = discussions.get(discussionId);
+    if(discussion != null){
+      respond.setDiscussionId(discussion.getId());
+      Widget.asWidgetOrNull(respond).addStyleName("child-" + discussion.getLevel());
+      main.insert(respond, main.getWidgetIndex(discussion) + 1);
+    }else{
+      respond.setDiscussionId(0);
+      Widget.asWidgetOrNull(respond).setStyleName(StringPool.BLANK);
+      main.add(respond);
+    }
+  }
+  
+  @Override
+  public void onReplyDiscussion(ReplyDiscussionEvent event) {
+    updateReponseViewPosition(event.getDiscussionId());
+  }
+
+  private void clearAll() {
     discussions.clear();
     main.clear();
     main.add(title);
@@ -78,8 +99,8 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
       if (discussions.size() < total) 
         return false;
       Widget w = main.getWidget(index);
-      if(w instanceof DiscussionView){
-        ((DiscussionView) w).setIndex(index);
+      if(w instanceof DiscussionViewImpl){
+        ((DiscussionViewImpl) w).setIndex(index);
       }
       if((++index) == main.getWidgetCount() && respond != null){
         main.add(respond);
@@ -88,21 +109,6 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
     }
   }
 
-  @Override
-  public void onReply(ReplyDiscussionEvent event) {
-    if(respond == null) return;
-    DiscussionView discussion = discussions.get(event.getDiscussionId());
-    if(discussion != null){
-      Widget.asWidgetOrNull(respond).addStyleName(discussion.getStyleName());
-      respond.setDiscussionId(discussion.getId());
-      main.insert(respond, main.getWidgetIndex(discussion) + 1);
-    }
-  }
 
-  @Override
-  public void onCancel(ReplyDiscussionEvent event) {
-    respond.setDiscussionId(0);
-    main.add(respond);
-  }
-
+  
 }
