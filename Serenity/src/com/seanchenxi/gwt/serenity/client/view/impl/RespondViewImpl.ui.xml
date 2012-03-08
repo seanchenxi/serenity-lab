@@ -4,7 +4,7 @@
 	<g:HTMLPanel>
 		<h3>
 			Leave a Comment
-			<g:Anchor styleName="respond-cancel" ui:field="cancel" >Cancel&nbsp;Reply&uarr;</g:Anchor>
+			<g:Anchor styleName="respond-cancel" ui:field="cancel" >Cancel&nbsp;Reply&nbsp;&uarr;</g:Anchor>
 		</h3>
 		
 		<p class="desc">

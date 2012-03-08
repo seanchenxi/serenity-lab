@@ -112,7 +112,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       
       @Override
       public void onFailure(Throwable caught) {
-        Log.severe("error", caught);
+        Log.severe("[ArticleActivity] SubmitComment onFailure", caught);
       }
     });
   }
