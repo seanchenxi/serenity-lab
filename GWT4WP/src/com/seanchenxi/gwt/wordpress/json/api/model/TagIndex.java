@@ -3,7 +3,7 @@ package com.seanchenxi.gwt.wordpress.json.api.model;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.JsArray;
-import com.seanchenxi.gwt.wordpress.json.util.JsUtil;
+import com.seanchenxi.gwt.wordpress.json.util.JUtil;
 
 public class TagIndex extends IndexModel<Tag>{
 
@@ -16,7 +16,7 @@ public class TagIndex extends IndexModel<Tag>{
 	}-*/;
 	
 	public final ArrayList<Tag> getTags(){
-		return JsUtil.convert(getList());
+		return JUtil.convert(getList());
 	}
 
 }

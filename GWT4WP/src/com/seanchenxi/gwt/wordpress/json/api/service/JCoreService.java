@@ -3,6 +3,7 @@ package com.seanchenxi.gwt.wordpress.json.api.service;
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.seanchenxi.gwt.wordpress.json.api.JRequest;
 import com.seanchenxi.gwt.wordpress.json.api.model.CategoryIndex;
 import com.seanchenxi.gwt.wordpress.json.api.model.Page;
 import com.seanchenxi.gwt.wordpress.json.api.model.PagingPostList;

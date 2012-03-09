@@ -7,10 +7,10 @@ import com.google.gwt.i18n.client.Dictionary;
 import com.google.gwt.jsonp.client.JsonpRequest;
 import com.google.gwt.jsonp.client.JsonpRequestBuilder;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.seanchenxi.gwt.wordpress.json.api.JRequest;
 import com.seanchenxi.gwt.wordpress.json.api.model.JModel;
-import com.seanchenxi.gwt.wordpress.json.api.service.JRequest;
 
-abstract class JService {
+public abstract class JService {
   
   private static final Logger Log = Logger.getLogger(JService.class.getName());
   
@@ -83,20 +83,6 @@ abstract class JService {
       }
     }
 
-  }
-
-  private class JRequestImpl implements JRequest {
-    private JsonpRequest<JavaScriptObject> requset;
-
-    private JRequestImpl(JsonpRequest<JavaScriptObject> requset) {
-      this.requset = requset;
-    }
-
-    @Override
-    public void cancel() {
-      if (requset != null)
-        requset.cancel();
-    }
   }
 
 }

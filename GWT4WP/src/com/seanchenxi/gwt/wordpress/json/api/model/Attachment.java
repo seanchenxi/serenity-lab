@@ -3,7 +3,7 @@ package com.seanchenxi.gwt.wordpress.json.api.model;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.JsArray;
-import com.seanchenxi.gwt.wordpress.json.api.JUtil;
+import com.seanchenxi.gwt.wordpress.json.util.JUtil;
 
 public class Attachment extends JModel {
 

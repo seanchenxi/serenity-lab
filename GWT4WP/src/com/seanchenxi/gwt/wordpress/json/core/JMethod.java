@@ -1,4 +1,4 @@
-package com.seanchenxi.gwt.wordpress.json.api;
+package com.seanchenxi.gwt.wordpress.json.core;
 
 public enum JMethod {
   

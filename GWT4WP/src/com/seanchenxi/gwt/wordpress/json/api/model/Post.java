@@ -2,7 +2,7 @@ package com.seanchenxi.gwt.wordpress.json.api.model;
 
 import java.util.ArrayList;
 
-import com.seanchenxi.gwt.wordpress.json.api.JUtil;
+import com.seanchenxi.gwt.wordpress.json.util.JUtil;
 
 public class Post extends Page {
 

@@ -4,9 +4,9 @@ import com.google.gwt.core.client.GWT;
 import com.seanchenxi.gwt.wordpress.json.api.service.JCoreService;
 import com.seanchenxi.gwt.wordpress.json.api.service.JPostsService;
 import com.seanchenxi.gwt.wordpress.json.api.service.JRespondService;
-import com.seanchenxi.gwt.wordpress.json.core.JCoreServiceImpl;
-import com.seanchenxi.gwt.wordpress.json.core.JPostsServiceImpl;
-import com.seanchenxi.gwt.wordpress.json.core.JRespondServiceImpl;
+import com.seanchenxi.gwt.wordpress.json.core.service.JCoreServiceImpl;
+import com.seanchenxi.gwt.wordpress.json.core.service.JPostsServiceImpl;
+import com.seanchenxi.gwt.wordpress.json.core.service.JRespondServiceImpl;
 
 public class WPJsonAPI {
   

@@ -1,10 +1,9 @@
-package com.seanchenxi.gwt.wordpress.json.core;
+package com.seanchenxi.gwt.wordpress.json.core.service;
 
 import java.util.Date;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.seanchenxi.gwt.wordpress.json.api.JMethod;
-import com.seanchenxi.gwt.wordpress.json.api.JParameter;
+import com.seanchenxi.gwt.wordpress.json.api.JRequest;
 import com.seanchenxi.gwt.wordpress.json.api.model.CategoryIndex;
 import com.seanchenxi.gwt.wordpress.json.api.model.Page;
 import com.seanchenxi.gwt.wordpress.json.api.model.PagingPostList;
@@ -12,7 +11,10 @@ import com.seanchenxi.gwt.wordpress.json.api.model.Post;
 import com.seanchenxi.gwt.wordpress.json.api.model.PostType;
 import com.seanchenxi.gwt.wordpress.json.api.model.TagIndex;
 import com.seanchenxi.gwt.wordpress.json.api.service.JCoreService;
-import com.seanchenxi.gwt.wordpress.json.api.service.JRequest;
+import com.seanchenxi.gwt.wordpress.json.core.JMethod;
+import com.seanchenxi.gwt.wordpress.json.core.JParameter;
+import com.seanchenxi.gwt.wordpress.json.core.JService;
+import com.seanchenxi.gwt.wordpress.json.core.RequestURL;
 
 public class JCoreServiceImpl extends JService implements JCoreService {
 

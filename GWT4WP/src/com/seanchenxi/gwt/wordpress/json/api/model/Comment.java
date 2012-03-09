@@ -2,7 +2,7 @@ package com.seanchenxi.gwt.wordpress.json.api.model;
 
 import java.util.Date;
 
-import com.seanchenxi.gwt.wordpress.json.api.JUtil;
+import com.seanchenxi.gwt.wordpress.json.util.JUtil;
 
 public class Comment extends JModel {
   

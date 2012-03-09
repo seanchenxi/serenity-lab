@@ -5,8 +5,6 @@ import java.util.HashMap;
 
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.seanchenxi.gwt.wordpress.json.api.JMethod;
-import com.seanchenxi.gwt.wordpress.json.api.JParameter;
 
 public class RequestURL {
 

@@ -1,11 +1,13 @@
-package com.seanchenxi.gwt.wordpress.json.core;
+package com.seanchenxi.gwt.wordpress.json.core.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.seanchenxi.gwt.wordpress.json.api.JMethod;
-import com.seanchenxi.gwt.wordpress.json.api.JParameter;
+import com.seanchenxi.gwt.wordpress.json.api.JRequest;
 import com.seanchenxi.gwt.wordpress.json.api.model.Comment;
-import com.seanchenxi.gwt.wordpress.json.api.service.JRequest;
 import com.seanchenxi.gwt.wordpress.json.api.service.JRespondService;
+import com.seanchenxi.gwt.wordpress.json.core.JMethod;
+import com.seanchenxi.gwt.wordpress.json.core.JParameter;
+import com.seanchenxi.gwt.wordpress.json.core.JService;
+import com.seanchenxi.gwt.wordpress.json.core.RequestURL;
 
 public class JRespondServiceImpl extends JService implements JRespondService {
 

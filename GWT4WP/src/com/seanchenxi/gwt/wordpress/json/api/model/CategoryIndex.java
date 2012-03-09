@@ -3,7 +3,7 @@ package com.seanchenxi.gwt.wordpress.json.api.model;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.JsArray;
-import com.seanchenxi.gwt.wordpress.json.util.JsUtil;
+import com.seanchenxi.gwt.wordpress.json.util.JUtil;
 
 public class CategoryIndex extends IndexModel<Category> {
 	
@@ -16,7 +16,7 @@ public class CategoryIndex extends IndexModel<Category> {
 	}-*/;
 	
 	public final ArrayList<Category> getCagetories(){
-		return JsUtil.convert(getList());
+		return JUtil.convert(getList());
 	}
 
 }
