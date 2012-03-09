@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
-import com.seanchenxi.gwt.serenity.client.view.SummaryShow;
 
 public class ContentListViewImpl extends Composite implements ContentListView, ClickHandler {
 
@@ -56,11 +55,11 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 		Iterator<Widget> itW = listBody.iterator();
 		while(itW.hasNext()){
 			Widget w = itW.next();
-			if(w instanceof SummaryShow){
-				if(((SummaryShow) w).getId().equalsIgnoreCase(contentSlug)){
-					((SummaryShow) w).setHighlight(true);
+			if(w instanceof ContentItemViewImpl){
+				if(((ContentItemViewImpl) w).getId().equalsIgnoreCase(contentSlug)){
+					((ContentItemViewImpl) w).setHighlight(true);
 				}else{
-					((SummaryShow) w).setHighlight(false);
+					((ContentItemViewImpl) w).setHighlight(false);
 				}
 			}
 		}
@@ -68,11 +67,11 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	
 	@Override
 	public void addContent(String slug, String title, String excerpt, Date date){
-		SummaryShow ss = new SummaryShow();
+	  ContentItemViewImpl ss = new ContentItemViewImpl();
 		ss.setId(slug);
-		ss.setPostTitle(title);
-		ss.setPostSummary(excerpt);
-		ss.setPostMetaInfo(SerenityUtil.toDateTimeString(date));
+		ss.setTitle(title);
+		ss.setSummary(excerpt);
+		ss.setMeta(SerenityUtil.toDateTimeString(date));
 		ss.setHighlight(slug.equalsIgnoreCase(highlightId));
 		ss.addClickHandler(this);
 		listBody.add(ss);
@@ -91,8 +90,8 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	@Override
 	public void onClick(ClickEvent event) {
 		Object o = event.getSource();
-		if(o instanceof SummaryShow){
-			SummaryShow ss = ((SummaryShow) o);
+		if(o instanceof ContentItemViewImpl){
+		  ContentItemViewImpl ss = ((ContentItemViewImpl) o);
 			if(ss.isHighlighted()){
 				presenter.goForPost(null);
 			}else{

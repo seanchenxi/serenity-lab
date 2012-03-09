@@ -66,7 +66,6 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
     view.setTitle(post.getTitle());
     view.setDateString(SerenityUtil.toDateString(post.getCreatedDate()));
     view.setContent(post.getContent());
-    view.setCommentsCount(post.getCommentCount());
     //Show categories
     for(Category cat : post.getCategories()){
       String anchorHref = SerenityPlaceUtil.getCategoryAnchor(cat.getSlug(), 0);
@@ -77,23 +76,28 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       String anchorHref = SerenityPlaceUtil.getTagAnchor(tag.getSlug(), 0);
       view.addTag(anchorHref, tag.getTitle());
     }
-    
     // Show comments
-    discussionListView = clientFactory.getDiscussionListView();
-    discussionListView.intView(post.getCommentCount());
-    for(Comment cmt : post.getComments()){
-      Image.prefetch(cmt.getGravatarURL()); // prefetch gravatar  
-      discussionListView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getURL(), cmt.getContent(), cmt.getDate(), cmt.getParentId());
+    boolean commentOpened = PostCommentStatus.OPEN.equals(post.getCommentStatus());
+    int discussionCount = post.getComments().size();
+    if(discussionCount > 1 || commentOpened){
+      discussionListView = clientFactory.getDiscussionListView();
+      discussionListView.intView(discussionCount, commentOpened);
+      for(Comment cmt : post.getComments()){
+        Image.prefetch(cmt.getGravatarURL()); // prefetch gravatar  
+        discussionListView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getURL(), cmt.getContent(), cmt.getDate(), cmt.getParentId());
+      }
+      // check and show respond view
+      if(commentOpened){
+        RespondView respondView = clientFactory.getRespondView();
+        respondView.reset();
+        respondView.setArticleId(post.getId());
+        respondView.bindPresenter(ArticleActivity.this);
+        discussionListView.setRespondView(respondView);
+      }
+      view.setCommentsCount(discussionCount);
+      view.setDiscussionListView(discussionListView);
     }
-    // check and show respond view
-    if(PostCommentStatus.OPEN.equals(post.getCommentStatus())){
-      RespondView respondView = clientFactory.getRespondView();
-      respondView.reset();
-      respondView.setArticleId(post.getId());
-      respondView.bindPresenter(ArticleActivity.this);
-      discussionListView.setRespondView(respondView);
-    }
-    view.setDiscussionListView(discussionListView);    
+    
     panel.setWidget(view);
 	}
 	 

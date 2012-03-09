@@ -536,30 +536,36 @@ h2.post-title {
 	cursor: default;
 }
 
-.summaryTable {
+.contentItem {
 	display: block;
 	padding: 10px 15px 0 15px;
 	border-bottom: 1px solid #EBEBEB;
 }
 
-.summaryTable.hilight,.summaryTable:hover {
-	background: #E7F2F8;
-	cursor: pointer;
-}
-
-.summaryTable tbody,.summaryTable tr,.summaryTable td {
-	display: block;
-}
-
-.summaryTable td {
-	padding: 5px 0px;
-}
-
-.summaryTitle h2 {
-	font-size: 1.6em;
+.contentItem h2 {
+	font-size: 1.5em;
 	font-weight: bold;
 }
 
+.contentItem-summary {
+	padding-top: 5px;
+}
+
+.contentItem-meta{
+	text-align: right;
+	color: #BBB;
+}
+
+.contentItem-meta,
+.contentItem-summary {
+	padding-bottom: 5px;
+}
+
+.contentItem.hilight,.contentItem:hover {
+	background: #E7F2F8;
+	cursor: pointer;
+	color: #010101;
+}
 
 .navItem {
 	padding-top: 5px;

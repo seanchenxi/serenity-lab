@@ -51,12 +51,13 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
   @UiField HTMLPanel contentWrap;
   @UiField HTML content;
   @UiField HTML counter;
+  @UiField HTML reply;
   
   private int index;
   private int id;
   private int level;
   
-  public DiscussionViewImpl(int id){
+  public DiscussionViewImpl(int id, boolean isReplyEnabled){
     initWidget(uiBinder.createAndBindUi(this));
     setStyleName(PREFIX);
     getElement().setId(PREFIX + "-" + id);
@@ -66,6 +67,9 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
     this.author.setStyleName(PREFIX + "-meta");
     this.content.setStyleName("");
     this.counter.setStyleName(PREFIX + "-counter");
+    if(!isReplyEnabled && reply != null){
+      contentWrap.remove(reply);
+    }
   }
   
   public int getId() {

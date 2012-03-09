@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
+import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.event.ReplyDiscussionEvent;
 import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
@@ -20,10 +21,12 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
 
   private HTML title;
   private FlowPanel main;
+  
   private RespondView respond;
   
   private HashMap<Integer, DiscussionViewImpl> discussions;
   private int total;
+  private boolean showReply = true;
   
   public DiscussionListViewImpl() {
     discussions = new HashMap<Integer, DiscussionViewImpl>();
@@ -34,22 +37,26 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   }
 
   @Override
-  public void intView(int discussionCount) {
+  public void intView(int discussionCount, boolean showReply) {
     clearAll();
-    title.setText((total = discussionCount) + " Comments:");
+    this.title.setText((total = discussionCount) + " Comments:");
+    this.showReply = showReply;
+    Log.finest("[DiscussionListViewImpl] showReply="+showReply);
   }
 
   @Override
   public void setRespondView(RespondView respondView) {
-    respond = respondView;
-    if(respond != null && discussions.size() >= total){
-      main.add(respond);
+    if(showReply){
+      respond = respondView;
+      if(respond != null && discussions.size() >= total){
+        main.add(respond);
+      }
     }
   }
   
   @Override
   public void addDiscussion(int id, String gravatar, String name, String url, String content, Date date, int parentId) {
-    DiscussionViewImpl discussion = new DiscussionViewImpl(id);
+    DiscussionViewImpl discussion = new DiscussionViewImpl(id, showReply);
     discussion.setAthorInfo(gravatar, name, url, date);
     discussion.setMessage(content);
     discussion.addReplyDiscussionHandler(this);
@@ -90,6 +97,7 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
     discussions.clear();
     main.clear();
     main.add(title);
+    respond = null;
   }
   
   private class IndexUpdateCommand implements RepeatingCommand {
