@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2012 Xi CHEN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.place;
 
 import com.seanchenxi.gwt.serenity.share.StringPool;
@@ -7,6 +22,7 @@ public class SerenityPlaceUtil {
 	protected static final String PRE = StringPool.EXCLAMATION + StringPool.SLASH;
 	private static final String PPRE = "page";
 	private static final String PREGX = PPRE+"[0-9]+";
+	private static final String NBREGX = "[0-9]+";
 	
 	private static final int PPRE_LENGTH = PPRE.length();
 	private static final int PRE_LENGTH = PRE.length();
@@ -34,6 +50,8 @@ public class SerenityPlaceUtil {
 		}
 		if(place instanceof SlugPlace){
 			slug = ((SlugPlace) place).getSlug();
+		}else if(place instanceof AboutPlace){
+		  slug = ((AboutPlace) place).getSlug();
 		}
 		return buildToken(prefix, slug, page, false);
 	}
@@ -61,8 +79,8 @@ public class SerenityPlaceUtil {
 				if(tokens.length > 2){
 					page = Integer.parseInt(tokens[2].substring(PPRE_LENGTH));
 				}
-			}else{
-				page = Integer.parseInt(tokens[1].substring(PPRE_LENGTH));
+			}else if(tokens[1].matches(NBREGX)){
+			  page = Integer.parseInt(tokens[1].substring(PPRE_LENGTH));
 			}
 		}
 		return builder.build(slug, page);
@@ -92,7 +110,7 @@ public class SerenityPlaceUtil {
 		},ABOUT(AboutPlace.PREFIX) {
 			@Override
 			public SerenityPlace build(String slug, int page) {
-				return new AboutPlace();
+				return new AboutPlace(slug);
 			}
 		},CATEGORY(CategoryPlace.PREFIX) {
 			@Override

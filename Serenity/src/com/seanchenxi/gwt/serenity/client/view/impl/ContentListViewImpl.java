@@ -1,6 +1,20 @@
+/*******************************************************************************
+ * Copyright 2012 Xi CHEN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
-import java.util.Date;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
@@ -16,7 +30,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
 
 public class ContentListViewImpl extends Composite implements ContentListView, ClickHandler {
@@ -66,12 +79,12 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	}
 	
 	@Override
-	public void addContent(String slug, String title, String excerpt, Date date){
+	public void addContent(String slug, String title, String excerpt, String meta){
 	  ContentItemViewImpl ss = new ContentItemViewImpl();
 		ss.setId(slug);
 		ss.setTitle(title);
 		ss.setSummary(excerpt);
-		ss.setMeta(SerenityUtil.toDateTimeString(date));
+		ss.setMeta(meta);
 		ss.setHighlight(slug.equalsIgnoreCase(highlightId));
 		ss.addClickHandler(this);
 		listBody.add(ss);
@@ -93,9 +106,9 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 		if(o instanceof ContentItemViewImpl){
 		  ContentItemViewImpl ss = ((ContentItemViewImpl) o);
 			if(ss.isHighlighted()){
-				presenter.goForPost(null);
+				presenter.goForArticle(null);
 			}else{
-				presenter.goForPost(ss.getId());
+				presenter.goForArticle(ss.getId());
 			}
 		}
 	}

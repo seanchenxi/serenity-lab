@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2012 Xi CHEN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -9,7 +24,6 @@ import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.SerenityFactory;
 import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.event.ArticleCloseEvent;
-import com.seanchenxi.gwt.serenity.client.place.ArticlePlace;
 import com.seanchenxi.gwt.serenity.client.place.SerenityPlaceUtil;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
 import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
@@ -24,14 +38,14 @@ import com.seanchenxi.gwt.wordpress.json.api.model.Tag;
 
 public class ArticleActivity extends AbstractActivity implements ArticleView.Presenter, RespondView.Presenter {
 
-	private ArticlePlace place;
+	private String articleSlug;
 	private SerenityFactory clientFactory;
 	
 	private ArticleView view;
 	private DiscussionListView discussionListView;
 	
-	public ArticleActivity(ArticlePlace place, SerenityFactory clientFactory){
-		this.place = place;
+	public ArticleActivity(String articleSlug, SerenityFactory clientFactory){
+		this.articleSlug = articleSlug;
 		this.clientFactory = clientFactory;
 	}
 	
@@ -41,7 +55,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
 	}
 	
 	private void fetchContentAndShow(final AcceptsOneWidget panel) {
-	  WPJsonAPI.get().getCoreService().getPost(place.getSlug(), new AsyncCallback<Post>() {
+	  WPJsonAPI.get().getCoreService().getPost(articleSlug, new AsyncCallback<Post>() {
 			@Override
 			public void onSuccess(Post result) {
 			  showView(result, panel);
@@ -128,7 +142,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
 	
   @Override
   public void closeView() {
-    clientFactory.getEventBus().fireEvent(new ArticleCloseEvent(place.getSlug()));
+    clientFactory.getEventBus().fireEvent(new ArticleCloseEvent(articleSlug));
   }
   
 }

@@ -1,8 +1,22 @@
+/*******************************************************************************
+ * Copyright 2012 Xi CHEN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.event.shared.HandlerRegistration;
@@ -13,6 +27,7 @@ import com.seanchenxi.gwt.serenity.client.event.ArticleCloseEvent;
 import com.seanchenxi.gwt.serenity.client.place.ArticlePlace;
 import com.seanchenxi.gwt.serenity.client.place.SerenityPlace;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
+import com.seanchenxi.gwt.ui.widget.MessageBox;
 import com.seanchenxi.gwt.wordpress.json.WPJsonAPI;
 import com.seanchenxi.gwt.wordpress.json.api.model.PagingPostList;
 import com.seanchenxi.gwt.wordpress.json.api.model.Post;
@@ -55,11 +70,11 @@ public abstract class ContentListActivity extends AbstractActivity implements Co
 	}
 
 	@Override
-	public final void goForPost(String postSlug) {
-		if(postSlug == null){
+	public void goForArticle(String articleSlug) {
+		if(articleSlug == null){
 			clientFactory.getPlaceController().goTo(nextPlace(slug, page));
 		}else{
-			clientFactory.getPlaceController().goTo(new ArticlePlace(postSlug));
+			clientFactory.getPlaceController().goTo(new ArticlePlace(articleSlug));
 		}
 	}
 	
@@ -130,7 +145,7 @@ public abstract class ContentListActivity extends AbstractActivity implements Co
 		@Override
 		public void onFailure(Throwable caught) {
 			if(caught.getMessage().contains("Not found")){
-				Window.alert("Not Found");
+				MessageBox.alert("Not Found","The content you're looking for is not found !",null);
 			}else{
 				Log.severe("GetContentsResult ERROR", caught);
 			}
@@ -142,8 +157,10 @@ public abstract class ContentListActivity extends AbstractActivity implements Co
 				total = result.getTotal();
 				view.clearContentList();
 				view.setPagingInfo(title, offset, result.getCount(), result.getTotal());
+				String meta;
 				for(Post post : result.getList()){
-					view.addContent(post.getSlug(), post.getTitle(), post.getExcerpt(), post.getCreatedDate());
+				  meta = SerenityUtil.toDateTimeString(post.getCreatedDate());
+					view.addContent(post.getSlug(), post.getTitle(), post.getExcerpt(), meta);
 				}
 			}
 		}
