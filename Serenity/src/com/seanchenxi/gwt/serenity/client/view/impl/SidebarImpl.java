@@ -65,14 +65,14 @@ public class SidebarImpl implements Sidebar {
 		});
 		menu.addItem(item);
 		
-		item = new NavigationItem(SerenityResources.IMG.icon_Info_black());
-		item.setId("about");
-		menu.addItem(item);
-		
 		item = new NavigationItem(SerenityResources.IMG.icon_Grid_black());
 		item.setLabelBox(catPopup = new PopupLabelBox(3));
 		item.setId("category");
 		menu.addItem(item);
+		
+		item = new NavigationItem(SerenityResources.IMG.icon_Info_black());
+    item.setId("about");
+    menu.addItem(item);
 		
 		menu.addSelectionHandler(new SelectionHandler<NavigationItem>() {	
 			@Override
