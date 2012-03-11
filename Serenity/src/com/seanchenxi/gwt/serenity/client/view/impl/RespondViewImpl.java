@@ -125,6 +125,7 @@ public class RespondViewImpl extends Composite implements RespondView {
     authorField.setValue(StringPool.BLANK);
     emailField.setValue(StringPool.BLANK);
     commentField.setValue(StringPool.BLANK);
+    urlField.setValue(StringPool.BLANK);
   }
 
 }
