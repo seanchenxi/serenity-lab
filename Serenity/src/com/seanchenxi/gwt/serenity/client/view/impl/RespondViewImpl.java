@@ -82,6 +82,7 @@ public class RespondViewImpl extends Composite implements RespondView {
     if(presenter != null && articleId != -1 && isVisible()){
       if(validate()){
         presenter.reply(articleId, authorField.getValue(), emailField.getValue(), urlField.getValue(), commentField.getValue(), discussionId);
+        clear();
       }
     }
   }

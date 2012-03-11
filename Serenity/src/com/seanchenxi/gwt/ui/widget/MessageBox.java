@@ -17,6 +17,7 @@ package com.seanchenxi.gwt.ui.widget;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -37,11 +38,10 @@ public class MessageBox {
   
   private MessageBox(){
     buttons = new FlowPanel();
-    buttons.setSize("100%", "100%");
     
     container = new FlexTable();
     container.setSize("100%", "100%");
-    container.setCellPadding(5);
+    container.setCellPadding(0);
     container.setCellSpacing(5);
     container.setHTML(0, 0, "");
     container.setHTML(0, 1, "");
@@ -51,6 +51,7 @@ public class MessageBox {
     cellFormatter.setAlignment(0, 0, HasAlignment.ALIGN_CENTER, HasAlignment.ALIGN_MIDDLE);
     cellFormatter.setWidth(0, 0, "50px");
     cellFormatter.setAlignment(1, 0, HasAlignment.ALIGN_CENTER, HasAlignment.ALIGN_BOTTOM);
+    cellFormatter.setHeight(1, 0, "25px");
     
     dialog = new DialogBox(false, true);
     dialog.setStyleName("MessageBox");
@@ -69,30 +70,29 @@ public class MessageBox {
     container.setWidget(0, 0, new Image(icon));
   }
   
-  private void addButton(Button btn){
+  private Button addButton(Button btn, final ScheduledCommand cmd){
+    btn.getElement().getStyle().setMargin(0, Unit.PX);
     btn.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         hide();
+        if(cmd != null){
+          Scheduler.get().scheduleDeferred(cmd);
+        }
       }
     });
     buttons.add(btn);
+    return btn;
   }
   
-  public static void alert(String title, String message, final ScheduledCommand cmd) {   
-    MessageBox box = new MessageBox();
+  public static void alert(String title, String message, ScheduledCommand cmd) {   
+    final MessageBox box = new MessageBox();
     box.setTitle(title);
     box.setMessage(message);
     box.setIcon(UIResources.IMG.icon_MsgBox_warning());
-    box.setSize("250px", "120px");
-    if(cmd != null){
-      box.addButton(new Button("Ok", new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          Scheduler.get().scheduleDeferred(cmd);
-        }
-      }));
-    }
+    box.setSize("360px", "120px");
+    Button ok = box.addButton(new Button("Ok"), cmd);
+    box.container.setWidget(1, 0, ok); //Hook, cause, we only need one button here
     box.show();
   }
 

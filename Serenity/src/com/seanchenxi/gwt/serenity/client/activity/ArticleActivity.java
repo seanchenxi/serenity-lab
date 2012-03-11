@@ -28,6 +28,7 @@ import com.seanchenxi.gwt.serenity.client.place.SerenityPlaceUtil;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
 import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
+import com.seanchenxi.gwt.ui.widget.MessageBox;
 import com.seanchenxi.gwt.wordpress.json.WPJsonAPI;
 import com.seanchenxi.gwt.wordpress.json.api.model.Category;
 import com.seanchenxi.gwt.wordpress.json.api.model.Comment;
@@ -130,6 +131,9 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       
       @Override
       public void onFailure(Throwable caught) {
+        MessageBox.alert(
+            "Submit Comment Error", 
+            "I'm so sorry that, your comment submit is rejected. However, the author will be notified for this.", null);
         Log.severe("[ArticleActivity] SubmitComment onFailure", caught);
       }
     });
