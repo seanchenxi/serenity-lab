@@ -3,10 +3,27 @@
 
 	<inherits name='com.google.gwt.json.JSON' />
 	<inherits name='com.google.gwt.jsonp.Jsonp' />
+	<inherits name="com.google.gwt.http.HTTP" />
 	
 	<inherits name="com.google.gwt.logging.Logging" />
   	<set-property name="gwt.logging.hasWidgetsHandler" value="DISABLED" />
   	<set-property name="gwt.logging.popupHandler" value="DISABLED" />
-  	
+
+	<define-property name="crossSite" values="true,false" />
+	
+	<replace-with class="com.seanchenxi.gwt.wordpress.json.core.request.JRequestBuilderImpl">
+		<when-type-is class="com.seanchenxi.gwt.wordpress.json.api.JRequestBuilder" />
+		<when-property-is name="crossSite" value="false"/>
+	</replace-with>
+
+	<replace-with class="com.seanchenxi.gwt.wordpress.json.core.request.JRequestBuilderCSImpl">
+		<when-type-is class="com.seanchenxi.gwt.wordpress.json.api.JRequestBuilder" />
+		<when-property-is name="crossSite" value="true"/>
+	</replace-with>
+	
+	<set-property-fallback name="crossSite" value="false"/>
+	
+	<set-property name="crossSite" value="false"/>
+
 	<source path='json' />
 </module>

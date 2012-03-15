@@ -20,8 +20,9 @@ import java.util.HashMap;
 
 import com.google.gwt.http.client.URL;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.seanchenxi.gwt.wordpress.json.api.JRequestURL;
 
-public class RequestURL {
+public class JRequestURLImpl implements JRequestURL {
 
   protected final static DateTimeFormat DATE_FORMAT = DateTimeFormat.getFormat("yyy-MM-d");
   protected final static String START = "?";
@@ -36,7 +37,7 @@ public class RequestURL {
   private boolean encode;
   private String request;
 
-  public RequestURL(JMethod submitcomment) {
+  public JRequestURLImpl(JMethod submitcomment) {
     if (submitcomment == null)
       throw new NullPointerException();
     this.method = submitcomment;
@@ -44,11 +45,8 @@ public class RequestURL {
     this.request = null;
   }
 
-  public JMethod getMethod() {
-    return method;
-  }
-
-  public RequestURL setParameter(String name, Object value) {
+  @Override
+  public JRequestURLImpl setParameter(String name, Object value) {
     if (name == null || name.trim().isEmpty() || value == null)
       throw new NullPointerException();
     this.params.put(name.trim(), value);
@@ -57,7 +55,7 @@ public class RequestURL {
     return this;
   }
 
-  public RequestURL setParameter(JParameter param, Object value) {
+  public JRequestURLImpl setParameter(JParameter param, Object value) {
     if (param == null || value == null)
       throw new NullPointerException();
     this.params.put(param.toString(), value);
@@ -66,36 +64,40 @@ public class RequestURL {
     return this;
   }
 
+  @Override
   public void setEncode(boolean encode) {
     this.encode = encode;
   }
   
+  @Override
   public boolean isEncode() {
     return encode;
   }
   
-  public String create(String servicePath) {
-    if (request == null) {
-      StringBuilder sb = new StringBuilder(servicePath);
-      sb.append(SLASH);
-      sb.append(method);
-      sb.append(SLASH);
-      if (!params.isEmpty()) {
-        sb.append(START);
-        for (String name : params.keySet()) {
-          sb.append(name);
-          sb.append(EQUAL);
-          sb.append(convert(params.get(name)));
-          sb.append(AND);
-        }
-        sb.deleteCharAt(sb.lastIndexOf(AND));
-      }
-      request = sb.toString();
-      if(encode){
-        request = URL.encode(request);
-      }
-    }
-    return request;
+  @Override
+  public String getMethodName() {
+  	return method.toString();
+  }
+  
+  @Override
+  public String setPrefix(String urlPrefix) {
+	if (request == null) {
+		StringBuilder sb = new StringBuilder(urlPrefix);
+		sb.append(SLASH).append(method).append(SLASH);
+		if (!params.isEmpty()) {
+			sb.append(START);
+			for (String name : params.keySet()) {
+				sb.append(name).append(EQUAL).append(convert(params.get(name)));
+				sb.append(AND);
+			}
+			sb.deleteCharAt(sb.lastIndexOf(AND));
+		}
+		request = sb.toString();
+		if (encode) {
+			request = URL.encode(request);
+		}
+	}
+	return request;
   }
 
   @Override
@@ -109,4 +111,5 @@ public class RequestURL {
     }
     return String.valueOf(object);
   }
+
 }

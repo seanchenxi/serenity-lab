@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.seanchenxi.gwt.wordpress.json.core;
+package com.seanchenxi.gwt.wordpress.json.core.request;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.jsonp.client.JsonpRequest;
 import com.seanchenxi.gwt.wordpress.json.api.JRequest;
 
-class JRequestImpl implements JRequest {
+class JRequestCSImpl implements JRequest {
+	
   private JsonpRequest<JavaScriptObject> requset;
 
-  JRequestImpl(JsonpRequest<JavaScriptObject> requset) {
+  JRequestCSImpl(JsonpRequest<JavaScriptObject> requset) {
     this.requset = requset;
   }
 
@@ -31,4 +32,5 @@ class JRequestImpl implements JRequest {
     if (requset != null)
       requset.cancel();
   }
+  
 }

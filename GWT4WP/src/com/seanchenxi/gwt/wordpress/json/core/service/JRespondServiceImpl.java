@@ -21,14 +21,13 @@ import com.seanchenxi.gwt.wordpress.json.api.model.Comment;
 import com.seanchenxi.gwt.wordpress.json.api.service.JRespondService;
 import com.seanchenxi.gwt.wordpress.json.core.JMethod;
 import com.seanchenxi.gwt.wordpress.json.core.JParameter;
-import com.seanchenxi.gwt.wordpress.json.core.JService;
-import com.seanchenxi.gwt.wordpress.json.core.RequestURL;
+import com.seanchenxi.gwt.wordpress.json.core.JRequestURLImpl;
 
 public class JRespondServiceImpl extends JService implements JRespondService {
 
   @Override
   public JRequest submitComment(int postId, String name, String email, String url, String content, AsyncCallback<Comment> callback) {
-    RequestURL requrl = new RequestURL(JMethod.SubmitComment);
+    JRequestURLImpl requrl = new JRequestURLImpl(JMethod.SubmitComment);
     requrl.setParameter(JParameter.POST_ID, postId).setParameter(JParameter.NAME, name)
         .setParameter(JParameter.EMAIL, email).setParameter(JParameter.URL, url).setParameter(
             JParameter.CONTENT, content).setEncode(true);
@@ -37,7 +36,7 @@ public class JRespondServiceImpl extends JService implements JRespondService {
 
   @Override
   public JRequest submitComment(int postId, String name, String email, String url, String content, int parentId, AsyncCallback<Comment> callback) {
-    RequestURL requrl = new RequestURL(JMethod.SubmitComment);
+    JRequestURLImpl requrl = new JRequestURLImpl(JMethod.SubmitComment);
     requrl.setParameter(JParameter.POST_ID, postId).setParameter(JParameter.NAME, name)
         .setParameter(JParameter.EMAIL, email).setParameter(JParameter.URL, url).setParameter(
             JParameter.CONTENT, content).setParameter(JParameter.PARENT, parentId).setEncode(true);
