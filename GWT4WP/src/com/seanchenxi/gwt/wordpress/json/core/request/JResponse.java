@@ -52,14 +52,15 @@ class JResponse<M extends JavaScriptObject> extends JSONObject {
     return get("error").isString().stringValue();
   }
 
+  @SuppressWarnings("unchecked")
   final M getResult() {
     if (containsKey("post")) {
-      return get("post").isObject().getJavaScriptObject().cast();
+      return (M)get("post").isObject().getJavaScriptObject().cast();
     }
     if (containsKey("page")) {
-      return get("page").isObject().getJavaScriptObject().cast();
+      return (M)get("page").isObject().getJavaScriptObject().cast();
     }
-    return getJavaScriptObject().cast();
+    return (M)getJavaScriptObject().cast();
   }
 
 }

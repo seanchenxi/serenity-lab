@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.wordpress.json.core.service;
 
-public class JPostsServiceImpl {
+import com.seanchenxi.gwt.wordpress.json.api.service.JPostsService;
+
+public class JPostsServiceImpl implements JPostsService {
 
 }
