@@ -117,18 +117,24 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   
   private class IndexUpdateCommand implements RepeatingCommand {
     private int index = 0;  
+    private int count = 0;
     @Override
     public boolean execute() {
       if (discussions.size() < total) 
-        return false;
+        return false; //means add discussion will continue
       Widget w = main.getWidget(index);
       if(w instanceof DiscussionViewImpl){
         ((DiscussionViewImpl) w).setIndex(index);
+        count++; // count number of discussion
       }
-      if((++index) == main.getWidgetCount() && respond != null){
+      index++;
+      // if number of discussion is equals to discussion list's size,
+      // and respond view is not null, show respond view at last
+      if(count == discussions.size() && respond != null){
         main.add(respond);
       }
-      return index < main.getWidgetCount();
+      // continue only if the number of discussion is less than discussion list's size
+      return count < discussions.size();
     }
   }
 
