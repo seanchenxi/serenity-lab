@@ -23,7 +23,6 @@ import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.i18n.client.Dictionary;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.resource.message.MessageResources;
-import com.seanchenxi.gwt.serenity.client.util.MD5;
 
 public class SerenityUtil {
 	
@@ -53,18 +52,9 @@ public class SerenityUtil {
 		return TimerFormatter.format(date);
 	}
 	
-	public static String getMD5(String string){
-	  if(string == null || string.isEmpty())
-	    return null;
-	  return MD5.encode(string.trim().toLowerCase());
-	}
-	
 	public static boolean isValidEmail(String email){
 	  if(email == null || email.isEmpty()) return false;
-	  if(email.length() < 6) return false;
-	  if(email.indexOf("@") == -1) return false;
-	  if(email.indexOf(".") == -1) return false;
-	  return true;
+	  return email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$");
 	}
 	
 }
