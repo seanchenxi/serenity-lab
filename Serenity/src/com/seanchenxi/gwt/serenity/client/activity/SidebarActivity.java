@@ -20,12 +20,9 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import com.google.gwt.activity.shared.AbstractActivity;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.SerenityFactory;
 import com.seanchenxi.gwt.serenity.client.place.AboutPlace;
@@ -46,7 +43,6 @@ public class SidebarActivity extends AbstractActivity implements Sidebar.Present
 	private SerenityFactory clientFactory;
 	private Sidebar sidebar;
 	private SerenityPlace place;
-	private HandlerRegistration keyUpRegistration;
 	
 	public SidebarActivity(SerenityFactory clientFactory) {
 		this.clientFactory = clientFactory;
@@ -59,28 +55,6 @@ public class SidebarActivity extends AbstractActivity implements Sidebar.Present
 		if(!sidebar.asWidget().isAttached())
 			WPJsonAPI.get().getCoreService().getCategoryIndex(new GetCategoriesAction(sidebar));
 		panel.setWidget(sidebar);
-		keyUpRegistration = clientFactory.getEventBus().addHandler(KeyUpEvent.getType(), new KeyUpHandler() {     
-	      @Override
-	      public void onKeyUp(KeyUpEvent event) {
-	        System.out.println(event.getNativeKeyCode());
-	      }
-	    });
-	}
-	
-	@Override
-	public void onCancel() {
-	 if(keyUpRegistration != null){
-	   keyUpRegistration.removeHandler();
-	   keyUpRegistration = null;
-	 }
-	}
-	
-	@Override
-	public void onStop() {
-	  if(keyUpRegistration != null){
-	     keyUpRegistration.removeHandler();
-	     keyUpRegistration = null;
-	   }
 	}
 	
 	@Override
