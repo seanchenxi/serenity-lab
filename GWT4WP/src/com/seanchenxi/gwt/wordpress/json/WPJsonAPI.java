@@ -46,7 +46,7 @@ public class WPJsonAPI {
   }
   
   private static class JsonAPIHolder {
-    private static final WPJsonAPI INSTANCE = new WPJsonAPI();
+    private static final WPJsonAPI INSTANCE = GWT.create(WPJsonAPI.class);
   }
   
 }
