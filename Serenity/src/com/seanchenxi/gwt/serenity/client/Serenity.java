@@ -18,13 +18,26 @@ package com.seanchenxi.gwt.serenity.client;
 import java.util.logging.Level;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.seanchenxi.gwt.logging.api.Log;
 
 public class Serenity implements EntryPoint {
 
 	public void onModuleLoad() {
-		Log.setLevel(Level.FINEST);
-		SerenityWeb.getInstance().run();
+	  Log.setLevel(Level.FINEST);
+	  if(!SerenityUtil.replaceIfIdOldRequest()){
+	    GWT.runAsync(new RunAsyncCallback() {
+        @Override
+        public void onSuccess() {
+          SerenityWeb.getInstance().run();
+        }
+        @Override
+        public void onFailure(Throwable reason) {
+          Log.severe("[Serenity] load module error", reason);
+        }
+      });
+	  }
 	}
 
 }

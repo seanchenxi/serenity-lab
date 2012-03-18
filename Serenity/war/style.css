@@ -1,12 +1,10 @@
 /* 
-
-Theme Name: Serenity-X
+Theme Name: Serenity-G
 Theme URI: http://seanchenxi.com/
-Description: CHEN Xi's GWT made themplate
+Description: CHEN Xi's GWT made Wordpress Theme
 Version: 1
 Author: CHEN Xi	
 Author URI: http://seanchenxi.com/
-
 */
 
 @charset "utf-8";
@@ -30,12 +28,12 @@ body {
 	text-align: left;
 	min-width: 1024px;
 	min-height: 700px;
-	background: #E2E2E2 none repeat scroll 0 0;
-	background: #E1E1E1 url(images/bg.jpg) no-repeat fixed center center;
+	background: #E2E2E2 url(images/body.jpg) repeat scroll 0 0;
+	/*background: #E1E1E1 url(images/bg.jpg) no-repeat fixed center center;
 	background-size: 100% 100%;
 	-webkit-background-size: 100% 100%;
 	-moz-background-size: 100% 100% !important;
-	-o-background-size: 100% 100%;
+	-o-background-size: 100% 100%;*/
 }
 
 ::-moz-selection {

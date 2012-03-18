@@ -30,9 +30,9 @@ public class AboutContentsActivity extends ContentListActivity {
   protected void fetchContents(String slug, int offset, int size, final ContentListView view) {
     view.clearContentList();
     view.setPagingInfo("About",  0 , 3, 3);
-    view.addContent("chen-xi", "CHEN Xi", "About CHEN Xi", "");
-    view.addContent("seanchenxi-com", "SeanChenXi.com", "About seanchenxi.com", "-- Since 2007");
-    view.addContent("theme", "Theme", "About seanchenxi.com's Theme", "-- in 2012");
+    view.addContent("xi-chen", "Xi CHEN", "About me...", "");
+    view.addContent("seanchenxi-com", "SeanChenXi.com", "About SeanChenXi.com", "-- Since 2007");
+    view.addContent("theme", "Theme", "About SeanChenXi.com's Theme", "-- in 2012");
     if(slug != null && !slug.isEmpty()){
       view.highlightContentItem(slug);
     }

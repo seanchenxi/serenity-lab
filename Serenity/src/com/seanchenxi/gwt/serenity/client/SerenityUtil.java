@@ -18,10 +18,15 @@ package com.seanchenxi.gwt.serenity.client;
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.i18n.client.Dictionary;
+import com.google.gwt.user.client.Window.Location;
 import com.seanchenxi.gwt.logging.api.Log;
+import com.seanchenxi.gwt.serenity.client.place.SerenityPlaceUtil;
 import com.seanchenxi.gwt.serenity.client.resource.message.MessageResources;
 
 public class SerenityUtil {
@@ -55,6 +60,41 @@ public class SerenityUtil {
 	public static boolean isValidEmail(String email){
 	  if(email == null || email.isEmpty()) return false;
 	  return email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$");
+	}
+	
+	public static String getWpBaseUrl(){
+	  Element el = Document.get().getElementsByTagName("head").getItem(0);
+	  NodeList<Element> els = el.getElementsByTagName("meta");
+	  for(int i = 0; i < els.getLength(); i++){
+	    if("url".equalsIgnoreCase(els.getItem(i).getAttribute("name"))){
+	      return els.getItem(i).getAttribute("content");
+	    }
+	  }
+	  return "/";
+	}
+	
+	public static boolean replaceIfIdOldRequest(){
+	  String path = Location.getPath();
+	  String query = Location.getQueryString();
+	  if(path.endsWith(".html")){
+	    try{
+  	    String[] slugs = path.split("/");
+  	    String token = SerenityPlaceUtil.getArticleAnchor(slugs[slugs.length - 1].replace(".html", ""));
+  	    StringBuilder sb = new StringBuilder(getWpBaseUrl());
+  	    if(query != null){
+  	      sb.append(query);
+  	    }else{
+  	      sb.append("/");
+  	    }
+  	    sb.append(token);
+  	    Log.finest("[SerenityUtil] replace to " + sb.toString());
+  	    Location.replace(sb.toString());
+  	    return true;
+	    }catch (Exception e) {
+	      Log.warn("[SerenityUtil] replace error", e);
+      }
+	  }
+	  return false;
 	}
 	
 }

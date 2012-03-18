@@ -29,6 +29,10 @@ public class SerenityPlaceUtil {
 	
 	private static final HomePlace DEFAULT = new HomePlace();
 	
+  public static String getArticleAnchor(String slug) {
+    return buildToken(ArticlePlace.PREFIX, slug, 0, true);
+  }
+	 
 	public static String getCategoryAnchor(String slug, int page){
 		return buildToken(CategoryPlace.PREFIX, slug, page, true);
 	}
