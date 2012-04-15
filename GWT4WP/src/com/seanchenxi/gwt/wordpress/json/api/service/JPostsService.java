@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.wordpress.json.api.service;
 
+// TODO implement all services for posting new article
 public interface JPostsService {
 
 }

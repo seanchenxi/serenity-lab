@@ -38,6 +38,11 @@ public class Configuration {
 		return instance;
 	}
 	
+	/**
+	 * Get plugin Json API's service path
+	 * If it is not defined in the dictionary "WPJsonAPIConfig", "/api" is returned as default value
+	 * @return the relative 
+	 */
 	public String getServicePath(){
 		try{
 			return jServiceConfig.get(ServicePathKey).trim();
@@ -46,6 +51,12 @@ public class Configuration {
 		}
 	}
 	
+	/**
+	 * Get HTTP Request Timeout Time, 20s by default.
+	 * If it is not set in the dictionary "WPJsonAPIConfig", 20s is returned as default value
+	 * 
+	 * @return The defined HTTP Request Timeout Time. 
+	 */
 	public int getRequestTimeoutTime(){
 		try{
 			return Integer.parseInt(jServiceConfig.get(RequestTimeoutKey));

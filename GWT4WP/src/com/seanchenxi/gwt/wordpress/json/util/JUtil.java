@@ -22,11 +22,21 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
+/**
+ * JSON Object String parsing utility class
+ * @author Xi
+ *
+ */
 @SuppressWarnings("unchecked")
 public class JUtil {
 
 	private final static DateTimeFormat DATE_TIME_FORMATTER = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
 
+	/**
+	 * Convert a {@link JsArray} to {@link ArrayList}
+	 * @param jsList
+	 * @return
+	 */
 	public static <M extends JavaScriptObject> ArrayList<M> convert(
 			JsArray<? extends JavaScriptObject> jsList) {
 		if (jsList == null || jsList.length() < 1)
@@ -41,12 +51,22 @@ public class JUtil {
 		return list;
 	}
 
+	/**
+	 * Convert a {@link String} in format "yyyy-MM-dd HH:mm:ss" to {@link Date} 
+	 * @param dateString, date string in format "yyyy-MM-dd HH:mm:ss"
+	 * @return date
+	 */
 	public static Date parse(String dateString) {
 		if (dateString == null || dateString.isEmpty())
 			return null;
 		return DATE_TIME_FORMATTER.parse(dateString);
 	}
 
+	/**
+	 * Convert a {@link Date} to {@link String} "yyyy-MM-dd HH:mm:ss"
+	 * @param date
+	 * @return a "yyyy-MM-dd HH:mm:ss" formatted date string
+	 */
 	public static String format(Date date) {
 		if (date == null)
 			return null;
