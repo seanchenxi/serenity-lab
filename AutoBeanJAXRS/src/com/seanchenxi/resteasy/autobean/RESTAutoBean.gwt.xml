@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <inherits name='com.google.gwt.http.HTTP'/>
+  <inherits name='com.google.web.bindery.autobean.AutoBean'/>
+
+  <generate-with class="com.seanchenxi.resteasy.autobean.generator.ThrowableFactoryGenerator">
+  	<when-type-is class="com.seanchenxi.resteasy.autobean.client.ThrowableFactory"/>
+  </generate-with>
+  
+  <generate-with class="com.seanchenxi.resteasy.autobean.generator.RESTClientGenerator">
+    <when-type-assignable class="com.seanchenxi.resteasy.autobean.share.HasRESTClient" />
+  </generate-with>
+  
+  <source path='client'/>
+  <source path='share'/>
+<!--   <super-source path='jaxrs'/> -->
+  
+</module>

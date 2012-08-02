@@ -1,0 +1,4 @@
+1. Implement request parameters
+2. Find a better way to do AutoBeanFactory registration
+3. Maybe should use a general AutoBean to encapsulate all returned result object
+4. Generate ThowableFactory by parsing HasRESTClient's sub types
