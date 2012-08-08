@@ -10,19 +10,23 @@ import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.web.bindery.autobean.shared.Splittable;
 import com.google.web.bindery.autobean.shared.impl.StringQuoter;
+import com.seanchenxi.resteasy.autobean.share.RESTResponse;
 
-class RESTCallbackAdapter<T> implements RequestCallback {
+class RESTResponseHandler<T> implements RequestCallback {
 
-	private final AsyncCallback<T> callback;
+	private final String fullServiceName;
 	private final String uri;
 	private final Class<T> clazz;
+	private final AsyncCallback<T> callback;
 
-	public RESTCallbackAdapter(String uri, Class<T> clazz,
+	public RESTResponseHandler(String fullServiceName, String uri, Class<T> clazz,
 			AsyncCallback<T> callback) {
 		assert (callback != null);
+		assert (clazz != null);
 		this.callback = callback;
 		this.uri = uri;
 		this.clazz = clazz;
+		this.fullServiceName = fullServiceName;
 	}
 
 	@Override
@@ -35,21 +39,21 @@ class RESTCallbackAdapter<T> implements RequestCallback {
 		T result = null;
 		Throwable caught = null;
 		try {
-			String encodedResponse = response.getText();
+		  RESTResponse restResponse = REST.decodeResponse(response.getText());
 			int statusCode = response.getStatusCode();
 			if (statusCode != Response.SC_OK) {
-				if(statusCode != Response.SC_NO_CONTENT || !Void.class.equals(clazz)){
-					caught = new StatusCodeException(statusCode, encodedResponse);
-				}
-			}else if (encodedResponse == null) {
-				caught = new InvocationException("No response payload from " + uri);
+				caught = new StatusCodeException(statusCode, response.getText());
+			}else if (restResponse == null) {
+				caught = new InvocationException("No response payload from " + uri + " of service " + fullServiceName);
+			}else if(REST.isReturnValue(restResponse)){
+			  if(!Void.class.equals(clazz)){
+			    Splittable data = StringQuoter.split(restResponse.getPayload());
+			    if(data != null)  result = (T) REST.decodeData(clazz, data);
+			  }
+			}else if(REST.isThrowable(restResponse)){
+			  caught = REST.decodeThrowable(restResponse.getPayload());
 			}else{
-				Splittable data = StringQuoter.split(encodedResponse);
-				if(REST.isThrowable(data)){
-					caught = REST.decodeThrowable(data);
-				}else if(data != null){
-					result = (T) REST.decodeData(clazz, data);
-				}
+			  caught = new InvocationException(restResponse + " from " + uri + " of service " + fullServiceName);
 			}
 		} catch (SerializationException e) {
 			caught = new IncompatibleRemoteServiceException("The response: \n{"

@@ -9,12 +9,33 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+import com.seanchenxi.resteasy.autobean.share.RESTService;
 
 public class ThrowableFactoryGenerator extends Generator {
+  
+  private static HashSet<String> THROWABLES = new HashSet<String>();
+  static{
+    THROWABLES.add("java.lang.ArithmeticException");
+    THROWABLES.add("java.lang.ArrayIndexOutOfBoundsException");
+    THROWABLES.add("java.lang.ArrayStoreException");
+    THROWABLES.add("java.lang.ClassCastException");
+    THROWABLES.add("java.lang.Exception");
+    THROWABLES.add("java.lang.IllegalArgumentException");
+    THROWABLES.add("java.lang.IllegalStateException");
+    THROWABLES.add("java.lang.IndexOutOfBoundsException");
+    THROWABLES.add("java.lang.NegativeArraySizeException");
+    THROWABLES.add("java.lang.NullPointerException");
+    THROWABLES.add("java.lang.NumberFormatException");
+    THROWABLES.add("java.lang.RuntimeException");
+    THROWABLES.add("java.lang.StringIndexOutOfBoundsException");
+    THROWABLES.add("java.lang.UnsupportedOperationException");
+    THROWABLES.add("java.lang.Throwable");
+  }
 
 	@Override
 	public String generate(TreeLogger logger, GeneratorContext context,
@@ -46,6 +67,11 @@ public class ThrowableFactoryGenerator extends Generator {
 			writer.println("		return new " + qname + " (message);");
 			writer.println("	}");
 		}
+    for (String qname : getAllThrowableTypes(oracle, logger)) {
+      writer.println("  if(\"" + qname + "\".equals(className)) {");
+      writer.println("    return new " + qname + " (message);");
+      writer.println("  }");
+    }
 		writer.println("	return null;");
 		writer.println("}");
 		writer.outdent();
@@ -59,35 +85,21 @@ public class ThrowableFactoryGenerator extends Generator {
 		try {
 			JType[] params = new JType[1];
 			params[0] = oracle.parse("java.lang.String");
-			JClassType[] types = oracle.getType(Throwable.class.getName()).getSubtypes();
-			for (JClassType type : types) {
-				try {
-					String name = type.getQualifiedSourceName();
-					if (name.startsWith("com.pcis.phenix")
-							&& null != type.getConstructor(params)) {
-						set.add(name);
-					}
-				} catch (Exception e) {
-				}
+			JClassType[] svcTypes = oracle.getType(RESTService.class.getName()).getSubtypes();
+			for(JClassType type : svcTypes){
+			  for(JMethod method : type.getMethods()){
+			    for(JClassType throwable : method.getThrows()){
+			      if(null != throwable.getConstructor(params))
+			        set.add(throwable.getQualifiedSourceName());
+			      else
+			        logger.log(Type.WARN, throwable.getQualifiedSourceName() + " will be ignored for serialization, it must at least have a constructor with string type message as parameter.");
+			    }
+			  }
 			}
 		} catch (Exception e) {
 			logger.log(Type.ERROR, e.getMessage(), e);
 		}
-		set.add("java.lang.ArithmeticException");
-		set.add("java.lang.ArrayIndexOutOfBoundsException");
-		set.add("java.lang.ArrayStoreException");
-		set.add("java.lang.ClassCastException");
-		set.add("java.lang.Exception");
-		set.add("java.lang.IllegalArgumentException");
-		set.add("java.lang.IllegalStateException");
-		set.add("java.lang.IndexOutOfBoundsException");
-		set.add("java.lang.NegativeArraySizeException");
-		set.add("java.lang.NullPointerException");
-		set.add("java.lang.NumberFormatException");
-		set.add("java.lang.RuntimeException");
-		set.add("java.lang.StringIndexOutOfBoundsException");
-		set.add("java.lang.UnsupportedOperationException");
-		set.add("java.lang.Throwable");
+		set.addAll(THROWABLES);
 		return set;
 	}
 

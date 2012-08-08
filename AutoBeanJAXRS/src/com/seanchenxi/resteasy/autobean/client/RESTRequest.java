@@ -1,11 +1,11 @@
 package com.seanchenxi.resteasy.autobean.client;
 
+import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestBuilder.Method;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.SerializationException;
 
 public class RESTRequest {
   
@@ -26,16 +26,12 @@ public class RESTRequest {
   /**
    *  Executes the request with all the information set in the current object. The value is never returned but passed to the optional argument callback. 
    * @param clazz 
+   * @return 
+   * @throws RequestException 
    */
-  public <T> void execute(Class<T> clazz, AsyncCallback<T> callback){
-    if(callback != null){
-    	try {
-    		builder.setCallback(new RESTCallbackAdapter<T>(builder.getUrl(), clazz, callback));
-			builder.send();
-		} catch (RequestException e) {
-			callback.onFailure(e);
-		}
-    }
+  public <T> Request execute(String fullServiceName, Class<T> clazz, AsyncCallback<T> callback) throws RequestException{
+    builder.setCallback(new RESTResponseHandler<T>(fullServiceName, builder.getUrl(), clazz, callback));
+    return builder.send();
   }
   
   /**
@@ -58,13 +54,8 @@ public class RESTRequest {
   /**
    *  Sets the request entity.
    */
-  public RESTRequest setRequestData(Object...requestData){
-    try {
-      if(requestData != null && requestData.length > 0)
-      builder.setRequestData(REST.encodeRequestData(requestData));
-    } catch (SerializationException e) {
-      e.printStackTrace(System.err);
-    }
+  public RESTRequest setRequestData(String requestData){
+    builder.setRequestData(requestData);
     return this;
   }
   

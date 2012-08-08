@@ -29,9 +29,12 @@ import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
+import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.autobean.shared.AutoBeanUtils;
-import com.seanchenxi.resteasy.autobean.server.AutoBeanFactoryHolder;
+import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
+import com.seanchenxi.resteasy.autobean.share.RESTResponse;
+import com.seanchenxi.resteasy.autobean.share.RSETBeanFactory;
 import com.seanchenxi.resteasy.autobean.share.StackTraceElementBean;
 import com.seanchenxi.resteasy.autobean.share.ThrowableBean;
 
@@ -48,6 +51,7 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 	protected final static String CHARSET_UTF8 = "UTF-8";
 	protected final static String GENERIC_FAILURE_MSG = "The call failed on the server; see server log for details";
 	
+	private RSETBeanFactory REST_BEAN_FACTORY = AutoBeanFactorySource.create(RSETBeanFactory.class);
 	private final static Logger Log = Logger.getLogger(AutoBeanProvider.class.getName());
 
 	protected final static HashSet<Class<?>> untouchables = new HashSet<Class<?>>();
@@ -83,7 +87,19 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 			Annotation[] arg3, MediaType arg4,
 			MultivaluedMap<String, Object> arg5, OutputStream out)
 			throws IOException, WebApplicationException {
-		byte[] payloadBytes = AutoBeanCodex.encode(AutoBeanUtils.getAutoBean(arg0)).getPayload().getBytes(CHARSET_UTF8);
+	  
+	  AutoBean<RESTResponse> responseBean = REST_BEAN_FACTORY.resposne();
+	  String payload = null;
+	  if(arg0 instanceof ThrowableBean){
+	    payload = AutoBeanCodex.encode((AutoBean<?>) arg0).getPayload();
+	    responseBean.as().setType(RESTResponse.Type.EX);
+	  }else{
+	    payload = AutoBeanCodex.encode(AutoBeanUtils.getAutoBean(arg0)).getPayload();
+	    responseBean.as().setType(RESTResponse.Type.OK);
+	  }
+	  responseBean.as().setPayload(payload);
+	  
+		byte[] payloadBytes = AutoBeanCodex.encode(responseBean).getPayload().getBytes(CHARSET_UTF8);
 		if (acceptsGzipEncoding(requset)) { //this is optional
 			ByteArrayOutputStream output = null;
 			GZIPOutputStream gzipOutputStream = null;
@@ -144,12 +160,12 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 	}
 
 	private ThrowableBean convert(Throwable failure){
-		ThrowableBean tb = AutoBeanFactoryHolder.getFactory().throwable().as();
+		ThrowableBean tb = REST_BEAN_FACTORY.throwable().as();
 		tb.setExceptionType(failure.getClass().getName());
 		tb.setMessage(failure.getMessage());
 		List<StackTraceElementBean> stackTraceBeans = new ArrayList<StackTraceElementBean>();
 		for(StackTraceElement ste : failure.getStackTrace()){
-			StackTraceElementBean steb = AutoBeanFactoryHolder.getFactory().stackTraceElement().as();
+			StackTraceElementBean steb = REST_BEAN_FACTORY.stackTraceElement().as();
 			steb.setClassName(ste.getClassName());
 			steb.setFileName(ste.getFileName());
 			steb.setLineNumber(ste.getLineNumber());

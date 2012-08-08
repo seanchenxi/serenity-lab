@@ -15,8 +15,17 @@ Then add
 		<listener-class>com.seanchenxi.resteasy.autobean.server.AutoBeanFacotryIntializer</listener-class>
 	</listener>
 
-5. Your REST Resource interface should extends HasRESTClient
-6. Your GWT REST Client Async interface should be created just like GWT RPC Async
+5. Your REST Resource interface should extends "com.seanchenxi.resteasy.autobean.share.RESTService"
+6. Your GWT REST Client Async interface should be created just like GWT RPC Async 
 7. Then use 
+
+   interface RestResource extends com.seanchenxi.resteasy.autobean.share.RESTService {
+       void helloWorld();
+   }
+   
+   interface RestResourceAsync {
+       void helloWorld(AsyncCallback<Void> callback);
+   }
+   
    RestResourceAsync service = GWT.create(RestResource.class)
    

@@ -6,9 +6,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
-import com.google.web.bindery.autobean.shared.AutoBeanUtils;
+import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 import com.google.web.bindery.autobean.shared.Splittable;
-import com.seanchenxi.resteasy.autobean.share.RestAutoBeanFactory;
+import com.seanchenxi.resteasy.autobean.share.RESTResponse;
+import com.seanchenxi.resteasy.autobean.share.RSETBeanFactory;
 import com.seanchenxi.resteasy.autobean.share.StackTraceElementBean;
 import com.seanchenxi.resteasy.autobean.share.ThrowableBean;
 
@@ -20,48 +21,12 @@ public class REST {
 
 	private static final ThrowableFactory THROWABLE_FACTORY = GWT.create(ThrowableFactory.class);
 	
-	private static RestAutoBeanFactory FACTORY;
+	private static RSETBeanFactory REST_BEAN_FACTORY = GWT.create(RSETBeanFactory.class);
 	
-	public static <T extends RestAutoBeanFactory> void registerFactory(T factory){
+	private static AutoBeanFactory FACTORY;
+	
+	public static <T extends AutoBeanFactory> void registerFactory(T factory){
 		REST.FACTORY = factory;
-	}
-
-	public static <T, U extends T> String encodeRequestData(U...delegates) throws SerializationException {
-		if (delegates == null) return null;
-		StringBuilder sb = new StringBuilder("{");
-		for(U delegate : delegates){
-			if (delegate instanceof String){
-				sb.append("i:\""+String.valueOf(delegate) + "\", ");
-			}else if (delegate instanceof Number){
-				sb.append("n:"+String.valueOf(delegate) + ", ");
-			}else if (delegate instanceof Boolean){
-				sb.append("b:"+String.valueOf(delegate));
-			}else{
-				try {
-					@SuppressWarnings("unchecked")
-					AutoBean<T> bean = (AutoBean<T>) AutoBeanUtils.getAutoBean(delegate);
-					if (bean == null) {
-						throw new IllegalStateException("The given " + delegate
-								+ " is not wrapped by an AutoBean !");
-					}
-					sb.append(AutoBeanCodex.encode(bean).getPayload());
-				} catch (Exception e) {
-					throw new SerializationException(e);
-				}
-			}
-		}
-		sb.append("}");
-		System.out.println(sb);
-		return sb.toString();
-	}
-
-	public static <U> U decodePayload(Class<U> clazz, String payload) throws SerializationException {
-		try {
-			AutoBean<U> bean = AutoBeanCodex.decode(FACTORY, clazz, payload);
-			return bean.as();
-		} catch (Exception e) {
-			throw new SerializationException(e);
-		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -83,7 +48,7 @@ public class REST {
 					return (U) number;
 				}
 			}else{
-				AutoBean<U> bean = AutoBeanCodex.decode(FACTORY, clazz, data);
+			  AutoBean<U> bean = AutoBeanCodex.decode(FACTORY, clazz, data);
 				return bean != null ? bean.as() : null;
 			}
 		} catch (Exception e) {
@@ -91,8 +56,7 @@ public class REST {
 		}
 	}
 
-	public static <T, U extends T> AutoBean<T> createAutoBean(Class<T> clazz,
-			U toWrap) throws SerializationException {
+	public static <T, U extends T> AutoBean<T> createAutoBean(Class<T> clazz, U toWrap) throws SerializationException {
 		try {
 			AutoBean<T> bean = FACTORY.create(clazz, toWrap);
 			return bean;
@@ -101,17 +65,27 @@ public class REST {
 		}
 	}
 	
-	public static boolean isThrowable(Splittable data){
-		try{
-			return data != null && !data.isNull("exceptionType");
-		}catch (Exception e) {
-			return false;
-		}
+	public static boolean isReturnValue(RESTResponse restResponse) {
+    return restResponse != null && RESTResponse.Type.OK.equals(restResponse.getType());
+  }
+	
+	public static boolean isThrowable(RESTResponse restResponse){
+	  return restResponse != null && RESTResponse.Type.EX.equals(restResponse.getType());
 	}
 	
-	public static Throwable decodeThrowable(Splittable data) throws SerializationException {
+	public static RESTResponse decodeResponse(String encodedResponse) throws SerializationException {
+	  if(encodedResponse == null || encodedResponse.trim().isEmpty()) return null;
+    try {
+      AutoBean<RESTResponse> bean = AutoBeanCodex.decode(REST_BEAN_FACTORY, RESTResponse.class, encodedResponse);
+      return bean.as();
+    } catch (Exception e) {
+      throw new SerializationException(e);
+    }
+  }
+	
+	public static Throwable decodeThrowable(String throwablePayload) throws SerializationException {
 		try {
-			AutoBean<ThrowableBean> bean = AutoBeanCodex.decode(FACTORY, ThrowableBean.class, data);
+			AutoBean<ThrowableBean> bean = AutoBeanCodex.decode(REST_BEAN_FACTORY, ThrowableBean.class, throwablePayload);
 			return convert(bean.as());
 		} catch (Exception e) {
 			throw new SerializationException(e);
@@ -135,4 +109,6 @@ public class REST {
 		}
 		return caught;
 	}
+
+  
 }

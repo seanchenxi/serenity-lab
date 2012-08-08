@@ -25,8 +25,9 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 import com.seanchenxi.resteasy.autobean.client.RESTRequest;
+import com.seanchenxi.resteasy.autobean.client.RESTServiceProxy;
 
-public class RESTClientGenerator extends Generator {
+public class RESTServiceGenerator extends Generator {
 	
 	private static final String METHOD_PREFIX = RequestBuilder.class.getSimpleName();
 	private static final String REST_REQUEST = RESTRequest.class.getSimpleName();
@@ -66,6 +67,7 @@ public class RESTClientGenerator extends Generator {
 		
 		ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleName);
 		factory.addImplementedInterface(asyncTypeName);
+		factory.setSuperclass(RESTServiceProxy.class.getName());
 		factory.addImport(RequestBuilder.class.getName());
 		factory.addImport(RESTRequest.class.getName());
 		
@@ -124,7 +126,7 @@ public class RESTClientGenerator extends Generator {
 		writer.println("public void %s(%s){", methodName, methodParams);
 		writer.println("	%1s request = new %1$s(%2$s, \"%3$s\");", REST_REQUEST, httpMethod, restPath);
 		writer.println("	request.setRequestData(%s);", requestDatas);
-		writer.println("	request.execute(%s.class, callback);", clazz);
+		writer.println("	invoke(%s, request, %s.class, callback);", clazz);
 		writer.println("}");
 		writer.println("");
 	}

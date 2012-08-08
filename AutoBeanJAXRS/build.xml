@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="AutoBeanJAXRS" default="update" basedir="." >
+<project name="AutoBeanJAXRS" default="jar" basedir="." >
 
-	<import file="../Phenix/build.xml" />
-
-	<property name="build.path" location="build/classes" />
+	<property name="build.path" location="bin" />
 
 	<path id="libs">
-		<fileset dir="${Phenix.Runtime}" includes="**/*.jar"/>
-		<fileset dir="${Phenix.ThirdParty}/GWT" includes="gwt-user.jar, gwt-dev*.jar, validation-api*.jar"/>
+		<fileset dir="libs" includes="**/*.jar"/>
+		<fileset dir="D:/Lib/GWT" includes="gwt-user.jar, gwt-dev*.jar, validation-api*.jar"/>
 	</path>
 
 	<target name="clean">
@@ -31,19 +29,16 @@
 
 	<target name="jar" depends="build">
 		<mkdir dir="src/META-INF" />
+		<mkdir dir="target" />
 		<echo message="Packaging to ${ant.project.name}.jar" />
-		<jar destfile="${ant.project.name}.jar">
+		<jar destfile="target/${ant.project.name}.jar">
 			<metainf dir="src/META-INF" />
 			<fileset dir="${build.path}" includes="**/*.*" />
 			<manifest>
-				<attribute name="Implementation-Vendor" value="${Phenix.Vendor}" />
+				<attribute name="Implementation-Vendor" value="seanchenxi.com" />
 				<attribute name="Implementation-Title" value="${ant.project.name}" />
 			</manifest>
 		</jar>
-	</target>
-	
-	<target name="update" depends="jar">
-		<move todir="../Phenix/EarContent/shared" file="${ant.project.name}.jar" />
 	</target>
 
 </project>
