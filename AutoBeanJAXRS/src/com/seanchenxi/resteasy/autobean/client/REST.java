@@ -8,8 +8,8 @@ import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.autobean.shared.AutoBeanFactory;
 import com.google.web.bindery.autobean.shared.Splittable;
+import com.seanchenxi.resteasy.autobean.share.RESTBeanFactory;
 import com.seanchenxi.resteasy.autobean.share.RESTResponse;
-import com.seanchenxi.resteasy.autobean.share.RSETBeanFactory;
 import com.seanchenxi.resteasy.autobean.share.StackTraceElementBean;
 import com.seanchenxi.resteasy.autobean.share.ThrowableBean;
 
@@ -20,8 +20,7 @@ public class REST {
 	public static final String ACCEPT_ALL = "*/*";
 
 	private static final ThrowableFactory THROWABLE_FACTORY = GWT.create(ThrowableFactory.class);
-	
-	private static RSETBeanFactory REST_BEAN_FACTORY = GWT.create(RSETBeanFactory.class);
+	private static final RESTBeanFactory REST_BEAN_FACTORY = GWT.create(RESTBeanFactory.class);
 	
 	private static AutoBeanFactory FACTORY;
 	
@@ -31,6 +30,7 @@ public class REST {
 	
 	@SuppressWarnings("unchecked")
 	public static <U> U decodeData(Class<U> clazz, Splittable data) throws SerializationException {
+	  assert FACTORY != null : "REST.register(factory) to register your autobean factory class";
 		try {
 			if(data.isBoolean()){
 				return (U) Boolean.valueOf(data.asBoolean());
@@ -57,7 +57,8 @@ public class REST {
 	}
 
 	public static <T, U extends T> AutoBean<T> createAutoBean(Class<T> clazz, U toWrap) throws SerializationException {
-		try {
+	  assert FACTORY != null : "REST.register(factory) to register your autobean factory class";
+	  try {
 			AutoBean<T> bean = FACTORY.create(clazz, toWrap);
 			return bean;
 		} catch (Exception e) {

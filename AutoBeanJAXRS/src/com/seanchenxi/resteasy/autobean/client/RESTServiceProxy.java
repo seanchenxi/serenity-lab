@@ -7,20 +7,17 @@ import com.google.gwt.user.client.rpc.InvocationException;
 
 public abstract class RESTServiceProxy {
 
-  protected RESTServiceProxy(){
-    
-  }
+  protected RESTServiceProxy(){}
   
-  protected <T> Request invoke(String fullServiceName, RESTRequest builder, Class<T> clazz, AsyncCallback<T> callback){
-    if(callback == null) 
-      throw new IllegalArgumentException("The AsyncCallback in "+fullServiceName+" shouldn't be null !");
+  protected <T> Request invoke(RESTRequest<T> builder, Class<T> clazz, AsyncCallback<T> callback){
     assert builder != null : "create RESTRequestBuilder at first";
+    if(callback == null) throw new IllegalArgumentException("The AsyncCallback in " + builder.getResourceName() + " is null !");
     try {
-      return builder.execute(fullServiceName, clazz, callback);
+      return builder.execute(clazz, callback);
     } catch (RequestException ex) {
       InvocationException iex = new InvocationException(
           "Unable to initiate the asynchronous service invocation (" +
-              fullServiceName + ") -- check the network connection",
+              builder.getResourceName() + ") -- check the network connection",
           ex);
       callback.onFailure(iex);
     }

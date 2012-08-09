@@ -7,20 +7,46 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class RESTRequest {
+public final class RESTRequest<T> {
   
   public static final String CONTENT_TYPE_HEADER = "Content-Type";
   public static final String ACCEPT_HEADER = "Accept";
+
   private final RequestBuilder builder;
+  private final String resourceName;
   
-  public RESTRequest(String uri){
-    this(RequestBuilder.GET, uri);
+  public RESTRequest(String uri, String resourceName){
+    this(RequestBuilder.GET, uri, resourceName);
   }
   
-  public RESTRequest(Method httpMethod, String uri){
-    builder = new RequestBuilder(httpMethod, uri);
+  public RESTRequest(Method httpMethod, String uri, String resourceName){
+    this.resourceName = resourceName;
+    this.builder = new RequestBuilder(httpMethod, uri);
     setContentType(REST.JSON_CONTENT_TYPE_UTF8);
     setAccepts(REST.ACCEPT_JSON);
+  }
+  
+  public String getResourceName() {
+    return resourceName;
+  }
+  
+  /**
+   * 
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  public RESTResponseHandler<T> getResponseHandler(){
+    return builder.getCallback() == null ? null : (RESTResponseHandler<T>) builder.getCallback();
+  }
+  
+  /**
+   * 
+   * @param responseHandler
+   * @return
+   */
+  public RESTRequest<T> setResponseHandler(RESTResponseHandler<T> responseHandler) {
+    builder.setCallback(responseHandler);
+    return this;
   }
   
   /**
@@ -29,15 +55,18 @@ public class RESTRequest {
    * @return 
    * @throws RequestException 
    */
-  public <T> Request execute(String fullServiceName, Class<T> clazz, AsyncCallback<T> callback) throws RequestException{
-    builder.setCallback(new RESTResponseHandler<T>(fullServiceName, builder.getUrl(), clazz, callback));
+  public Request execute(Class<T> clazz, AsyncCallback<T> callback) throws RequestException{
+    RESTResponseHandler<T> responseHandler = getResponseHandler();
+    if(null == responseHandler) setResponseHandler(responseHandler = new BaseResponseHandler<T>(builder.getUrl()));
+    responseHandler.setCallback(clazz, callback);
+    responseHandler.setResourceName(resourceName);
     return builder.send();
   }
   
   /**
    * Sets the Accept request header. Defaults to application/json.
    */
-  public RESTRequest setAccepts(String acceptHeader){
+  public RESTRequest<T> setAccepts(String acceptHeader){
     builder.setHeader(ACCEPT_HEADER, acceptHeader);
     return this;
   }
@@ -45,7 +74,7 @@ public class RESTRequest {
    /**
     * Sets the request credentials.
     */
-  public RESTRequest setCredentials(String username, String password){
+  public RESTRequest<T> setCredentials(String username, String password){
     builder.setUser(username);
     builder.setPassword(password);
     return this;
@@ -54,7 +83,7 @@ public class RESTRequest {
   /**
    *  Sets the request entity.
    */
-  public RESTRequest setRequestData(String requestData){
+  public RESTRequest<T> setRequestData(String requestData){
     builder.setRequestData(requestData);
     return this;
   }
@@ -62,7 +91,7 @@ public class RESTRequest {
   /**
    * Sets the Content-Type request header.
    */
-  public RESTRequest setContentType(String contentTypeHeader){
+  public RESTRequest<T> setContentType(String contentTypeHeader){
     builder.setHeader(CONTENT_TYPE_HEADER, contentTypeHeader);
     return this;
   }  
@@ -70,7 +99,7 @@ public class RESTRequest {
   /**
    * Sets the given cookie in the current document when executing the request. Beware that this will be persistent in your browser.
    */
-  public RESTRequest addCookie(String name, String value){
+  public RESTRequest<T> addCookie(String name, String value){
     Cookies.setCookie(name, value);
     return this;
   } 
@@ -78,23 +107,23 @@ public class RESTRequest {
   /**
    * Adds a query parameter to the URI query part.
    */
-  public RESTRequest addQueryParameter(String name, String value){
+  public RESTRequest<T> addQueryParameter(String name, String value){
     throw new UnsupportedOperationException();
   } 
   
   /**
    * Adds a matrix parameter (path parameter) to the last path segment of the request URI.
    */
-  public RESTRequest addMatrixParameter(String name, String value){
+  public RESTRequest<T> addMatrixParameter(String name, String value){
     throw new UnsupportedOperationException();
   } 
   
   /**
    * Adds a request header. 
    */
-  public RESTRequest addHeader(String name, String value){
+  public RESTRequest<T> addHeader(String name, String value){
     builder.setHeader(name, value);
     return this;
-  }  
+  }
   
 }

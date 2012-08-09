@@ -122,12 +122,12 @@ public class RESTServiceGenerator extends Generator {
 			logger.log(Type.WARN, "Method " + methodName + " has no AsyncCallback<T> paramter, ingore");
 			return; //should have AsyncCallback<T> parameter
 		}
-		
+		String resourceName = asyncTypeName+"."+asyncMethod.getName();
 		writer.println("@Override");
 		writer.println("public void %s(%s){", methodName, methodParams);
-		writer.println("	%1s request = new %1$s(%2$s, %3$s);", REST_REQUEST, httpMethod, restPath);
+		writer.println("	%1s request = new %1$s(%2$s, %3$s, \"%4$s\");", REST_REQUEST, httpMethod, restPath, resourceName);
 //		writer.println("	request.setRequestData(%s);", requestDatas); //TODO treat request data
-		writer.println("	invoke(\"%s\", request, %s.class, callback);", asyncTypeName+"."+asyncMethod.getName(), clazz);
+		writer.println("	invoke(request, %s.class, callback);", clazz);
 		writer.println("}");
 		writer.println("");
 	}

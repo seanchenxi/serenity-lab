@@ -89,15 +89,12 @@ public class Test implements EntryPoint {
    */
   private void sendNameToServer() {
     validate();
-    
-    if(!useM || !returnObject){
+    if(useM){
+      callManualServiceObjectReturned();
+    }else if(!returnObject){
       callGeneratedServiceStringReturned();
     }else{
-      if(useM){
-        callManualServiceObjectReturned();
-      }else{
-        callGeneratedServiceObjectReturned();
-      }
+      callGeneratedServiceObjectReturned();
     }
   }
   

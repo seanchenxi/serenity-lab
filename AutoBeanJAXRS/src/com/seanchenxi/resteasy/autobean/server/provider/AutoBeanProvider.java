@@ -1,7 +1,6 @@
 package com.seanchenxi.resteasy.autobean.server.provider;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,14 +12,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.GZIPOutputStream;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -33,8 +28,8 @@ import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.autobean.shared.AutoBeanUtils;
 import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
+import com.seanchenxi.resteasy.autobean.share.RESTBeanFactory;
 import com.seanchenxi.resteasy.autobean.share.RESTResponse;
-import com.seanchenxi.resteasy.autobean.share.RSETBeanFactory;
 import com.seanchenxi.resteasy.autobean.share.StackTraceElementBean;
 import com.seanchenxi.resteasy.autobean.share.ThrowableBean;
 
@@ -51,8 +46,9 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 	protected final static String CHARSET_UTF8 = "UTF-8";
 	protected final static String GENERIC_FAILURE_MSG = "The call failed on the server; see server log for details";
 	
-	private RSETBeanFactory REST_BEAN_FACTORY = AutoBeanFactorySource.create(RSETBeanFactory.class);
 	private final static Logger Log = Logger.getLogger(AutoBeanProvider.class.getName());
+	
+	private final static RESTBeanFactory REST_BEAN_FACTORY = AutoBeanFactorySource.create(RESTBeanFactory.class);
 
 	protected final static HashSet<Class<?>> untouchables = new HashSet<Class<?>>();
 	static {
@@ -65,11 +61,8 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 		untouchables.add(Float.class);
 		untouchables.add(Double.class);
 		untouchables.add(Void.class);
-//		untouchables.add(String.class);
+		untouchables.add(String.class);
 	}
-	
-	private @Context HttpServletResponse response;
-	private @Context HttpServletRequest requset;
 	
 	@Override
 	public long getSize(Object arg0, Class<?> type, Type arg2, Annotation[] arg3, MediaType mediaType) {
@@ -79,7 +72,7 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 	@Override
 	public boolean isWriteable(Class<?> type, Type arg1, Annotation[] arg2,
 			MediaType mediaType) {
-		return !Throwable.class.isAssignableFrom(type) && isJsonType(mediaType) && !untouchables.contains(type);
+		return !Throwable.class.isAssignableFrom(type) && isJsonType(mediaType);
 	}
 
 	@Override
@@ -89,35 +82,12 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 			throws IOException, WebApplicationException {
 	  AutoBean<RESTResponse> responseBean = REST_BEAN_FACTORY.resposne();
 	  responseBean.as().setType(arg0 instanceof ThrowableBean ? RESTResponse.Type.EX : RESTResponse.Type.OK);
-	  if(String.class.equals(type)){
-	    responseBean.as().setPayload("\"" + (String) arg0 + "\"");
+	  if(untouchables.contains(type)){
+	    responseBean.as().setPayload("\"" + arg0 != null ? String.valueOf(arg0) : arg0 + "\"");
 	  }else{
 	    responseBean.as().setPayload(AutoBeanCodex.encode(AutoBeanUtils.getAutoBean(arg0)).getPayload());
 	  }
-
-		byte[] payloadBytes = AutoBeanCodex.encode(responseBean).getPayload().getBytes(CHARSET_UTF8);
-		if (acceptsGzipEncoding(requset)) { //this is optional
-			ByteArrayOutputStream output = null;
-			GZIPOutputStream gzipOutputStream = null;
-			try {
-				output = new ByteArrayOutputStream(payloadBytes.length);
-				gzipOutputStream = new GZIPOutputStream(output);
-				gzipOutputStream.write(payloadBytes);
-				gzipOutputStream.finish();
-				gzipOutputStream.flush();
-				payloadBytes = output.toByteArray();
-				response.setHeader(CONTENT_ENCODING, CONTENT_ENCODING_GZIP);
-			} finally {
-				if (null != gzipOutputStream) {
-					gzipOutputStream.close();
-				}
-				if (null != output) {
-					output.close();
-				}
-			}
-		}
-		response.setContentLength(payloadBytes.length);
-		out.write(payloadBytes);
+		out.write(AutoBeanCodex.encode(responseBean).getPayload().getBytes(CHARSET_UTF8));
 	}
 
 	@Override
@@ -136,9 +106,8 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 		while ((readed = input.readLine()) != null) {
 			sb.append(readed);
 		}
-		String payload = sb.toString();
-		System.out.println("readFrom for type: " + type + ", payload: " + payload);
-		return payload;
+		//TODO need to deserialize
+		return sb.toString();
 	}
 	
 	protected boolean isJsonType(MediaType mediaType){
@@ -173,11 +142,5 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 			tb.setCause(convert(failure.getCause()));
 		}
 		return tb;
-	}
-	
-	private boolean acceptsGzipEncoding(HttpServletRequest request) {
-		assert (request != null);
-		String acceptEncoding = request.getHeader(ACCEPT_ENCODING);
-		return acceptEncoding != null && (acceptEncoding.indexOf(CONTENT_ENCODING_GZIP) != -1);
 	}
 }

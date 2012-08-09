@@ -1,5 +1,9 @@
 package com.seanchenxi.resteasy.autobean.test.server;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
 import com.seanchenxi.resteasy.autobean.test.client.GreetingService;
 import com.seanchenxi.resteasy.autobean.test.share.BeanFactory;
@@ -10,6 +14,9 @@ import com.seanchenxi.resteasy.autobean.test.share.Greeting;
 public class GreetingServiceImpl implements GreetingService {
 
   private final static BeanFactory FACTORY = AutoBeanFactorySource.create(BeanFactory.class);
+  
+  private @Context ServletContext servletContext;
+  private @Context HttpServletRequest servletRequset;
   
   public String greetServer(String input, boolean ok) throws IllegalArgumentException {
     // Verify that the input is valid. 
@@ -38,18 +45,18 @@ public class GreetingServiceImpl implements GreetingService {
       throw new IllegalArgumentException("Name must be at least 4 characters long");
     }
 
-//    String serverInfo = getServletContext().getServerInfo();
-//    String userAgent = getThreadLocalRequest().getHeader("User-Agent");
+    String serverInfo = servletContext.getServerInfo();
+    String userAgent = servletRequset.getHeader("User-Agent");
 
     // Escape data from the client to avoid cross-site script vulnerabilities.
     input = escapeHtml(input);
-//    userAgent = escapeHtml(userAgent);
+    userAgent = escapeHtml(userAgent);
 
     Greeting g = FACTORY.greeting().as();
     g.setUserName(input);
     g.setOK(ok);
-    g.setMessage("Hello, " + input + "-" + ok + "!<br><br>I am running " + "serverInfo"
-        + ".<br><br>It looks like you are using:<br>" + "userAgent");
+    g.setMessage("Hello, " + input + "-" + ok + "!<br><br>I am running " + serverInfo
+        + ".<br><br>It looks like you are using:<br>" + userAgent);
     return g;
   }
   

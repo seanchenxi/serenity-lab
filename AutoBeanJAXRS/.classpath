@@ -4,10 +4,10 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="lib" path="D:/Lib/GWT/gwt-dev.jar"/>
 	<classpathentry kind="lib" path="D:/Lib/GWT/gwt-user.jar"/>
-	<classpathentry kind="lib" path="libs/jboss-jaxrs-api_1.1_spec-1.0.0.Final.jar"/>
-	<classpathentry kind="lib" path="libs/resteasy-jaxrs-2.3.2.Final.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/resteasy-jaxrs-2.3.4.Final.jar" sourcepath="E:/Download/firefox/resteasy-jaxrs-2.3.4.Final-src.zip"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jboss-jaxrs-api_1.1_spec-1.0.0.Final.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>

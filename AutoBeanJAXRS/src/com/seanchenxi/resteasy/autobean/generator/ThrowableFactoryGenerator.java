@@ -57,6 +57,7 @@ public class ThrowableFactoryGenerator extends Generator {
 
 		ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleName);
 		factory.addImplementedInterface(typeName);
+		factory.addImport(Throwable.class.getName());
 		
 		SourceWriter writer = factory.createSourceWriter(context, printWriter);
 		writer.indent();
@@ -67,12 +68,7 @@ public class ThrowableFactoryGenerator extends Generator {
 			writer.println("		return new " + qname + " (message);");
 			writer.println("	}");
 		}
-    for (String qname : getAllThrowableTypes(oracle, logger)) {
-      writer.println("  if(\"" + qname + "\".equals(className)) {");
-      writer.println("    return new " + qname + " (message);");
-      writer.println("  }");
-    }
-		writer.println("	return null;");
+		writer.println("	return new Throwable(message);");
 		writer.println("}");
 		writer.outdent();
 		writer.commit(logger);
