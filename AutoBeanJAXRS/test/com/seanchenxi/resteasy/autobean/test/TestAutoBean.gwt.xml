@@ -1,0 +1,12 @@
+<module rename-to='test'>
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name='com.seanchenxi.resteasy.autobean.RESTAutoBean'/>
+  
+  <inherits name='com.google.gwt.user.theme.clean.Clean'/>
+  
+  <entry-point class='com.seanchenxi.resteasy.autobean.test.client.Test'/>
+  
+  <source path='client'/>
+  <source path='share'/>
+  
+</module>

@@ -9,6 +9,7 @@ import javax.ws.rs.HEAD;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
@@ -43,9 +44,6 @@ public class RESTServiceGenerator extends Generator {
 		
 		TypeOracle oracle = context.getTypeOracle();
 		
-		// This method will complete httpMethods map and restPaths map;
-		parseSyncType(typeName, oracle, logger);
-		
 		String asyncTypeName = typeName + "Async";
 		JClassType asyncType = null;
 		String packageName = null;
@@ -65,6 +63,9 @@ public class RESTServiceGenerator extends Generator {
 			return packageName + "." + simpleName;
 		}
 		
+    // This method will complete httpMethods map and restPaths map;
+		parseSyncType(typeName, oracle, logger);
+    
 		ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleName);
 		factory.addImplementedInterface(asyncTypeName);
 		factory.setSuperclass(RESTServiceProxy.class.getName());
@@ -75,14 +76,14 @@ public class RESTServiceGenerator extends Generator {
 		writer.indent();
 		writer.println("");
 		for(JMethod asyncMethod : asyncType.getMethods()){
-			writeAsyncMethod(asyncMethod, writer, logger);
+			writeAsyncMethod(asyncTypeName, asyncMethod, writer, logger);
 		}
 		writer.outdent();
 		writer.commit(logger);
 		return factory.getCreatedClassName();
 	}
 	
-	private void writeAsyncMethod(JMethod asyncMethod, SourceWriter writer, TreeLogger logger){
+	private void writeAsyncMethod(String asyncTypeName, JMethod asyncMethod, SourceWriter writer, TreeLogger logger){
 		String methodName = asyncMethod.getName();
 		String httpMethod = httpMethods.get(methodName);
 		String restPath = restPaths.get(methodName);
@@ -93,11 +94,11 @@ public class RESTServiceGenerator extends Generator {
 		}
 		
 		StringBuilder methodParams = new StringBuilder();
-		StringBuilder requestDatas = new StringBuilder();
+//		StringBuilder requestDatas = new StringBuilder(); //TODO treat request data
 		String clazz = null;
 		
 		boolean isMethodParamsBegin = true;
-		boolean isRequestDatasBegin = true;
+//		boolean isRequestDatasBegin = true;
 		for(JParameter parameter : asyncMethod.getParameters()){
 			if(!isMethodParamsBegin) methodParams.append(", ");
 			String name = parameter.getName();
@@ -107,9 +108,9 @@ public class RESTServiceGenerator extends Generator {
 				clazz = pType.getTypeArgs()[0].getQualifiedSourceName();
 				methodParams.append(pType.getParameterizedQualifiedSourceName());
 			}else{
-				if(!isRequestDatasBegin) requestDatas.append(", ");
-				requestDatas.append(name);
-				isRequestDatasBegin = false;
+//				if(!isRequestDatasBegin) requestDatas.append(", ");
+//				requestDatas.append(name);
+//				isRequestDatasBegin = false;
 				methodParams.append(type.getQualifiedSourceName());
 			}
 			methodParams.append(" ");
@@ -124,14 +125,14 @@ public class RESTServiceGenerator extends Generator {
 		
 		writer.println("@Override");
 		writer.println("public void %s(%s){", methodName, methodParams);
-		writer.println("	%1s request = new %1$s(%2$s, \"%3$s\");", REST_REQUEST, httpMethod, restPath);
-		writer.println("	request.setRequestData(%s);", requestDatas);
-		writer.println("	invoke(%s, request, %s.class, callback);", clazz);
+		writer.println("	%1s request = new %1$s(%2$s, %3$s);", REST_REQUEST, httpMethod, restPath);
+//		writer.println("	request.setRequestData(%s);", requestDatas); //TODO treat request data
+		writer.println("	invoke(\"%s\", request, %s.class, callback);", asyncTypeName+"."+asyncMethod.getName(), clazz);
 		writer.println("}");
 		writer.println("");
 	}
 	
-	private void parseSyncType(String typeName, TypeOracle oracle, TreeLogger logger) throws UnableToCompleteException {
+	private JClassType parseSyncType(String typeName, TypeOracle oracle, TreeLogger logger) throws UnableToCompleteException {
 		JClassType syncType = null;
 		try{
 			syncType = oracle.findType(typeName);
@@ -140,9 +141,10 @@ public class RESTServiceGenerator extends Generator {
 			for(JMethod syncMethod : syncType.getMethods()){
 				if(!syncMethod.isAnnotationPresent(Path.class)) continue; // means is not registered as REST service
 				String key = syncMethod.getName();
-				restPaths.put(key, rootPath + getRestPath(syncMethod.getAnnotation(Path.class)));
+				restPaths.put(key,  getMethodRestPath(rootPath, syncMethod));
 				httpMethods.put(key, getHttpMethod(syncMethod));
 			}
+			return syncType;
 		}catch (Exception e) {
 			logger.log(TreeLogger.ERROR, typeName + " is not found or is not an interface", e);
 			throw new UnableToCompleteException();
@@ -171,4 +173,19 @@ public class RESTServiceGenerator extends Generator {
 		return relativePath;
 	}
 
+	 private String getMethodRestPath(String rootPath, JMethod method){
+	    String methodPath = rootPath + getRestPath(method.getAnnotation(Path.class));
+	    for(JParameter param : method.getParameters()){
+	      if(param.isAnnotationPresent(PathParam.class)){
+	        String paramPath = param.getAnnotation(PathParam.class).value();
+	        methodPath = methodPath.replace("{" + paramPath + "}", "\"+"+param.getName() + "+\"");
+	      }
+	    }
+	    methodPath = ("\"" + methodPath.trim() + "\"").replace("+\"\"+", "+").replaceAll("(\"|\\+)\\1", "$1");
+	    if(methodPath.endsWith("+\"")){
+	      methodPath = methodPath.substring(0, methodPath.length() - 2);
+	    }
+	    return methodPath;
+	  }
+	 
 }

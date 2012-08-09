@@ -2,3 +2,7 @@
 2. Find a better way to do AutoBeanFactory registration
 3. Maybe should use a general AutoBean to encapsulate all returned result object
 4. Find a better way to convert exception in client side. Right now, the a constructor with string type message parameter is demand
+5. Limitation : 
+    Async Service Method parameter name must be the same as Sync service method parameter name for the @PathParam,
+    No set requset data,
+    No other parameter type...

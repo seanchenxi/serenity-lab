@@ -65,7 +65,7 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 		untouchables.add(Float.class);
 		untouchables.add(Double.class);
 		untouchables.add(Void.class);
-		untouchables.add(String.class);
+//		untouchables.add(String.class);
 	}
 	
 	private @Context HttpServletResponse response;
@@ -87,18 +87,14 @@ public class AutoBeanProvider implements MessageBodyReader<Object>, MessageBodyW
 			Annotation[] arg3, MediaType arg4,
 			MultivaluedMap<String, Object> arg5, OutputStream out)
 			throws IOException, WebApplicationException {
-	  
 	  AutoBean<RESTResponse> responseBean = REST_BEAN_FACTORY.resposne();
-	  String payload = null;
-	  if(arg0 instanceof ThrowableBean){
-	    payload = AutoBeanCodex.encode((AutoBean<?>) arg0).getPayload();
-	    responseBean.as().setType(RESTResponse.Type.EX);
+	  responseBean.as().setType(arg0 instanceof ThrowableBean ? RESTResponse.Type.EX : RESTResponse.Type.OK);
+	  if(String.class.equals(type)){
+	    responseBean.as().setPayload("\"" + (String) arg0 + "\"");
 	  }else{
-	    payload = AutoBeanCodex.encode(AutoBeanUtils.getAutoBean(arg0)).getPayload();
-	    responseBean.as().setType(RESTResponse.Type.OK);
+	    responseBean.as().setPayload(AutoBeanCodex.encode(AutoBeanUtils.getAutoBean(arg0)).getPayload());
 	  }
-	  responseBean.as().setPayload(payload);
-	  
+
 		byte[] payloadBytes = AutoBeanCodex.encode(responseBean).getPayload().getBytes(CHARSET_UTF8);
 		if (acceptsGzipEncoding(requset)) { //this is optional
 			ByteArrayOutputStream output = null;
