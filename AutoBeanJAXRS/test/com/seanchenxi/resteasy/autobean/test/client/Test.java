@@ -25,12 +25,63 @@ public class Test implements EntryPoint {
   private final static BeanFactory FACTORY = GWT.create(BeanFactory.class);
   private final static GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
   
+  private final static GreetingServiceAsyncM greetingServiceM = new GreetingServiceAsyncM(FACTORY);
+  
   boolean returnObject = true;
+  boolean useM = false;
   
   @Override
   public void onModuleLoad() {
     REST.registerFactory(FACTORY);
     initView();
+  }
+  
+  private void callManualServiceObjectReturned(){
+    greetingServiceM.greetServerObject(nameField.getText(), false, new AsyncCallback<Greeting>() {
+      public void onFailure(Throwable caught) {
+        onRESTFailure(caught);
+      }
+
+      public void onSuccess(Greeting result) {
+        dialogBox.setText("Remote Procedure Call");
+        serverResponseLabel.removeStyleName("serverResponseLabelError");
+        serverResponseLabel.setHTML(result.getMessage());
+        dialogBox.center();
+        closeButton.setFocus(true);
+      }
+    });
+  }
+  
+  private void callGeneratedServiceStringReturned(){
+    greetingService.greetServer(nameField.getText(), false, new AsyncCallback<String>() {
+      public void onFailure(Throwable caught) {
+        onRESTFailure(caught);
+      }
+      
+      public void onSuccess(String result) {
+        dialogBox.setText("Remote Procedure Call");
+        serverResponseLabel.removeStyleName("serverResponseLabelError");
+        serverResponseLabel.setHTML(result);
+        dialogBox.center();
+        closeButton.setFocus(true);
+      }
+    });
+  }
+  
+  private void callGeneratedServiceObjectReturned(){
+    greetingService.greetServerObject(nameField.getText(), false, new AsyncCallback<Greeting>() {
+      public void onFailure(Throwable caught) {
+        onRESTFailure(caught);
+      }
+
+      public void onSuccess(Greeting result) {
+        dialogBox.setText("Remote Procedure Call");
+        serverResponseLabel.removeStyleName("serverResponseLabelError");
+        serverResponseLabel.setHTML(result.getMessage());
+        dialogBox.center();
+        closeButton.setFocus(true);
+      }
+    });
   }
   
   /**
@@ -39,34 +90,14 @@ public class Test implements EntryPoint {
   private void sendNameToServer() {
     validate();
     
-    if(!returnObject){
-      greetingService.greetServer(nameField.getText(), false, new AsyncCallback<String>() {
-        public void onFailure(Throwable caught) {
-          onRESTFailure(caught);
-        }
-        
-        public void onSuccess(String result) {
-          dialogBox.setText("Remote Procedure Call");
-          serverResponseLabel.removeStyleName("serverResponseLabelError");
-          serverResponseLabel.setHTML(result);
-          dialogBox.center();
-          closeButton.setFocus(true);
-        }
-      });
+    if(!useM || !returnObject){
+      callGeneratedServiceStringReturned();
     }else{
-      greetingService.greetServerObject(nameField.getText(), false, new AsyncCallback<Greeting>() {
-        public void onFailure(Throwable caught) {
-          onRESTFailure(caught);
-        }
-  
-        public void onSuccess(Greeting result) {
-          dialogBox.setText("Remote Procedure Call");
-          serverResponseLabel.removeStyleName("serverResponseLabelError");
-          serverResponseLabel.setHTML(result.getMessage());
-          dialogBox.center();
-          closeButton.setFocus(true);
-        }
-      });
+      if(useM){
+        callManualServiceObjectReturned();
+      }else{
+        callGeneratedServiceObjectReturned();
+      }
     }
   }
   
