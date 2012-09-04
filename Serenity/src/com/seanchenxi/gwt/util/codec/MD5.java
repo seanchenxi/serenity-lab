@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.seanchenxi.gwt.serenity.client.util;
+package com.seanchenxi.gwt.util.codec;
 
 /**
 *

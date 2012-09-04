@@ -8,6 +8,7 @@
   <inherits name="com.seanchenxi.gwt.logging.Logging"/>
   <inherits name='com.seanchenxi.gwt.wordpress.WpJson'/>
   <inherits name="com.seanchenxi.gwt.ui.UI"/>
+  <inherits name="com.seanchenxi.gwt.util.UTIL" />
   
   <entry-point class='com.seanchenxi.gwt.serenity.client.Serenity'/>
   

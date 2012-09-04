@@ -1,6 +1,19 @@
-package com.seanchenxi.gwt.serenity.client.util;
-
-import com.seanchenxi.gwt.serenity.client.SerenityUtil;
+/*******************************************************************************
+ * Copyright 2012 Xi CHEN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
+package com.seanchenxi.gwt.util.codec;
 
 /**
  *
@@ -137,13 +150,5 @@ public class Base64 {
 		}
  
 		return string;
-	}
-	
-	public static void main(String[] args) {
-		String encoded = Base64.encode("test");
-		String decoded = Base64.decode("iVBORw0KGgoAAAANSUhEUgAAACQAAAAhCAYAAACxzQkrAAAArElEQVR42u3U2w2AIAwFUEZwFMJjD0ZwFEdkBEdwA5VEjEbAVwuN0uT+QEjPB7mMAQznvJFSGkZhFoydMwohWjIYn2KoEKYYKoXJjrqC2cRQwrgMWmtOBYOHeoGBRwFg4FCAmPcoBMxzFCLGp3c7qGB87CkqI+YcVQATRxXEHFEEMHsUEcyKin5w7OW3i7GCPgdSSnWhUnNn7i47KFX7S5XkBWG/r6AKqqDfgCYdbtKZuXM4AwAAAABJRU5ErkJggg==");
-		System.out.println(encoded);
-		System.out.println(decoded);
-		System.out.println(SerenityUtil.isValidEmail("chenx  ifr@gmail.dd.com"));
 	}
 }
