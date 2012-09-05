@@ -1,12 +1,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+			 xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" 
 			 xmlns:g="urn:import:com.google.gwt.user.client.ui" 
 			 xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations"
 			 xmlns:my="urn:import:com.seanchenxi.gwt.serenity.client.view">
 	<g:LayoutPanel>
 		<g:layer left="0px" right="0px" top="0px" height="60px">
 			<g:HTMLPanel styleName="post-header top-corner-radius">
-				<h2 class="post-title" ui:field="titleField" />
+				<b:Heading styleName="post-title" size="2" ui:field="titleField" />
 				<div class="post-meta">
 					<g:Label styleName="date" ui:field="dateField" />
 					<g:Label styleName="comments" ui:field="commentCountField"/>

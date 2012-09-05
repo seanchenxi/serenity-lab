@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="Serenity" default="deploy" basedir="." >
+
+	<property name="deploy.path" location="D:/Servers/xampp/htdocs/wordpress/wp-content/themes" />
+
+	<target name="deploy">
+		<delete dir="${deploy.path}/Serenity-G"/>
+		<copy todir="${deploy.path}" overwrite="yes">
+			<fileset dir="wp-themes" />
+		</copy>
+		<copy todir="${deploy.path}/Serenity-G" overwrite="yes">
+			<fileset dir="war" excludes="*WEB-INF/**, index.html" />
+		</copy>
+	</target>
+
+</project>

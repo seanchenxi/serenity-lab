@@ -1,5 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations">
 	<g:HTMLPanel>
 		<h3>
@@ -11,34 +12,23 @@
 			Your email address will not be published. Required fields are marked *
 		</p>
 		<p class="input-half">
-			<label for="commentAuthor" class="respond-label">
-				Your name
-				<span class="required">*</span>
-			</label>
-			<g:TextBox styleName="respond-input" tabIndex="1" ui:field="authorField" />
+			<b:ControlLabel>Your name<span class="required">*</span></b:ControlLabel>
+			<b:TextBox styleName="respond-input" tabIndex="1" ui:field="authorField" />
 		</p>
 		<p class="input-half">
-			<label for="email" class="respond-label">
-				Your email
-				<span class="required">*</span>
-			</label>
-			<g:TextBox styleName="respond-input" tabIndex="2" ui:field="emailField" />
+			<b:ControlLabel>Your email<span class="required">*</span></b:ControlLabel>
+			<b:TextBox styleName="respond-input" tabIndex="2" ui:field="emailField" />
 		</p>
 		<p class="input-half">
-			<label for="url" class="respond-label">
-				Your website
-			</label>
-			<g:TextBox styleName="respond-input" tabIndex="2" ui:field="urlField" />
+			<b:ControlLabel>Your website</b:ControlLabel>
+			<b:TextBox styleName="respond-input" tabIndex="2" ui:field="urlField" />
 		</p>
 		<p id="message-box">
-			<label for="comment" class="respond-label">
-				Your message
-			<span class="required">*</span>
-			</label>
-			<g:TextArea styleName="respond-input-textarea" tabIndex="3" ui:field="commentField" />
+			<b:ControlLabel>Your message<span class="required">*</span></b:ControlLabel>
+			<b:TextArea styleName="respond-input-textarea" tabIndex="3" ui:field="commentField" />
 		</p>
 		<p id="submit-form">
-			<g:Button ui:field="submit" tabIndex="4" >Submit comment</g:Button>
+			<b:Button ui:field="submit" tabIndex="4">Submit comment</b:Button>
 		</p>
 		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
 	</g:HTMLPanel>

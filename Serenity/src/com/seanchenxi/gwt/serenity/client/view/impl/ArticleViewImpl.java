@@ -15,13 +15,17 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
+import com.github.gwtbootstrap.client.ui.Heading;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Event.NativePreviewEvent;
+import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -40,7 +44,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	private static ArticleViewImplUiBinder uiBinder = GWT.create(ArticleViewImplUiBinder.class);
 	
-	@UiField HeadingElement titleField;
+	@UiField Heading titleField;
 	@UiField Label dateField;
 	@UiField FlowPanel categoryList;
 	@UiField Label commentCountField;
@@ -57,11 +61,20 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	public ArticleViewImpl(){
 		initWidget(uiBinder.createAndBindUi(this));
+		Event.addNativePreviewHandler(new NativePreviewHandler() {
+      @Override
+      public void onPreviewNativeEvent(NativePreviewEvent event) {
+        if(presenter != null && event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE){
+          presenter.closeView();
+          event.getNativeEvent().preventDefault();
+        }
+      }
+    });
 	}
 	
 	@Override
 	public void clearContent() {
-		titleField.setInnerHTML(StringPool.BLANK);
+		titleField.setText(StringPool.BLANK);
 		dateField.setText(StringPool.BLANK);
 		categoryList.clear();
 		commentCountField.setText(StringPool.BLANK);
@@ -82,7 +95,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	@Override
 	public void setTitle(String title) {
-		titleField.setInnerHTML(title);
+		titleField.setText(title);
 	}
 
 	@Override

@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
+import com.github.gwtbootstrap.client.ui.PageHeader;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style;
@@ -23,7 +24,6 @@ import com.google.gwt.layout.client.Layout.AnimationCallback;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -50,7 +50,10 @@ public class SerenityLayoutImpl extends LayoutPanel implements SerenityLayout {
 	}
 
 	private void initGUI() {
-		HTML title = new HTML("<h1 class=\"title\">Serenity</h1>");
+	  PageHeader title = new PageHeader();
+	  title.addStyleName("title");
+	  title.setText("Serenity");
+	  title.setSubtext("非淡泊无以明志，非宁静无以致远");
 		add(title);
 		setWidgetTopHeight(title, 0, UNIT, HEADER_HEIGHT, UNIT);
 		

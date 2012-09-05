@@ -10,6 +10,8 @@
   <inherits name="com.seanchenxi.gwt.ui.UI"/>
   <inherits name="com.seanchenxi.gwt.util.UTIL" />
   
+  <inherits name="com.github.gwtbootstrap.Bootstrap" />
+  
   <entry-point class='com.seanchenxi.gwt.serenity.client.Serenity'/>
   
   <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.SerenityLayoutImpl">

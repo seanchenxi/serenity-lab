@@ -80,12 +80,14 @@ a:hover {
 	text-decoration: none;
 }
 
-h1.title {
+.page-header.title{
+	margin:10px;
+	border-bottom: none;
+}
+
+.page-header.title h1{
 	font-size: 3.2em;
-	line-height: 1.4em;
-	color: #333;
-	font-weight: bolder;
-	text-shadow: -1px -1px #EEE, 1px 1px #000;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
 }
 
 h3 {
@@ -144,10 +146,9 @@ h4 {
 }
 
 h2.post-title {
-	margin-top: 4px;
+	margin-top: 3px;
 	text-align: center;
 	font-size: 1.6em;
-	font-weight: bold;
 	line-height: 1.6em;
 	color: #111;
 }
@@ -412,15 +413,8 @@ h2.post-title {
 }
 
 .respond-input-textarea,.respond-input {
-	-moz-transition: border-color 0.3s ease 0s;
-	background-color: #FFFFFF;
-	border: 1px solid #CCC;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	border-radius: 5px 5px 5px 5px;
 	color: #333333;
 	font-size: 1em;
-	margin-left: 6px;
-	margin-bottom: 1em;
 	outline: medium none;
 	padding: 0.5em;
 	width: 250px;
@@ -432,10 +426,6 @@ h2.post-title {
 	width: 450px;
 	height: 125px;
 	max-width: 600px;
-}
-
-.respond-input-textarea:focus,.respond-input:focus {
-	border-color: #FFCC00;
 }
 
 /*
