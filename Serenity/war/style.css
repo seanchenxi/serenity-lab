@@ -558,14 +558,18 @@ h2.post-title {
 .navItem {
 	padding-top: 5px;
 	text-align: center;
-	width: 99%;
 	height: 40px;
 	cursor: pointer;
 	opacity: 0.59;
+	margin:0 6px 3px 0;
+	border-left: 6px solid transparent;
+	-webkit-user-select: none;
+	-moz-user-select: none;
 }
 
 .navItem:hover,.navItem-selected {
 	opacity: 0.99;
+	border-left-color: rgba(0, 0, 0, 0.8);
 }
 
 .popSearchBox,.popLabelBox {
@@ -579,8 +583,13 @@ h2.post-title {
 	background-color: #222;
 	background-color: rgba(25, 25, 25, 0.92);
 	color: #FFFFFF;
-	width: 200px;
-	height: 150px;
+}
+
+.popLabelBox {
+	min-width:120px;
+	max-width: 250px;
+	min-height: 120px;
+	max-height: 320px;
 }
 
 .popSearchBox {

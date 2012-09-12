@@ -55,9 +55,8 @@ public class PopupLabelBox extends PopupPanel implements ClickHandler,
 
 	public void showRelativeTo(Widget w) {
 		show();
-		int top = Math.max(w.getParent().getAbsoluteTop(), w.getAbsoluteTop()
-				+ ((w.getOffsetHeight() - getOffsetHeight()) >> 1));
-		int left = w.getAbsoluteLeft() + w.getOffsetWidth() - 5;
+		int top = w.getAbsoluteTop() - 20;
+		int left = w.getAbsoluteLeft() + w.getOffsetWidth();
 		setPopupPosition(left, top);
 	}
 

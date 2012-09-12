@@ -20,6 +20,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
@@ -59,14 +60,20 @@ public class SidebarImpl implements Sidebar {
 		item.addClickHandler(new ClickHandler() {			
 			@Override
 			public void onClick(ClickEvent event) {
+			  Object obj = event.getSource();
 			  searchBox.show();
-        searchBox.center();
+			  if(obj instanceof UIObject){
+			    UIObject uio = (UIObject) obj;
+			    searchBox.setPopupPosition(uio.getAbsoluteLeft() + uio.getOffsetWidth(), uio.getAbsoluteTop());
+			  }else{
+			    searchBox.center();
+			  }
 			}
 		});
 		menu.addItem(item);
 		
 		item = new NavigationItem(SerenityResources.IMG.icon_Grid_black());
-		item.setLabelBox(catPopup = new PopupLabelBox(3));
+		item.setLabelBox(catPopup = new PopupLabelBox(1));
 		item.setId("category");
 		menu.addItem(item);
 		

@@ -15,6 +15,8 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.ui.widget;
 
+import com.github.gwtbootstrap.client.ui.Button;
+import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
@@ -26,31 +28,30 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.seanchenxi.gwt.ui.event.SearchEvent;
 import com.seanchenxi.gwt.ui.event.SearchEvent.HasSearchHandlers;
 
 public class SearchBox extends PopupPanel implements FocusHandler,
 		KeyUpHandler, ClickHandler, HasSearchHandlers, SearchEvent.Handler {
 
-	private FlowPanel container;
+	private HorizontalPanel container;
 
 	private TextBox field;
 	private Button button;
 
 	public SearchBox() {
 		super(true, true);
-		setWidget(container = new FlowPanel());
+		setWidget(container = new HorizontalPanel());
 		setStyleName("popSearchBox");
-		
+		container.setVerticalAlignment(HasAlignment.ALIGN_MIDDLE);
 		container.add(field = new TextBox());
 		container.add(button = new Button("Search"));
-		
-		field.getElement().getStyle().setMarginRight(1, Unit.EM);
-		container.getElement().getStyle().setPadding(1, Unit.EM);
+		container.getElement().getStyle().setMargin(0.6, Unit.EM);
+		field.getElement().getStyle().setMargin(0, Unit.PX);
+		field.getElement().getStyle().setMarginRight(0.6, Unit.EM);
 		initAllHandlers();
 	}
 	
@@ -111,7 +112,7 @@ public class SearchBox extends PopupPanel implements FocusHandler,
 	  switch (event.getNativeKeyCode()) {
       case KeyCodes.KEY_ENTER:
         if(field.getValue() != null && !field.getValue().isEmpty()){
-          button.click();
+          fireSearchEvent(field.getText());
         }
         break;
       case KeyCodes.KEY_ESCAPE:

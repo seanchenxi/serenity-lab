@@ -64,7 +64,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
       @Override
       public void onPreviewNativeEvent(NativePreviewEvent event) {
-        if(presenter != null && event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE){
+        if(presenter != null && event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE && isAttached()){
           presenter.closeView();
           event.getNativeEvent().preventDefault();
         }
