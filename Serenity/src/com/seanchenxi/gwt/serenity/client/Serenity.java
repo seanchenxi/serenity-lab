@@ -25,7 +25,7 @@ import com.seanchenxi.gwt.logging.api.Log;
 public class Serenity implements EntryPoint {
 
 	public void onModuleLoad() {
-	  Log.setLevel(Level.FINEST);
+	  Log.setLevel(Level.INFO);
 	  if(!SerenityUtil.replaceIfIdOldRequest()){
 	    GWT.runAsync(new RunAsyncCallback() {
         @Override

@@ -89,7 +89,7 @@ public class NavigationBar extends Composite implements ClickHandler,
 			return false;
 		}
 		if(selectedItem != null){
-			selectedItem.hideLabelBox();
+			selectedItem.hideLabelBox(true);
 			selectedItem.setSelectionStyle(false);
 		}
 		selectedItem = item;

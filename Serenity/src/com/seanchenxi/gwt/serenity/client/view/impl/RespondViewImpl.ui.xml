@@ -16,7 +16,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:b="urn:import:com.github.gwtbootstrap.client.ui"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" 
+	xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations">
 	<g:HTMLPanel>
 		<h3>
 			Leave a Comment

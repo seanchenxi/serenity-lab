@@ -27,7 +27,7 @@
 				<g:FlowPanel ui:field="listBody" />
 			</g:ScrollPanel>
 		</g:layer>
-		<g:layer right="20px" top="4px" width="160px" height="28px">
+		<g:layer right="20px" top="4px" width="160px" height="22px">
 			<g:FlowPanel styleName="paging-control">
 				<g:HTML styleName="paging-info-lbl" ui:field="pagingInfoLbl" />
 				<g:HTML styleName="paging-control-lbl" ui:field="newer" HTML="&lt;" />
