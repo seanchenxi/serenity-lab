@@ -24,6 +24,7 @@ import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window.Location;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.place.SerenityPlaceUtil;
@@ -102,5 +103,14 @@ public class SerenityUtil {
 	  }
 	  return false;
 	}
+	
+	public static boolean isLoggedIn() {
+    for(String name : Cookies.getCookieNames()){
+      if(name != null && name.indexOf("logged") != -1 && name.indexOf("in") != -1){
+        return true;
+      }
+    }
+    return false;
+  }
 	
 }

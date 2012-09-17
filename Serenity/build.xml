@@ -13,4 +13,14 @@
 		</copy>
 	</target>
 
+	<target name="packaging">
+		<delete dir="target"/>
+		<mkdir dir="target" />
+		<copy todir="target" overwrite="yes">
+			<fileset dir="wp-themes" />
+		</copy>
+		<copy todir="target/Serenity-G" overwrite="yes">
+			<fileset dir="war" excludes="*WEB-INF/**, index.html" />
+		</copy>
+	</target>
 </project>

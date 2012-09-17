@@ -17,15 +17,16 @@ package com.seanchenxi.gwt.serenity.client.view.impl;
 
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeUri;
 
 public interface FooterTemplate extends SafeHtmlTemplates {
 
-  @Template("<p>Copyright &copy; 2007 - {0} <a href=\"{1}\" title=\"{2}\">{1}</a></p>")
-  SafeHtml copyright(String year, String url, String title);
+  @Template("<p>Copyright &copy; 2007 - {0} <a href=\"{1}\" title=\"{2}\">SeanChenXi.com</a></p>")
+  SafeHtml copyright(String year, SafeUri url, String title);
   
   @Template("<p>Proudly powered by <a target=\"_blank\" href=\"{0}\" title=\"{1}\">{2}</a></p>")
-  SafeHtml poweredBy(String url, String title, String name);
+  SafeHtml poweredBy(SafeUri url, String title, String name);
   
   @Template("<p>Theme by <a target=\"_blank\" href=\"{0}\" title=\"{1}\">{2}</a></p>")
-  SafeHtml themeBy(String url, String title, String name);
+  SafeHtml themeBy(SafeUri url, String title, String name);
 }

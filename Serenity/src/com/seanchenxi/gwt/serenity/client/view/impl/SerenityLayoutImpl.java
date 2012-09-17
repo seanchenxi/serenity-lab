@@ -28,6 +28,7 @@ import com.google.gwt.i18n.shared.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.layout.client.Layout.AnimationCallback;
 import com.google.gwt.layout.client.Layout.Layer;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -169,6 +170,7 @@ public class SerenityLayoutImpl extends LayoutPanel implements SerenityLayout {
 		Style rootStyle = root.getElement().getStyle();
 		rootStyle.setProperty("minWidth", MIN_WIDTH, UNIT);
 		rootStyle.setProperty("minHeight", MIN_HEIGHT, UNIT);
+		rootStyle.setTop(SerenityUtil.isLoggedIn() ? 28 : 0, UNIT);
 		root.add(this);
 	}
 
@@ -202,8 +204,8 @@ public class SerenityLayoutImpl extends LayoutPanel implements SerenityLayout {
     footer.getElement().getStyle().setPadding(5, UNIT);
     footer.getElement().getStyle().setPaddingLeft(MENU_WIDTH + CONTENT_LIST_WIDTH + 10, UNIT);
     SafeHtmlBuilder shb = new SafeHtmlBuilder();
-    shb.append(FOOTER_TEMPLATE.copyright(DateTimeFormat.getFormat(PredefinedFormat.YEAR).format(new Date()), SerenityUtil.getWpBaseUrl(), Location.getHost()));
-    shb.append(FOOTER_TEMPLATE.poweredBy(SerenityResources.MSG.wordpress_URL(), SerenityResources.MSG.wordpress_URL(), SerenityUtil.getWpNaming()));
+    shb.append(FOOTER_TEMPLATE.copyright(DateTimeFormat.getFormat(PredefinedFormat.YEAR).format(new Date()), UriUtils.fromSafeConstant(SerenityUtil.getWpBaseUrl()), Location.getHost()));
+    shb.append(FOOTER_TEMPLATE.poweredBy(UriUtils.fromSafeConstant(SerenityResources.MSG.wordpress_URL()), SerenityResources.MSG.wordpress_URL(), SerenityUtil.getWpNaming()));
     footer.setHTML(shb.toSafeHtml());
     add(footer);
     setWidgetBottomHeight(footer, 0, UNIT, 50, UNIT);
