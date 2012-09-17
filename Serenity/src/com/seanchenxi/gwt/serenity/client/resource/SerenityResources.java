@@ -16,8 +16,21 @@
 package com.seanchenxi.gwt.serenity.client.resource;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.Dictionary;
 import com.seanchenxi.gwt.serenity.client.resource.image.ImgSources;
+import com.seanchenxi.gwt.serenity.client.resource.message.MessageResources;
 
 public class SerenityResources {
+  
+  public static final String PAGING_CONFIG_ID = "PagingConfig";
+  public static final String NAME = "name";
+  public static final String CONTENT = "content";
+  public static final String URL = "url";
+  public static final String GENERATOR = "generator";
+  public static final String SIZE = "size";
+  
 	public static final ImgSources IMG = GWT.create(ImgSources.class);
+	public static final MessageResources MSG = GWT.create(MessageResources.class);
+  
+	public static final Dictionary PAGING_CONFIG = Dictionary.getDictionary(PAGING_CONFIG_ID);
 }

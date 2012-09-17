@@ -19,9 +19,6 @@ import com.google.gwt.i18n.client.Constants;
 
 public interface MessageResources extends Constants {
 	
-	@DefaultStringValue("Copyright © 2007-2011 Serenity - is proudly powered by WordPress")
-	String footer_info();
-	
 	@DefaultStringValue("Submit")
 	String btn_submit();
 	
@@ -34,4 +31,16 @@ public interface MessageResources extends Constants {
 	@DefaultStringValue("Content:")
 	String lbl_content();
 	
+	@DefaultStringValue("http://wordpress.org")
+  String wordpress_URL();
+	
+	@DefaultStringValue("Wordpress")
+  String wordpress_Name();
+
+	@DefaultStringValue("Serenity")
+  String page_Title();
+
+	@DefaultStringValue("非淡泊无以明志，非宁静无以致远")
+  String page_subTitle();
+
 }

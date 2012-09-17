@@ -17,32 +17,27 @@ package com.seanchenxi.gwt.serenity.client;
 
 import java.util.Date;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.HeadElement;
+import com.google.gwt.dom.client.MetaElement;
 import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.i18n.client.Dictionary;
 import com.google.gwt.user.client.Window.Location;
 import com.seanchenxi.gwt.logging.api.Log;
 import com.seanchenxi.gwt.serenity.client.place.SerenityPlaceUtil;
-import com.seanchenxi.gwt.serenity.client.resource.message.MessageResources;
+import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
+import com.seanchenxi.gwt.serenity.share.StringPool;
 
 public class SerenityUtil {
-	
-	public static final String PAGING_CONFIG_ID = "PagingConfig";
-	
-	public static final MessageResources CST = GWT.create(MessageResources.class);
-	
+  
 	private static final DateTimeFormat DateFormatter = DateTimeFormat.getFormat(PredefinedFormat.DATE_MEDIUM);
 	private static final DateTimeFormat TimerFormatter = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_MEDIUM);
 	
-	private static final Dictionary PAGING_CONFIG = Dictionary.getDictionary(PAGING_CONFIG_ID);
-	
 	public static int getPageSize(){
 		try{
-			return Integer.parseInt(PAGING_CONFIG.get("size"));
+			return Integer.parseInt(SerenityResources.PAGING_CONFIG.get(SerenityResources.SIZE));
 		}catch (Exception e) {
 			Log.severe("[SerenityUtil] getPageSize error", e);
 			return 10;
@@ -62,15 +57,26 @@ public class SerenityUtil {
 	  return email.matches("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$");
 	}
 	
+  public static String getWpNaming() {
+    Element el = Document.get().getElementsByTagName(HeadElement.TAG).getItem(0);
+    NodeList<Element> els = el.getElementsByTagName(MetaElement.TAG);
+    for (int i = 0; i < els.getLength(); i++) {
+      if (SerenityResources.GENERATOR.equalsIgnoreCase(els.getItem(i).getAttribute(SerenityResources.NAME))) {
+        return els.getItem(i).getAttribute(SerenityResources.CONTENT);
+      }
+    }
+    return SerenityResources.MSG.wordpress_Name();
+  }
+ 
 	public static String getWpBaseUrl(){
-	  Element el = Document.get().getElementsByTagName("head").getItem(0);
-	  NodeList<Element> els = el.getElementsByTagName("meta");
+	  Element el = Document.get().getElementsByTagName(HeadElement.TAG).getItem(0);
+	  NodeList<Element> els = el.getElementsByTagName(MetaElement.TAG);
 	  for(int i = 0; i < els.getLength(); i++){
-	    if("url".equalsIgnoreCase(els.getItem(i).getAttribute("name"))){
-	      return els.getItem(i).getAttribute("content");
+	    if(SerenityResources.URL.equalsIgnoreCase(els.getItem(i).getAttribute(SerenityResources.NAME))){
+	      return els.getItem(i).getAttribute(SerenityResources.CONTENT);
 	    }
 	  }
-	  return "/";
+	  return StringPool.SLASH;
 	}
 	
 	public static boolean replaceIfIdOldRequest(){
@@ -78,13 +84,13 @@ public class SerenityUtil {
 	  String query = Location.getQueryString();
 	  if(path.endsWith(".html")){
 	    try{
-  	    String[] slugs = path.split("/");
+  	    String[] slugs = path.split(StringPool.SLASH);
   	    String token = SerenityPlaceUtil.getArticleAnchor(slugs[slugs.length - 1].replace(".html", ""));
   	    StringBuilder sb = new StringBuilder(getWpBaseUrl());
   	    if(query != null){
   	      sb.append(query);
   	    }else{
-  	      sb.append("/");
+  	      sb.append(StringPool.SLASH);
   	    }
   	    sb.append(token);
   	    Log.finest("[SerenityUtil] replace to " + sb.toString());
