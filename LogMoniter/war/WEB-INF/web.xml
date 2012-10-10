@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <context-param>
+    <param-name>logPath</param-name>
+<!--     <param-value>D:/Servers/jboss-as-7.1.0.Final/standalone/log/server.log</param-value> -->
+    <param-value>/home/jboss-as-7.1.1.Final/standalone/log/server.log</param-value>
+  </context-param>
+  
+  <servlet>
+    <servlet-name>monitorServlet</servlet-name>
+    <servlet-class>com.seanchenxi.logging.monitor.server.MessageServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>monitorServlet</servlet-name>
+    <url-pattern>/logmoniter/reader</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>
