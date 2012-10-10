@@ -48,7 +48,7 @@ public class LogParser {
   
   public static String getColor(Level logLevel) {
     if (logLevel == Level.OFF) {
-      return "#ccc"; // grey
+      return "#888"; // grey
     }
     if (logLevel == Level.SEVERE) {
       return "#F00"; // bright red
