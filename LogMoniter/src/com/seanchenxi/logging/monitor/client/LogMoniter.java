@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -62,7 +64,7 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, CloseHa
     RootLayoutPanel.get().add(bar = new SettingBar());
     RootLayoutPanel.get().setWidgetTopHeight(bar, 10, PX, 40, PX);
     RootLayoutPanel.get().setWidgetLeftRight(bar, 0, PX, 0, PX);
-    RootLayoutPanel.get().add(viewer = new Viewer(bar.getRowLimit()));
+    RootLayoutPanel.get().add(viewer = new Viewer(bar.getRowLimit(), bar.getShowNames()));
     RootLayoutPanel.get().setWidgetTopBottom(viewer, 55, PX, 0, PX);
     RootLayoutPanel.get().setWidgetLeftRight(viewer, 0, PX, 0, PX);
   }
@@ -78,8 +80,13 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, CloseHa
     bar.getConfirmeRowLimit().addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        viewer.setRowLimit(bar.getRowLimit());
-        bar.getConfirmeRowLimit().setEnabled(false);
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+          @Override
+          public void execute() {
+            viewer.setRowLimit(bar.getRowLimit());
+            bar.getConfirmeRowLimit().setEnabled(false);
+          }
+        });
       }
     });
 
@@ -87,6 +94,18 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, CloseHa
       @Override
       public void onValueChange(ValueChangeEvent<Boolean> event) {
         viewer.setPause(event.getValue());
+      }
+    });
+    
+    bar.addShowNameValueChangeHandler(new ValueChangeHandler<Boolean>() {     
+      @Override
+      public void onValueChange(ValueChangeEvent<Boolean> event) {
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+          @Override
+          public void execute() {
+            viewer.updateRowVisibility(bar.getShowNames());
+          }
+        });
       }
     });
 

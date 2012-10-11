@@ -1,41 +1,70 @@
 package com.seanchenxi.logging.monitor.client;
 
-import java.util.logging.Level;
 
 public class LogParser {
-
-  private static final String WARN = "WARN";
-  private static final String[] SEVERE = {"ERROR", "SEVERE", "EXCEPTION"};
-  private static final String[] SEVERE_TRACE = {"AT", ".JAVA:", "("};
-
+  
   private static final String STDOUT = "[STDOUT]";
-  private static final String INFO = "INFO";
   private static final String GWT_LOG = "[GWT-LOG]";
+  private static final String INFO = " INFO ";
+  private static final String CONFIG = " CONFIG ";
+  private static final String FINE = " FINE ";
+  private static final String FINER = " FINER ";
+  private static final String FINEST = " FINEST ";
+  private static final String DEBUG = " DEBUG ";
+  
+  private static final String[] SEVERE = {"ERROR", "SEVERE", "EXCEPTION"};
+  private static final String[] WARNING = {" WARN ", " WARNING "};
+  private static final String[] SEVERE_TRACE = {"AT", ".JAVA:", "("};
+  private static final String[] SQL_TRACE = {STDOUT, INFO, "HIBERNATE"};
+  
 
-  public static Level getLevel(String log) {
+  public static ExtLevel getLevel(String log) {
     String upperLog = log.toUpperCase().trim();
 
     if(isTraceLine(upperLog)){
-        return Level.SEVERE;
+        return ExtLevel.SEVERE;
     }
     
     for (String str : SEVERE) {
       if (upperLog.indexOf(str) != -1) {
-        return Level.SEVERE;
+        return ExtLevel.SEVERE;
       }
     }
-
-    if (upperLog.indexOf(GWT_LOG) != -1 && upperLog.indexOf(INFO) != -1) {
-      return Level.INFO;
-    } else if (upperLog.indexOf(STDOUT) != -1 && upperLog.indexOf(INFO) != -1) {
-      return Level.OFF;
-    } else if (upperLog.indexOf(WARN) != -1) {
-      return Level.WARNING;
+    
+    for (String str : WARNING) {
+      if (upperLog.indexOf(str) != -1) {
+        return ExtLevel.WARNING;
+      }
+    }
+    
+    if(isSQLTrace(upperLog)){
+      return ExtLevel.SQL;
+    }
+    
+    if (upperLog.indexOf(INFO) != -1) {
+      return upperLog.indexOf(GWT_LOG) != -1 ? ExtLevel.GREEN_INFO : ExtLevel.INFO;
     }
 
-    return null;
+    if (upperLog.indexOf(DEBUG) != -1) {
+      return ExtLevel.DEBUG;
+    }
+    
+    if (upperLog.indexOf(CONFIG) != -1) {
+      return ExtLevel.CONFIG;
+    }
+    if (upperLog.indexOf(FINE) != -1) {
+      return ExtLevel.FINE;
+    }
+    if (upperLog.indexOf(FINER) != -1) {
+      return ExtLevel.FINER;
+    }    
+    if (upperLog.indexOf(FINEST) != -1) {
+      return ExtLevel.FINEST;
+    }
+    
+    return ExtLevel.ALL;
   }
-
+  
   public static boolean isTraceLine(String log) {
     String upperLog = log.toUpperCase().trim();
     for (String str : SEVERE_TRACE) {
@@ -46,29 +75,39 @@ public class LogParser {
     return true;
   }
   
-  public static String getColor(Level logLevel) {
-    if (logLevel == Level.OFF) {
+  public static boolean isSQLTrace(String log) {
+    String upperLog = log.toUpperCase().trim();
+    for (String str : SQL_TRACE) {
+      if (upperLog.indexOf(str) == -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  public static String getColor(ExtLevel logLevel) {
+    if (logLevel == ExtLevel.OFF || logLevel == ExtLevel.SQL) {
       return "#888"; // grey
     }
-    if (logLevel == Level.SEVERE) {
+    if (logLevel == ExtLevel.SEVERE) {
       return "#F00"; // bright red
     }
-    if (logLevel == Level.WARNING) {
+    if (logLevel == ExtLevel.WARNING) {
       return "#E56717"; // dark orange
     }
-    if (logLevel == Level.INFO) {
+    if (logLevel == ExtLevel.GREEN_INFO) {
       return "#20b000"; // green
     }
-    if (logLevel == Level.CONFIG) {
+    if (logLevel == ExtLevel.CONFIG) {
       return "#2B60DE"; // blue
     }
-    if (logLevel == Level.FINE) {
+    if (logLevel == ExtLevel.FINE) {
       return "#F0F"; // purple
     }
-    if (logLevel == Level.FINER) {
+    if (logLevel == ExtLevel.FINER) {
       return "#F0F"; // purple
     }
-    if (logLevel == Level.FINEST) {
+    if (logLevel == ExtLevel.FINEST) {
       return "#F0F"; // purple
     }
     return "#333"; // deep grey

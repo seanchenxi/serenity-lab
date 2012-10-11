@@ -1,5 +1,9 @@
 package com.seanchenxi.logging.monitor.client;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -14,6 +18,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 public class SettingBar extends HorizontalPanel {
 
@@ -25,6 +30,8 @@ public class SettingBar extends HorizontalPanel {
   private Button confirmeRowLimit;
   private Button clear;
   private ToggleButton pause;
+  
+  private ArrayList<ToggleButton> nameBtns;
   
   public SettingBar(){
     super();
@@ -47,7 +54,15 @@ public class SettingBar extends HorizontalPanel {
     clear = new Button("Clear Log");
     pause = new ToggleButton("Pause", "Unpause");
     pause.setValue(false);
-
+    
+    nameBtns = new ArrayList<ToggleButton>();
+    nameBtns.add(new ToggleButton(ExtLevel.INFO.getName()));
+    nameBtns.add(new ToggleButton(ExtLevel.GREEN_INFO.getName()));
+    nameBtns.add(new ToggleButton(ExtLevel.SQL.getName()));
+    nameBtns.add(new ToggleButton(ExtLevel.DEBUG.getName()));
+    nameBtns.add(new ToggleButton(ExtLevel.WARNING.getName()));
+    nameBtns.add(new ToggleButton(ExtLevel.SEVERE.getName()));
+    
     add(label);
     add(rowLimit);
     add(confirmeRowLimit);
@@ -56,6 +71,10 @@ public class SettingBar extends HorizontalPanel {
     add(createSeparator());
     add(pause);
     add(createSeparator());
+    for(ToggleButton tb : nameBtns){
+      tb.setValue(true);
+      add(tb);
+    }
   }
 
   private void initHandlers() {
@@ -77,6 +96,21 @@ public class SettingBar extends HorizontalPanel {
         confirmeRowLimit.setEnabled(false);
       }
     });
+  }
+  
+  public HandlerRegistration addShowNameValueChangeHandler(ValueChangeHandler<Boolean> handler){
+    final ArrayList<HandlerRegistration> list = new ArrayList<HandlerRegistration>();
+    for(ToggleButton tb : nameBtns){
+      list.add(tb.addValueChangeHandler(handler));
+    }
+    return new HandlerRegistration() {
+      @Override
+      public void removeHandler() {
+        for(HandlerRegistration hr : list){
+          hr.removeHandler();
+        }
+      }
+    };
   }
   
   public Button getClearBtn() {
@@ -101,6 +135,15 @@ public class SettingBar extends HorizontalPanel {
   
   private HTML createSeparator() {
     return new HTML(NBSPx4);
+  }
+
+  public Set<String> getShowNames() {
+    Set<String> set = new HashSet<String>();
+    for(ToggleButton tb : nameBtns){
+      if(tb.getValue())
+        set.add(tb.getText());
+    }
+    return set;
   }
   
 }

@@ -1,5 +1,6 @@
 package com.seanchenxi.logging.monitor.client;
 
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +12,7 @@ import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
+import com.google.gwt.user.client.ui.HTMLTable.RowFormatter;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -25,22 +27,27 @@ public class Viewer implements IsWidget, LogEvent.Handler, LogRotatedEvent.Handl
   private final ScrollPanel scroller;
   private final FlexTable table;
   private final CellFormatter cellFormatter;
+  private final RowFormatter rowFormatter;
   
   private boolean isTemplePaused;
   private boolean isPaused;
   private int rowLimit;
   private int lastPosition = 0;
   private HandlerRegistration scrollHandler;
+
+  private Set<String> showNames;
   
-  public Viewer(int rowLimit){
+  public Viewer(int rowLimit, Set<String> showNames){
     table = new FlexTable();
     table.setSize("100%", "auto");
     table.setCellSpacing(2);
     cellFormatter = table.getCellFormatter();
+    rowFormatter = table.getRowFormatter();
     scroller = new ScrollPanel(table);
     scroller.getElement().getStyle().setProperty("borderTop", "1px solid #333333");
     setPause(false);
     setRowLimit(rowLimit);
+    updateRowVisibility(showNames);
   }
   
   public void clear() {
@@ -78,11 +85,24 @@ public class Viewer implements IsWidget, LogEvent.Handler, LogRotatedEvent.Handl
     return scroller;
   }
   
-  private void updateCellStyle(int row, Level level, boolean isTraceLine) {
-    Element cell = cellFormatter.getElement(row, 0);
-    cell.getStyle().setColor(LogParser.getColor(level));
-    cell.getStyle().setPaddingLeft(isTraceLine ? 20 : 2, Unit.PX);
-    cell.setClassName(level == null ? "" : level.getName());
+  private void updateCellStyle(int row, ExtLevel level, boolean isTraceLine) {
+    rowFormatter.getElement(row).getStyle().setColor(LogParser.getColor(level));
+    rowFormatter.setStyleName(row, level == null ? "" : level.getName());
+    rowFormatter.setVisible(row, level == null ? true : showNames.contains(level.getName()));
+    cellFormatter.getElement(row, 0).getStyle().setPaddingLeft(isTraceLine ? 20 : 2, Unit.PX);
+  }
+  
+  public void updateRowVisibility(Set<String> names) {
+    if(names.equals(showNames))
+      return;
+    this.showNames = names;
+    int row = 0;
+    while(row < table.getRowCount()){
+      Element rowEl = rowFormatter.getElement(row);
+      String className = rowEl.getClassName().trim();
+      rowFormatter.setVisible(row, className.isEmpty() || showNames.contains(className));
+      row++;
+    }
   }
 
   private int getRowCount() {
