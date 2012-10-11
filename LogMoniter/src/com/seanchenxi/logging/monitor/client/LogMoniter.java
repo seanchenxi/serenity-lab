@@ -8,11 +8,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -21,6 +24,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.ValueBoxBase.TextAlignment;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.seanchenxi.logging.monitor.client.event.LogEvent;
@@ -39,10 +43,13 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, LogEven
   
   private TextBox rowLimit;
   private Button clear;
+  private ToggleButton pause;
   
   private HandlerRegistration logHander;
   private HandlerRegistration logRotatedHander;
   private HandlerRegistration windowCloseHandler;
+  
+  private boolean isPaused;
 
   @Override
   public void onClose(CloseEvent<Window> event) {
@@ -55,7 +62,7 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, LogEven
     final int row = getRowCount();
     table.setHTML(row, 0, log);
     updateCellStyle(row, LogParser.getLevel(log), LogParser.isTraceLine(log));
-    scroller.scrollToBottom();
+    if(!isPaused) scroller.scrollToBottom();
   }
 
   @Override
@@ -89,7 +96,7 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, LogEven
 
   private int getRowCount() {
     int row = table.getRowCount();
-    if (row > getRowLimit()) {
+    if (!isPaused && row > getRowLimit()) {
       table.removeAllRows();
       return 0;
     }
@@ -105,6 +112,7 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, LogEven
   }
 
   private void initGUI() {
+	isPaused = false;
     Label label = new Label("Row Limit: ");
     label.getElement().getStyle().setFontWeight(FontWeight.BOLD);
     label.getElement().getStyle().setProperty("lineHeight", "25px");
@@ -121,6 +129,7 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, LogEven
     RootLayoutPanel.get().setWidgetLeftWidth(rowLimit, 90, PX, 70, PX);
     
     clear = new Button("Clear Log");
+    clear.getElement().getStyle().setTextAlign(TextAlign.CENTER);
     clear.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -129,8 +138,20 @@ public class LogMoniter implements EntryPoint, UncaughtExceptionHandler, LogEven
     });
     RootLayoutPanel.get().add(clear);
     RootLayoutPanel.get().setWidgetTopHeight(clear, 10, PX, 25, PX);
-    RootLayoutPanel.get().setWidgetLeftWidth(clear, 170, PX, 120, PX);
+    RootLayoutPanel.get().setWidgetLeftWidth(clear, 170, PX, 110, PX);
     
+    pause = new ToggleButton("Pause", "Unpause");
+    pause.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+    pause.addValueChangeHandler(new ValueChangeHandler<Boolean>() {	
+		@Override
+		public void onValueChange(ValueChangeEvent<Boolean> event) {
+			isPaused = event.getValue();
+		}
+	});
+    RootLayoutPanel.get().add(pause);
+    RootLayoutPanel.get().setWidgetTopHeight(pause, 10, PX, 25, PX);
+    RootLayoutPanel.get().setWidgetLeftWidth(pause, 280, PX, 100, PX);
+      
     table = new FlexTable();
     table.setSize("100%", "auto");
     table.setCellSpacing(2);

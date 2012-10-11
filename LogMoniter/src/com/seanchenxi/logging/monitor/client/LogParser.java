@@ -6,7 +6,7 @@ public class LogParser {
 
   private static final String WARN = "WARN";
   private static final String[] SEVERE = {"ERROR", "SEVERE", "EXCEPTION"};
-  private static final String[] SEVERE_TRACE = {"AT", ".JAVA:", "(", "]"};
+  private static final String[] SEVERE_TRACE = {"AT", ".JAVA:", "("};
 
   private static final String STDOUT = "[STDOUT]";
   private static final String INFO = "INFO";
@@ -15,14 +15,14 @@ public class LogParser {
   public static Level getLevel(String log) {
     String upperLog = log.toUpperCase().trim();
 
+    if(isTraceLine(upperLog)){
+        return Level.SEVERE;
+    }
+    
     for (String str : SEVERE) {
       if (upperLog.indexOf(str) != -1) {
         return Level.SEVERE;
       }
-    }
-
-    if(isTraceLine(upperLog)){
-      return Level.SEVERE;
     }
 
     if (upperLog.indexOf(GWT_LOG) != -1 && upperLog.indexOf(INFO) != -1) {
