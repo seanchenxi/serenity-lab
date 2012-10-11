@@ -1,5 +1,6 @@
 package com.seanchenxi.logging.monitor.server;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,8 +29,8 @@ public class MessageServiceImpl extends RemoteServiceServlet implements MessageS
 	private final static ScheduledExecutorService CLEANER = Executors.newScheduledThreadPool(0);	
 	private final static long CLEAN_TIME = 30 * 60 * 1000;
 	
-	private LogReader reader;
-	private String filePath;
+	private static LogReader reader;
+	private static String filePath;
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {
@@ -60,23 +61,10 @@ public class MessageServiceImpl extends RemoteServiceServlet implements MessageS
 	}
 	
 	@Override
-	public LogMessage listen(String messageId) {
+	public ArrayList<LogMessage> listen(String messageId) {
 		try{
 			TIME_MAP.put(messageId, System.currentTimeMillis());
-			LogMessage lm = poll(MAP.get(messageId));
-			if(lm == null){
-				int count = 0;
-				do{
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-					  Log.log(Level.SEVERE, "listen error", e);
-					}
-					lm = poll(MAP.get(messageId));
-					count ++;
-				}while(lm == null && count < 15);
-			}
-			return lm;
+			return poll(MAP.get(messageId), 50);
 		}finally{
 			TIME_MAP.put(messageId, System.currentTimeMillis());
 		}
@@ -88,14 +76,15 @@ public class MessageServiceImpl extends RemoteServiceServlet implements MessageS
 		MAP.put(id, new ConcurrentLinkedQueue<LogMessage>());
 		TIME_MAP.put(id, System.currentTimeMillis());
 		Log.info(id + " registered");
-		if(!MAP.isEmpty()){
-			if(reader == null){
-			  reader = new LogReader(filePath, this);
-			}
-			reader.start();
-			Log.info("LogReader started for file " + filePath);
-		}
+		startLogReader();
 		return id;
+	}
+
+	private synchronized void startLogReader() {
+		if(reader == null){
+			reader = new LogReader(filePath, this);
+		}
+		reader.start();
 	}
 
 	@Override
@@ -138,6 +127,42 @@ public class MessageServiceImpl extends RemoteServiceServlet implements MessageS
 			}
 		}
 	}
+
+	@Override
+	public void onError(String error) {
+		LogMessage lm = new LogMessage(Type.ERROR, error);
+		Iterator<String> idIt = MAP.keySet().iterator();
+		while (idIt.hasNext()) {
+			String id = idIt.next();
+			try {
+				offer(MAP.get(id), lm);
+			} catch (Exception e) {
+				Log.log(Level.SEVERE, "onError - offer " + lm + " to " + id + " error", e);
+			}
+		}
+	}
+	
+	private ArrayList<LogMessage> poll(ConcurrentLinkedQueue<LogMessage> msgs, int size){
+		ArrayList<LogMessage> list = new ArrayList<LogMessage>(size);
+		int count = 0;
+		do{
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+			  Log.log(Level.SEVERE, "poll error", e);
+			}
+			int i = 0;
+			LogMessage lm = null;
+			while(i < size &&  (lm = poll(msgs)) != null){
+				list.add(lm);
+				i++;
+			}
+			if(list.size() > 0 && msgs.isEmpty()){
+				return list;
+			}
+		}while ((++count) < 15 && list.size() < size);
+		return list;
+	}
 	
 	private LogMessage poll(ConcurrentLinkedQueue<LogMessage> msgs){
 		return msgs == null ? null : msgs.poll();
@@ -147,17 +172,4 @@ public class MessageServiceImpl extends RemoteServiceServlet implements MessageS
 		if(msgs != null && lm != null) msgs.offer(lm);
 	}
 
-  @Override
-  public void onError(String error) {
-    LogMessage lm = new LogMessage(Type.ERROR, error);
-    Iterator<String> idIt = MAP.keySet().iterator();
-    while(idIt.hasNext()){
-      String id = idIt.next();
-      try{
-        offer(MAP.get(id), lm);
-      }catch (Exception e) {
-        Log.log(Level.SEVERE, "onError - offer " + lm + " to " + id + " error", e);
-      }
-    }
-  }
 }

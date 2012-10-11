@@ -1,11 +1,14 @@
 package com.seanchenxi.logging.monitor.client;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -51,7 +54,7 @@ public class MessageClient {
 		}
 	}
 	
-	private class ListenCallback implements AsyncCallback<LogMessage> {
+	private class ListenCallback implements AsyncCallback<ArrayList<LogMessage>> {
 		@Override
 		public void onFailure(Throwable caught) {
 			if(errorCount-- > 0){
@@ -64,11 +67,27 @@ public class MessageClient {
 		}
 
 		@Override
-		public void onSuccess(LogMessage result) {
+		public void onSuccess(ArrayList<LogMessage> result) {
 			errorCount = 5;
-			fireEvent(result);
+			Scheduler.get().scheduleIncremental(new FireEventCommande(result));
 			call();
 		}
+	}
+	
+	private class FireEventCommande implements RepeatingCommand {
+		
+		private final LinkedList<LogMessage> msgs;	
+		
+		private FireEventCommande(List<LogMessage> msgs){
+			this.msgs = new LinkedList<LogMessage>(msgs);	
+		}
+
+		@Override
+		public boolean execute() {
+			fireEvent(msgs.poll());
+			return !msgs.isEmpty();
+		}
+		
 	}
 	
 	private final static MessageClient INSTANCE = new MessageClient();
@@ -102,25 +121,21 @@ public class MessageClient {
 		}
 	}
 	
-	private void fireEvent(final LogMessage result) {
-		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
-			public void execute() {
-				switch (result.getType()) {
-				case LOG:
-					handlerManager.fireEvent(new LogEvent(result.getMessage()));
-					break;
-				case ROTATED:
-					handlerManager.fireEvent(new LogRotatedEvent());
-					break;
-				case ERROR:
-				  handlerManager.fireEvent(new LogEvent(result.getMessage()));
-				  break;
-				default:
-					break;
-				}
-			}
-		});
+	private void fireEvent(LogMessage lm){
+		if(lm == null) return;
+		switch (lm.getType()) {
+		case LOG:
+			handlerManager.fireEvent(new LogEvent(lm.getMessage()));
+			break;
+		case ROTATED:
+			handlerManager.fireEvent(new LogRotatedEvent());
+			break;
+		case ERROR:
+		  handlerManager.fireEvent(new LogEvent(lm.getMessage()));
+		  break;
+		default:
+			break;
+		}
 	}
 	
 	private void start() {
