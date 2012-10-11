@@ -1,43 +1,74 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="LogM" default="war" basedir="." >
+<project name="LogM" default="war" basedir=".">
 
-	<property name="build.path" location="war/WEB-INF" />
+	<!-- Arguments to gwtc and devmode targets 
+		-style PRETTY
+		-strict 
+		-validateOnly 
+		-logLevel 
+		-compileReport 
+		-extra d:// 
+		-gen gen
+	-->
+	<property name="gwt.args" value="-war war -localWorkers 3 -strict " />
 
-	<path id="libs">
-		<fileset dir="{build.path}/lib" includes="**/*.jar"/>
-		<fileset dir="D:/Lib/GWT" includes="gwt-user.jar, gwt-dev*.jar, validation-api*.jar"/>
+	<property name="gwt.sdk" location="D:/Workspace/Lib/gwt-2.5.0.rc2/" />
+	<property name="build.path" location="war/WEB-INF/classes" />
+	<property name="package.libs" location="war/WEB-INF/lib" />
+
+	<path id="project.class.path">
+		<pathelement location="${build.path}"/>
+		<fileset dir="${package.libs}" includes="**/*.jar"/>
+		<fileset dir="${gwt.sdk}" includes="gwt-user.jar, gwt-dev*.jar, validation-api*.jar"/>
 	</path>
 
-	<target name="clean">
-		<echo message="Cleaning ${ant.project.name} build paths ..." />
-		<delete dir="dist" failonerror="false" />
-		<delete dir="${build.path}/classes" failonerror="false" />
-		<copy file="D:/Lib/GWT/gwt-servlet.jar" todir="{build.path}/lib" overwrite="true" />
-		<copy file="D:/Lib/GWT/gwt-servlet-deps.jar" todir="{build.path}/lib" overwrite="true" />
+	<target name="libs" description="Copy libs to WEB-INF/lib">
+		<mkdir dir="${package.libs}" />
+		<copy todir="${package.libs}" file="${gwt.sdk}/gwt-servlet.jar" overwrite="yes" />
+		<copy todir="${package.libs}" file="${gwt.sdk}/gwt-servlet-deps.jar" overwrite="yes" />
 	</target>
 
-	<target name="build" depends="clean">
-		<mkdir dir="${build.path}/classes" />
-		<echo message="Compiling ${ant.project.name} Java Sources ..." />
-		<javac srcdir="src" encoding="utf-8" destdir="${build.path}/classes" 
-		       source="1.6" target="1.6" nowarn="true" debug="true" 
-		       debuglevel="lines,vars,source" includeantruntime="false">
-			<classpath refid="libs"/>
+	<target name="javac" depends="clean, libs" description="Compile java source to bytecode">
+		<mkdir dir="${build.path}"/>
+		<echo message="Compiling ${ant.project.name} Java Sources ..."/>
+		<javac srcdir="src" includes="**" encoding="utf-8"
+        destdir="${build.path}" includeantruntime="false"
+        source="1.6" target="1.6" nowarn="true"
+        debug="true" debuglevel="lines,vars,source">
+			<classpath refid="project.class.path"/>
 		</javac>
 	</target>
 
-	<target name="war" depends="build">
-		<mkdir dir="src/META-INF" />
-		<mkdir dir="target" />
-		<echo message="Packaging to ${ant.project.name}.jar" />
-		<war destfile="target/${ant.project.name}.war">
-			<metainf dir="src/META-INF" />
-			<fileset dir="war" includes="**/*.*" />
-			<manifest>
-				<attribute name="Implementation-Vendor" value="seanchenxi.com" />
-				<attribute name="Implementation-Title" value="${ant.project.name}" />
-			</manifest>
+	<target name="gwtc" depends="javac" description="GWT compile to JavaScript (production mode)">
+		<echo message="Compiling ${ant.project.name} GWT Sources ..."/>
+		<java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+			<classpath>
+				<pathelement location="src"/>
+				<path refid="project.class.path"/>
+			</classpath>
+			<jvmarg value="-Xss16M"/>
+			<jvmarg value="-Xmx512M"/>
+			<jvmarg value="-Dgwt.persistentunitcache=false"/>
+			<arg line="${gwt.args}"/>
+			<arg value="com.seanchenxi.logging.monitor.LogMoniter"/>
+		</java>
+	</target>
+
+	<target name="war" description="Create a war file" depends="gwtc">
+		<mkdir dir="dist" />
+		<echo message="Packaging to ${ant.project.name}.war"/>
+		<war destfile="dist/${ant.project.name}.war">
+			<fileset dir="war" excludes="**/*.svn,**/.svn/**,**/*_index*,**/deploy/**,**/*.gwt.xml" />
 		</war>
+		<delete file="${package.libs}/gwt-servlet.jar"/>
+		<delete file="${package.libs}/gwt-servlet-deps.jar"/>
+	</target>
+
+	<target name="clean" description="Cleans this project">
+		<echo message="Cleaning ${ant.project.name} build paths ..." />
+		<delete dir="${build.path}" failonerror="yes" />
+		<delete dir="war/logmoniter" failonerror="yes" />
+		<delete dir="gwt-unitCache" failonerror="yes" />
 	</target>
 
 </project>
