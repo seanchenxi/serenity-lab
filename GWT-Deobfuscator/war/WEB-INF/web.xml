@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<context-param>
+		<param-name>symbolMaps</param-name>
+		<param-value>D:/test</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>deobfuscator</servlet-name>
+		<servlet-class>com.seanchenxi.gwt.deobfuscator.server.DeobfuscatorServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>deobfuscator</servlet-name>
+		<url-pattern>/deobfuscator/deobfuscate</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+</web-app>

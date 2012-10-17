@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/gwt-user.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/gwt-dev.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/validation-api-1.0.0.GA.jar"/>
+	<classpathentry kind="lib" path="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/validation-api-1.0.0.GA-sources.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gwt-servlet-deps.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
