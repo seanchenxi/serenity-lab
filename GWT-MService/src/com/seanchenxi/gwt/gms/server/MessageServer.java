@@ -1,16 +1,17 @@
 package com.seanchenxi.gwt.gms.server;
 
-import com.seanchenxi.gwt.gms.share.Message;
-import com.seanchenxi.gwt.gms.share.MessageHandler;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.seanchenxi.gwt.gms.share.Message;
+import com.seanchenxi.gwt.gms.share.MessageHandler;
 
 /**
  * User: Xi
@@ -35,9 +36,31 @@ public class MessageServer {
 
     private MessageServer() {
         USERS = new ConcurrentHashMap<String, Subscriber>();
+        initTimeOutCleaner();
     }
 
-    public String subscribe() {
+    private void initTimeOutCleaner() {
+    	CLEANER.scheduleAtFixedRate(new Runnable() {			
+			@Override
+			public void run() {
+				try{
+					long now = System.currentTimeMillis();
+					Iterator<Subscriber> idS = USERS.values().iterator();
+					while(idS.hasNext()){
+						Subscriber subscriber = idS.next();
+						if((now - subscriber.getLastActivityTime()) > CLEAN_TIME){
+							idS.remove();
+							LOG.info(subscriber.getId() + " cleaned");
+						}
+					}
+				}catch (Exception e) {
+				  LOG.log(Level.SEVERE, "clean error", e);
+				}
+			}
+		}, CLEAN_TIME, 10, TimeUnit.MINUTES);
+	}
+
+	public String addSubscriber() {
         String id = UUID.randomUUID().toString();
         Subscriber subscriber = USERS.putIfAbsent(id, new Subscriber(id));
         if (subscriber == null)
@@ -45,7 +68,7 @@ public class MessageServer {
         return id;
     }
 
-    public boolean unSubscribe(String id) {
+    public boolean removeSubscriber(String id) {
         return USERS.remove(id) != null;
     }
 
@@ -53,17 +76,22 @@ public class MessageServer {
         return USERS.get(id).retrieveMessage();
     }
 
-    public void sendMessage(Message<MessageHandler> message) {
+    public int sendMessage(Message<MessageHandler> message) {
         Iterator<Subscriber> itS = USERS.values().iterator();
+        int count = 0;
         while (itS.hasNext()) {
-            itS.next().addMessage(message);
+            if(itS.next().addMessage(message)){
+            	count++;
+            }
         }
+        return count;
     }
 
-    public void sendMessage(String id, Message<MessageHandler> message) {
+    public boolean sendMessage(String id, Message<MessageHandler> message) {
         Subscriber subscriber = USERS.get(id);
         if (subscriber != null)
-            subscriber.addMessage(message);
+            return subscriber.addMessage(message);
+        return false;
     }
 
 }

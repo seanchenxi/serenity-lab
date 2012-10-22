@@ -1,11 +1,11 @@
 package com.seanchenxi.gwt.gms.server;
 
-import com.seanchenxi.gwt.gms.share.Message;
-import com.seanchenxi.gwt.gms.share.MessageHandler;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import com.seanchenxi.gwt.gms.share.Message;
+import com.seanchenxi.gwt.gms.share.MessageHandler;
 
 /**
  * User: Xi
@@ -22,13 +22,20 @@ public class Subscriber {
         this.messages = new ConcurrentLinkedQueue<Message<MessageHandler>>();
     }
 
+    public String getId() {
+		return id;
+	}
+    
+    public long getLastActivityTime() {
+		return lastActivityTime;
+	}
+    
     public void updateActivity() {
         lastActivityTime = System.currentTimeMillis();
     }
 
-
-    public void addMessage(Message<MessageHandler> message) {
-        messages.offer(message);
+    public boolean addMessage(Message<MessageHandler> message) {
+        return messages.offer(message);
     }
 
     public LinkedList<Message<MessageHandler>> retrieveMessage() {

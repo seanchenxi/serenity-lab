@@ -1,10 +1,10 @@
 package com.seanchenxi.gwt.gms.client;
 
+import java.util.LinkedList;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.seanchenxi.gwt.gms.share.Message;
 import com.seanchenxi.gwt.gms.share.MessageHandler;
-
-import java.util.LinkedList;
 
 public interface MessageServiceAsync {
 

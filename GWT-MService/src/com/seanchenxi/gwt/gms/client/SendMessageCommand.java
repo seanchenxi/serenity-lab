@@ -1,11 +1,11 @@
 package com.seanchenxi.gwt.gms.client;
 
+import java.util.LinkedList;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.seanchenxi.gwt.gms.share.Message;
 import com.seanchenxi.gwt.gms.share.MessageHandler;
-
-import java.util.LinkedList;
 
 /**
  * User: Xi
