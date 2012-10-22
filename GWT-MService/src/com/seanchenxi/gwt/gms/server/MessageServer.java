@@ -1,5 +1,10 @@
 package com.seanchenxi.gwt.gms.server;
 
+import com.seanchenxi.gwt.gms.share.Message;
+import com.seanchenxi.gwt.gms.share.MessageHandler;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -17,7 +22,8 @@ public class MessageServer {
         private static final MessageServer INSTANCE = new MessageServer();
     }
 
-    private final Logger LOG;
+    private static final Logger LOG = Logger.getLogger(MessageServer.class.getName());
+
     private final ConcurrentHashMap<String, Subscriber> USERS;
 
     private final static ScheduledExecutorService CLEANER = Executors.newScheduledThreadPool(0);
@@ -28,17 +34,36 @@ public class MessageServer {
     }
 
     private MessageServer() {
-        LOG = Logger.getLogger(MessageServer.class.getName());
         USERS = new ConcurrentHashMap<String, Subscriber>();
     }
 
     public String subscribe() {
         String id = UUID.randomUUID().toString();
-        Subscriber subscriber = USERS.put(id, new Subscriber(id));
+        Subscriber subscriber = USERS.putIfAbsent(id, new Subscriber(id));
         if (subscriber == null)
             subscriber = USERS.get(id);
         return id;
     }
 
+    public boolean unSubscribe(String id) {
+        return USERS.remove(id) != null;
+    }
+
+    public LinkedList<Message<MessageHandler>> retrieveMessage(String id) {
+        return USERS.get(id).retrieveMessage();
+    }
+
+    public void sendMessage(Message<MessageHandler> message) {
+        Iterator<Subscriber> itS = USERS.values().iterator();
+        while (itS.hasNext()) {
+            itS.next().addMessage(message);
+        }
+    }
+
+    public void sendMessage(String id, Message<MessageHandler> message) {
+        Subscriber subscriber = USERS.get(id);
+        if (subscriber != null)
+            subscriber.addMessage(message);
+    }
 
 }

@@ -10,16 +10,16 @@ import java.util.LinkedList;
 public class MessageServiceImpl extends RemoteServiceServlet implements MessageService {
 
     @Override
-    public String register() {
+    public String subscribe() {
         return MessageServer.getInstance().subscribe();
     }
 
     @Override
-    public void unregister(String id) {
-
+    public void unSubscribe(String id) {
+        MessageServer.getInstance().unSubscribe(id);
     }
 
     public LinkedList<Message<MessageHandler>> retrieve(String id) {
-        return new LinkedList<Message<MessageHandler>>();
+        return MessageServer.getInstance().retrieveMessage(id);
     }
 }

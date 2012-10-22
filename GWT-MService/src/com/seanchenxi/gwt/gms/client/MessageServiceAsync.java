@@ -8,9 +8,9 @@ import java.util.LinkedList;
 
 public interface MessageServiceAsync {
 
-    void register(AsyncCallback<String> async);
+    void subscribe(AsyncCallback<String> async);
 
-    void unregister(String id, AsyncCallback<Void> async);
+    void unSubscribe(String id, AsyncCallback<Void> async);
 
     void retrieve(String id, AsyncCallback<LinkedList<Message<MessageHandler>>> async);
 

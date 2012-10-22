@@ -10,9 +10,9 @@ import java.util.LinkedList;
 @RemoteServiceRelativePath("gms")
 public interface MessageService extends RemoteService {
 
-    String register();
+    String subscribe();
 
-    void unregister(String id);
+    void unSubscribe(String id);
 
     LinkedList<Message<MessageHandler>> retrieve(String id);
 

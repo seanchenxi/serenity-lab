@@ -3,6 +3,7 @@ package com.seanchenxi.gwt.gms.server;
 import com.seanchenxi.gwt.gms.share.Message;
 import com.seanchenxi.gwt.gms.share.MessageHandler;
 
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -25,5 +26,18 @@ public class Subscriber {
         lastActivityTime = System.currentTimeMillis();
     }
 
+
+    public void addMessage(Message<MessageHandler> message) {
+        messages.offer(message);
+    }
+
+    public LinkedList<Message<MessageHandler>> retrieveMessage() {
+        LinkedList<Message<MessageHandler>> list = new LinkedList<Message<MessageHandler>>();
+        Message<MessageHandler> message = null;
+        while ((message = messages.poll()) != null) {
+            list.offer(message);
+        }
+        return list;
+    }
 
 }
