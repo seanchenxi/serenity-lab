@@ -10,7 +10,7 @@ public interface MessageServiceAsync {
 
     void register(AsyncCallback<String> async);
 
-    void unregister(AsyncCallback<Void> async);
+    void unregister(String id, AsyncCallback<Void> async);
 
     void retrieve(String id, AsyncCallback<LinkedList<Message<MessageHandler>>> async);
 

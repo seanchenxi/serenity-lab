@@ -12,7 +12,7 @@ public interface MessageService extends RemoteService {
 
     String register();
 
-    void unregister();
+    void unregister(String id);
 
     LinkedList<Message<MessageHandler>> retrieve(String id);
 

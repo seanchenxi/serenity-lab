@@ -11,11 +11,11 @@ public class MessageServiceImpl extends RemoteServiceServlet implements MessageS
 
     @Override
     public String register() {
-        return null;
+        return MessageServer.getInstance().subscribe();
     }
 
     @Override
-    public void unregister() {
+    public void unregister(String id) {
 
     }
 
