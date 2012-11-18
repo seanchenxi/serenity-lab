@@ -1,0 +1,29 @@
+<module>
+  
+  <define-property name="storage.cache" values="true, false" fallback-value="true" />
+  <set-property name="storage.cache" values="true" />
+  
+  <define-configuration-property name="storage.type.finder" is-multi-valued="false" />
+  <set-configuration-property name="storage.type.finder" value="rpc"/>
+    
+  <generate-with class="com.seanchenxi.gwt.storage.rebind.StorageTypeSerializerGenerator">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageTypeSerializer"/>
+  </generate-with>
+  
+  <replace-with class="com.seanchenxi.gwt.storage.client.cache.StorageMemoryCache">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.cache.StorageCache" />
+  	<when-property-is name="storage.cache" value="true"/>
+  </replace-with>
+  
+  <replace-with class="com.seanchenxi.gwt.storage.client.cache.NoStorageCache">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.cache.StorageCache" />
+  	<when-property-is name="storage.cache" value="false"/>
+  </replace-with>
+ 
+  <replace-with class="com.seanchenxi.gwt.storage.client.serializer.StorageRPCSerializerImpl">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageSerializer" />
+  </replace-with>
+  
+  <source path='client'/>
+  
+</module>
