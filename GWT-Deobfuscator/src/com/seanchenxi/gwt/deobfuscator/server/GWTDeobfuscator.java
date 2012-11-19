@@ -6,10 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.LogRecord;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,241 +13,184 @@ import org.json.JSONObject;
 import com.google.gwt.logging.server.StackTraceDeobfuscator;
 
 public class GWTDeobfuscator {
-
+	
 	private static final char POUND = '#';
+	private static final String USER_AGENT = "user.agent";
+
 	protected static final String OPEN_PARENTHESIS = "(";
 	protected static final String CLOSE_PARENTHESIS = ")";
 	protected static final String AT = "at";
-	protected static final String COMMA = ",";
-	protected static final String SEMICOLON = ";";
 	protected static final String UNKNOWN = "Unknown";
 	protected static final String SPACE = " ";
 	protected static final String PERIOD = ".";
-	protected static final String FORWARD_SLASH = "/";
 	protected static final String COLON = ":";
 	
+	protected static final String PROJET_URL_PREFIX = "http://pcis-source.dng-consulting.com/browse/PCIS_PHENIX/trunk";
+	protected static final String GWT_2_5_SOURCE = "http://code.google.com/p/google-web-toolkit/source/browse/releases/2.5";
+	
 	public static final String AT_UNKNOWN = AT + SPACE + UNKNOWN + PERIOD;
-	protected static final String USER_AGENT = "user.agent";
-
-	// From JsniRef class, which is in gwt-dev and so can't be accessed here
-	// TODO(unnurg) once there is a place for shared code, move this to there.
-	protected static Pattern JsniRefPattern = Pattern.compile("@?([^:]+)::([^(]+)(\\((.*)\\))?");
-
-	// The javadoc for StackTraceElement.getLineNumber() says it returns -1 when
-	// the line number is unavailable
-	protected static final int LINE_NUMBER_UNKNOWN = -1;
-
-	protected File symbolMapsDirectory;
-
-	// Key = Module Name, Value = Symbol Maps
-	protected Map<String, SymbolMap> symbolMaps;
-
-	public GWTDeobfuscator(String symbolMapsDirectory) {
-		setSymbolMapsDirectory(symbolMapsDirectory);
-	}
 	
-	public HashMap<String, String> getAllPermutationStrongNames(){
-		HashMap<String, String> map = new HashMap<String, String>();
-		for(String strongName : symbolMaps.keySet()){
-			map.put(strongName, symbolMaps.get(strongName).getUserAgent());
-		}
-		return map;
-	}
+	private String symbolMapsDirectory;
+	private String name;
+	private String versionNum;
+	private HashMap<String, String> userAgents;
+	private StackTraceDeobfuscator deobfuscator;
 	
-	public String deobfuscatePrintedStackTraceLine(String trace, String strongName) {
-		if(strongName == null || strongName.trim().isEmpty() || trace == null || !trace.startsWith(AT)) 
-			return trace;
-		SymbolMap map = symbolMaps.get(strongName);
-		if(map == null) return trace;	
-		int methodStartIndex = AT_UNKNOWN.length();
-		int methodEndIndex = trace.indexOf(OPEN_PARENTHESIS, methodStartIndex);
-		String _methodName = trace.substring(methodStartIndex, methodEndIndex);
-		String symbolData = map.get(_methodName.trim());
-		if (symbolData == null) return trace;
-		
-		// jsniIdent, className, memberName, sourceUri, sourceLine
-		String[] parts = symbolData.split(COMMA);
-		if (parts.length != 5) return trace;
-		
-		String[] ref = parse(parts[0].substring(0,parts[0].lastIndexOf(CLOSE_PARENTHESIS) + 1));
-		String declaringClass;
-		String methodName;
-		if (ref != null) {
-			declaringClass = ref[0];
-			methodName = ref[1];
-		} else {
-			declaringClass = UNKNOWN;
-			methodName = _methodName;
-		}
-
-		// parts[3] contains the source file URI or "Unknown"
-		String filename = UNKNOWN.equals(parts[3]) ? null : parts[3].substring(parts[3].lastIndexOf(FORWARD_SLASH) + 1);
-		
-		int lineNumber = LINE_NUMBER_UNKNOWN;
+	public GWTDeobfuscator(String name, String symbolMapsDirectory){
+		this.symbolMapsDirectory = symbolMapsDirectory;
+		this.name = name;
 		try{
-			int lineNumberStartIndex = trace.indexOf(COLON, methodEndIndex);
-			String _lineNumber = trace.substring(lineNumberStartIndex, trace.indexOf(CLOSE_PARENTHESIS, lineNumberStartIndex));
-			lineNumber = Integer.parseInt(_lineNumber);
+			String[] strs = name.split("-")[1].split("\\.");
+			this.versionNum = strs[strs.length - 1];
 		}catch(Exception e){
-			lineNumber = LINE_NUMBER_UNKNOWN;
+			this.versionNum = null;
 		}
-		/*
-		 * When lineNumber is LINE_NUMBER_UNKNOWN, either because
-		 * compiler.stackMode is not emulated or
-		 * compiler.emulatedStack.recordLineNumbers is false, use the
-		 * method declaration line number from the symbol map.
-		 */
-		if (lineNumber == LINE_NUMBER_UNKNOWN) {
-			lineNumber = Integer.parseInt(parts[4]);
-		}
-
-		return new StringBuilder(AT).append(SPACE).append(new StackTraceElement(declaringClass, methodName, filename, lineNumber)).toString();
-	}
-
-	/**
-	 * Copied form {@link StackTraceDeobfuscator#deobfuscateLogRecord(lr, strongName)}
-	 */
-	public LogRecord deobfuscateLogRecord(LogRecord lr, String strongName) {
-		if (lr.getThrown() != null && strongName != null) {
-			lr.setThrown(deobfuscateThrowable(lr.getThrown(), strongName));
-		}
-		return lr;
-	}
-
-	/**
-	 * Copied form {@link StackTraceDeobfuscator#deobfuscateStackTrace(st, strongName)}
-	 */
-	public StackTraceElement[] deobfuscateStackTrace(StackTraceElement[] st, String strongName) {
-		StackTraceElement[] newSt = new StackTraceElement[st.length];
-		for (int i = 0; i < st.length; i++) {
-			newSt[i] = resymbolize(st[i], strongName);
-		}
-		return newSt;
-	}
-
-	/**
-	 * Copied form {@link StackTraceDeobfuscator#resymbolize(ste, strongName)}
-	 */
-	public StackTraceElement resymbolize(StackTraceElement ste, String strongName) {
-		SymbolMap map = symbolMaps.get(strongName);
-		String symbolData = map == null ? null : map.get(ste.getMethodName());
-
-		if (symbolData != null) {
-			// jsniIdent, className, memberName, sourceUri, sourceLine
-			String[] parts = symbolData.split(",");
-			if (parts.length == 5) {
-				String[] ref = parse(parts[0].substring(0,
-						parts[0].lastIndexOf(')') + 1));
-
-				String declaringClass;
-				String methodName;
-				if (ref != null) {
-					declaringClass = ref[0];
-					methodName = ref[1];
-				} else {
-					declaringClass = ste.getClassName();
-					methodName = ste.getMethodName();
-				}
-
-				// parts[3] contains the source file URI or "Unknown"
-				String filename = "Unknown".equals(parts[3]) ? null : parts[3]
-						.substring(parts[3].lastIndexOf('/') + 1);
-
-				int lineNumber = ste.getLineNumber();
-				/*
-				 * When lineNumber is LINE_NUMBER_UNKNOWN, either because
-				 * compiler.stackMode is not emulated or
-				 * compiler.emulatedStack.recordLineNumbers is false, use the
-				 * method declaration line number from the symbol map.
-				 */
-				if (lineNumber == LINE_NUMBER_UNKNOWN) {
-					lineNumber = Integer.parseInt(parts[4]);
-				}
-
-				return new StackTraceElement(declaringClass, methodName,
-						filename, lineNumber);
-			}
-		}
-		// If anything goes wrong, just return the unobfuscated element
-		return ste;
-	}
-
-	/**
-	 * Copied form {@link StackTraceDeobfuscator#deobfuscateThrowable(old, strongName)}
-	 */
-	private Throwable deobfuscateThrowable(Throwable old, String strongName) {
-		Throwable t = new Throwable(old.getMessage());
-		if (old.getStackTrace() != null) {
-			t.setStackTrace(deobfuscateStackTrace(old.getStackTrace(),
-					strongName));
-		} else {
-			t.setStackTrace(new StackTraceElement[0]);
-		}
-		if (old.getCause() != null) {
-			t.initCause(deobfuscateThrowable(old.getCause(), strongName));
-		}
-		return t;
+		loadAllUserAgents();
 	}
 	
-	public void setSymbolMapsDirectory(String symbolMapsDirectory) {
-		// permutations are unique, no need to clear the symbolMaps hash map
-		this.symbolMapsDirectory = new File(symbolMapsDirectory);
-		loadAllSymbolMaps();
+	public String deobfuscateStackTrace(String line, String strongName){
+		if(deobfuscator == null)
+			deobfuscator = new StackTraceDeobfuscator(symbolMapsDirectory);
+		
+		StackTraceElement ste = deobfuscator.resymbolize(convert(line), strongName);
+		return convertToLinkableHtml(ste);
 	}
 
-	/**
-	 * Transformed form {@link StackTraceDeobfuscator#loadSymbolMap(String strongName)}
-	 */
-	private void loadAllSymbolMaps(){
-		symbolMaps = new HashMap<String, SymbolMap>();
-		for(File file : symbolMapsDirectory.listFiles()){
+	public String getName() {
+		return name;
+	}
+	
+	private String convertToLinkableHtml(StackTraceElement ste) {
+		String fileName = ste.getFileName();
+		String className = ste.getClassName();
+		int lineNumber = ste.getLineNumber();
+		String methodName = ste.getMethodName();
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(className).append(POUND).append(methodName);
+		if(lineNumber == -2){
+			sb.append("(Native Method)");
+		}else if(fileName != null){
+			sb.append(OPEN_PARENTHESIS);
+			String url = getURL(className, lineNumber);
+			if(url != null){
+				sb.append("<a target=\"_blank\" href=\"").append(url).append("\">")
+				  .append(fileName);
+				if(lineNumber >= 0){
+					sb.append(COLON).append(lineNumber);
+				}
+				sb.append("</a>");
+			}else{
+				sb.append(fileName);
+				if(lineNumber >= 0){
+					sb.append(COLON).append(lineNumber);
+				}
+			}
+			sb.append(CLOSE_PARENTHESIS);
+		}else{
+			sb.append("(Unknown Source)");
+		}
+		return sb.toString();
+	}
+	
+	private String getURL(String className, int lineNumber){
+		if(className.startsWith("com.pcis.phenix.client")){
+			String url = PROJET_URL_PREFIX + "/PhenixWeb/src/";
+			url += className.replaceAll("\\.", "\\/") + ".java";
+			url += getParam() + "#to" + lineNumber;
+			return url;
+		}else if(className.startsWith("com.pcis.phenix.domain.autobean") || 
+				(className.startsWith("com.pcis.phenix.domain.commande") && className.endsWith("ViewModel")) || 
+				className.startsWith("com.pcis.phenix.domain.ValueListConst")){
+			String url = PROJET_URL_PREFIX + "/PhenixWeb/src/";
+			url += className.replaceAll("\\.", "\\/") + ".java";
+			url += getParam() + "#to" + lineNumber;
+			return url;
+		}else if(className.startsWith("com.pcis.phenix.domain")){
+			String url = PROJET_URL_PREFIX + "/PhenixCommon/src/";
+			url += className.replaceAll("\\.", "\\/") + ".java";
+			url += getParam() + "#to" + lineNumber;
+			return url;
+		}else if(className.startsWith("com.pcis.phenix.util")){
+			String url = PROJET_URL_PREFIX + "/PhenixCommon/src/";
+			url += className.replaceAll("\\.", "\\/") + ".java";
+			url += getParam() + "#to" + lineNumber;
+			return url;
+		}else if(className.startsWith("com.google.gwt") || className.startsWith("com.google.web.bindery")){
+			String url = GWT_2_5_SOURCE + "/user/src/";
+			url += className.replaceAll("\\.", "\\/") + ".java";
+			url += "#" + lineNumber;
+			return url;	
+		}
+		return null;
+	}
+	
+	private String getParam(){
+		if(versionNum == null)
+			return "?hb=true";
+		else
+			return "?r="+versionNum;
+	}
+	
+	private StackTraceElement convert(String line) {
+		int methodStartIndex = AT_UNKNOWN.length();
+		int methodEndIndex = line.indexOf(OPEN_PARENTHESIS, methodStartIndex);
+		String methodName = line.substring(methodStartIndex, methodEndIndex);
+		
+		int lineNumberStartIndex = line.indexOf(COLON) + 1;
+		int lineNumberEndIndex = line.indexOf(CLOSE_PARENTHESIS, lineNumberStartIndex);
+		int lineNumber = Integer.parseInt(line.substring(lineNumberStartIndex, lineNumberEndIndex));
+		
+		String fileName = line.substring(methodEndIndex + 1, lineNumberStartIndex - 1);
+		
+		return new StackTraceElement(UNKNOWN, methodName, fileName, lineNumber);
+	}
+
+	private void loadAllUserAgents(){
+		userAgents = new HashMap<String, String>();
+		File dir = new File(symbolMapsDirectory);
+		for(File file : dir.listFiles()){
 			if(!file.isFile() && !file.getName().endsWith(".symbolMap")){
 				continue;
 			}
+			
 			final String strongName = file.getName().split("\\.")[0];
-			SymbolMap map = new SymbolMap(strongName);
-			String line;
+
 			try {
 				BufferedReader bin = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+				String line;
 				try {
-					while ((line = bin.readLine()) != null) {
-						if (line.charAt(0) == POUND) {
-							if(line.indexOf(USER_AGENT) != -1 && null == map.getUserAgent()){
-								try {
-									JSONObject json = new JSONObject(line.substring(1));
-									map.setUserAgent(json.getString(USER_AGENT));
-								} catch (JSONException e) {
-									e.printStackTrace();
-									continue;
-								}
+					findUserAgent : while ((line = bin.readLine()) != null) {
+						if (line.charAt(0) == POUND && line.indexOf(USER_AGENT) != -1) {
+							try {
+								JSONObject json = new JSONObject(line.substring(1));
+								userAgents.put(strongName, json.getString(USER_AGENT));
+								break findUserAgent;
+							} catch (JSONException e) {
+								e.printStackTrace();
+								continue;
 							}
-							continue;
 						}
-						int idx = line.indexOf(',');
-						map.put(new String(line.substring(0, idx)), line.substring(idx + 1));
+						continue;
 					}
 				} finally {
 					bin.close();
 				}
+				if(userAgents.get(strongName) == null){
+					userAgents.put(strongName, strongName);
+				}
 			} catch (IOException e) {
-				// use empty symbol map to avoid repeated lookups
-				map = new SymbolMap(strongName);
+				userAgents.put(strongName, strongName);
 			}
-			symbolMaps.put(strongName, map);
 		}
 	}
 
-	/**
-	 * Copied form {@link StackTraceDeobfuscator#parse(String refString)}
-	 */
-	private String[] parse(String refString) {
-		Matcher matcher = JsniRefPattern.matcher(refString);
-		if (!matcher.matches()) {
-			return null;
-		}
-		String className = matcher.group(1);
-		String memberName = matcher.group(2);
-		String[] toReturn = new String[] { className, memberName };
-		return toReturn;
+	public HashMap<String, String> getAllPermutationStrongNames() {
+		return userAgents;
 	}
+	
+	public String getSymbolMapsDirectory() {
+		return symbolMapsDirectory;
+	}
+	
 }

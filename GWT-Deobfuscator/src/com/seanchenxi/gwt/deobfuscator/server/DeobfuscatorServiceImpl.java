@@ -51,8 +51,8 @@ public class DeobfuscatorServiceImpl extends RemoteServiceServlet implements Deo
 	
 	@Override
 	public String deobfuscate(String moduleName, String strongName, String input) { 
-		GWTDeobfuscator deobfuscator = DEOBFUSCATORS.get(moduleName);
-		if(deobfuscator == null){
+		GWTDeobfuscator symbolModule = DEOBFUSCATORS.get(moduleName);
+		if(symbolModule == null){
 			Log.warning("deobfuscate - module " + moduleName + " not found.");
 			return input;
 		}
@@ -60,9 +60,12 @@ public class DeobfuscatorServiceImpl extends RemoteServiceServlet implements Deo
 		for(String line : input.split("\\\n")){
 			String trace = line.replaceAll("[\\r\\n\\t]", "").trim();
 			if(trace.startsWith("at")){
-				sb.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+				sb.append("&nbsp;&nbsp;&nbsp;&nbsp;at&nbsp;");
+				sb.append(symbolModule.deobfuscateStackTrace(trace, strongName));
+			}else{
+				sb.append(line);
 			}
-			sb.append(deobfuscator.deobfuscatePrintedStackTraceLine(trace, strongName)).append("<br/>");
+			sb.append("<br/>");
 		}
 		return sb.toString() ;
 	}
@@ -77,7 +80,7 @@ public class DeobfuscatorServiceImpl extends RemoteServiceServlet implements Deo
 					if (symbolMaps.isDirectory() 
 							&& PARAMETER_SYMBOL_MAPS.equalsIgnoreCase(symbolMaps.getName()) 
 							&& symbolMaps.list().length > 0 ) {
-						DEOBFUSCATORS.put(module.getName(), new GWTDeobfuscator(symbolMaps.getAbsolutePath()));
+						DEOBFUSCATORS.put(module.getName(), new GWTDeobfuscator(module.getName(), symbolMaps.getAbsolutePath()));
 						Log.info("Added Module ("+module.getName() + ") Symbol Maps at " + symbolMaps.getAbsolutePath());
 						break checkModuleFolder;
 					}
