@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="DeObf" default="build" basedir=".">
+<project name="DeObf" default="war" basedir=".">
   <!-- Arguments to gwtc and devmode targets -->
-  <property name="gwt.args" value="" />
+  <property name="gwt.args" value="-strict -optimize 9 -XdisableClassMetadata -localWorkers 3" />
 
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT" />
+  <property name="gwt.sdk" location="D:/Lib/gwt-2.5.0" />
 
   <path id="project.class.path">
     <pathelement location="war/WEB-INF/classes"/>
@@ -25,8 +25,8 @@
     <mkdir dir="war/WEB-INF/classes"/>
     <javac srcdir="src" includes="**" encoding="utf-8"
         destdir="war/WEB-INF/classes"
-        source="1.5" target="1.5" nowarn="true"
-        debug="true" debuglevel="lines,vars,source">
+        source="1.6" target="1.6" nowarn="true"
+        debug="true" debuglevel="lines,vars,source" includeantruntime="false">
       <classpath refid="project.class.path"/>
     </javac>
     <copy todir="war/WEB-INF/classes">
@@ -39,11 +39,12 @@
       <classpath>
         <pathelement location="src"/>
         <path refid="project.class.path"/>
-        <pathelement location="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/validation-api-1.0.0.GA.jar" />
-        <pathelement location="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <!-- add jvmarg -Xss16M or similar if you see a StackOverflowError -->
-      <jvmarg value="-Xmx256M"/>
+      <jvmarg value="-Xss16M"/>
+      <jvmarg value="-Xmx512M"/>
       <arg line="-war"/>
       <arg value="war"/>
       <!-- Additional arguments like -style PRETTY or -logLevel DEBUG -->
@@ -57,8 +58,8 @@
       <classpath>
         <pathelement location="src"/>
         <path refid="project.class.path"/>
-        <pathelement location="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/validation-api-1.0.0.GA.jar" />
-        <pathelement location="D:/Workspace/PCIS/Projects/ThirdPartyPhenix/GWT/validation-api-1.0.0.GA-sources.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA.jar" />
+        <pathelement location="${gwt.sdk}/validation-api-1.0.0.GA-sources.jar" />
       </classpath>
       <jvmarg value="-Xmx256M"/>
       <arg value="-startupUrl"/>
