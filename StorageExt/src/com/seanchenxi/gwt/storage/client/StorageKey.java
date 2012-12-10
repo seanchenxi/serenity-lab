@@ -6,6 +6,12 @@ public class StorageKey<T> {
   private final String name;
 
   public StorageKey(String name, Class<T> clazz) {
+    if(name == null || name.trim().length() < 1){
+      throw new IllegalArgumentException("StorageKey's name can not be null or empty");
+    }
+    if(clazz == null){
+      throw new IllegalArgumentException("StorageKey's class type can not be null");
+    }
     this.name = name;
     this.clazz = clazz;
   }

@@ -30,10 +30,10 @@ public final class StorageExt {
     if (sessionStorage == null && Storage.isSessionStorageSupported()) {
       sessionStorage = new StorageExt(Storage.getSessionStorageIfSupported());
     }
-    return localStorage;
+    return sessionStorage;
   }
 
-  private StorageChangeEvent.Level eventLevel = StorageChangeEvent.Level.STRING;
+  private StorageChangeEvent.Level eventLevel;
   private Set<StorageChangeEvent.Handler> handlers;
   private final StorageCache cache;
   private final Storage storage;
@@ -42,6 +42,7 @@ public final class StorageExt {
     assert storage != null : "Storage can not be null, check your browser's HTML 5 support state.";
     this.storage = storage;
     this.cache = GWT.create(StorageCache.class);
+    this.eventLevel = StorageChangeEvent.Level.STRING;
   }
 
   public HandlerRegistration addStorageChangeHandler(final StorageChangeEvent.Handler handler) {
@@ -59,6 +60,12 @@ public final class StorageExt {
     };
   }
 
+  /**
+   * Removes all items in the Storage, and its cache it activated
+   *
+   * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-clear">W3C Web
+   *      Storage - Storage.clear()</a>
+   */
   public void clear() {
     storage.clear();
     cache.clear();
@@ -66,9 +73,9 @@ public final class StorageExt {
   }
 
   public <T> boolean containsKey(StorageKey<T> key) {
-    return key != null && storage.getItem(key.name()) != null;
+    return storage.getItem(key.name()) != null;
   }
-
+  
   public <T> T get(StorageKey<T> key) throws SerializationException {
     T item = cache.get(key);
     if (item == null) {
@@ -86,8 +93,24 @@ public final class StorageExt {
     return storage.key(index);
   }
 
+  /**
+   * Sets the value in the Storage associated with the specified key to the
+   * specified data.
+   *
+   * Note: The empty string may not be used as a key. And NULL value is not allowed.
+   * 
+   * @param key the key to a value in the Storage
+   * @param value the value associated with the key
+   * @throws SerializationException 
+   * @throws StorageQuotaExceededException
+   * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-setitem">W3C Web
+   *      Storage - Storage.setItem(k,v)</a>
+   */
   public <T> void put(StorageKey<T> key, T value) throws SerializationException,
       StorageQuotaExceededException {
+    if(value == null){
+      throw new NullPointerException();
+    }
     try {
       String data = TYPE_SERIALIZER.serialize(key.getClazz(), value);
       // Update store and cache
