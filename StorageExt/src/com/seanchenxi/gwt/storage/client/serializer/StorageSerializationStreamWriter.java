@@ -78,8 +78,8 @@ final class StorageSerializationStreamWriter extends AbstractSerializationStream
   }
 
   private void writeHeader(StringBuffer buffer) {
-    // append(buffer, String.valueOf(getFlags()));
-    // buffer.append(getVersion());
+     append(buffer, String.valueOf(getFlags()));
+     buffer.append(getVersion());
   }
 
   private void writePayload(StringBuffer buffer) {

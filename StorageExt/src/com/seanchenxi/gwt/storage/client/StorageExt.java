@@ -1,18 +1,14 @@
 package com.seanchenxi.gwt.storage.client;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptException;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.storage.client.Storage;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.seanchenxi.gwt.storage.client.cache.StorageCache;
 import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
@@ -37,12 +33,11 @@ public final class StorageExt {
     return localStorage;
   }
 
-  private final StorageCache cache;
+  private StorageChangeEvent.Level eventLevel = StorageChangeEvent.Level.STRING;
   private Set<StorageChangeEvent.Handler> handlers;
-
+  private final StorageCache cache;
   private final Storage storage;
-  private boolean traceObject;
-
+  
   private StorageExt(Storage storage) {
     assert storage != null : "Storage can not be null, check your browser's HTML 5 support state.";
     this.storage = storage;
@@ -64,17 +59,6 @@ public final class StorageExt {
     };
   }
 
-  public int checkUsedSpace(Storage storage) {
-    int total = 0;
-    String key = null;
-    for (int i = 0; i < storage.getLength(); i++) {
-      if (null != (key = storage.key(i))) {
-        total += getDataLength(storage.getItem(key));
-      }
-    }
-    return total / 1024;
-  }
-
   public void clear() {
     storage.clear();
     cache.clear();
@@ -92,27 +76,6 @@ public final class StorageExt {
       cache.put(key, item);
     }
     return item;
-  }
-
-  public void getKeyValueSize(final AsyncCallback<HashMap<String, Integer>> callback) {
-    Scheduler.get().scheduleIncremental(new RepeatingCommand() {
-      private int count = storage.getLength();
-      private String key = null;
-      private final HashMap<String, Integer> result = new HashMap<String, Integer>();
-
-      @Override
-      public boolean execute() {
-        if (--count < 0) {
-          callback.onSuccess(result);
-          return false;
-        }
-        if (null != (key = storage.key(count))) {
-          int length = getDataLength(storage.getItem(key));
-          result.put(key, length);
-        }
-        return true;
-      }
-    });
   }
 
   public String getString(String key) {
@@ -148,8 +111,8 @@ public final class StorageExt {
     fireEvent(StorageChangeEvent.ChangeType.REMOVE, key, null, value, null, data);
   }
 
-  public void setEventLevel(boolean traceObject) {
-    this.traceObject = traceObject;
+  public void setEventLevel(StorageChangeEvent.Level eventLevel) {
+    this.eventLevel = eventLevel;
   }
 
   public int size() {
@@ -165,10 +128,10 @@ public final class StorageExt {
 
   private void fireEvent(StorageChangeEvent.ChangeType changeType, StorageKey<?> key, Object value,
       Object oldVal, String data, String oldData) {
-    if (handlers != null) {
+    UncaughtExceptionHandler ueh = com.google.gwt.core.client.GWT.getUncaughtExceptionHandler();
+    if (handlers != null && !handlers.isEmpty()) {
       Object oldValue = oldVal;
-      if (traceObject && oldValue == null && oldData != null) {
-        UncaughtExceptionHandler ueh = com.google.gwt.core.client.GWT.getUncaughtExceptionHandler();
+      if (oldValue == null && oldData != null && StorageChangeEvent.Level.OBJECT.equals(eventLevel)) {    
         try {
           oldValue = TYPE_SERIALIZER.deserialize(key.getClazz(), data);
         } catch (SerializationException e) {
@@ -178,16 +141,17 @@ public final class StorageExt {
         }
       }
 
-      final StorageChangeEvent event =
-          new StorageChangeEvent(changeType, key, value, oldValue, data, oldData);
+      final StorageChangeEvent event = new StorageChangeEvent(changeType, key, value, oldValue, data, oldData);
       for (Iterator<StorageChangeEvent.Handler> it = handlers.iterator(); it.hasNext();) {
-        it.next().onStorageChange(event);
+        try{
+          it.next().onStorageChange(event);
+        }catch(Exception e){
+          if(ueh != null){
+            ueh.onUncaughtException(e);
+          }
+        }
       }
     }
-  }
-
-  private int getDataLength(String str) {
-    return str == null ? 0 : str.length();
   }
 
 }

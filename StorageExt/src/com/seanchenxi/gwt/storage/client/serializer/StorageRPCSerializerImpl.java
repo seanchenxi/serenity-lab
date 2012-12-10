@@ -3,7 +3,6 @@ package com.seanchenxi.gwt.storage.client.serializer;
 import java.util.HashMap;
 
 import com.google.gwt.core.shared.GWT;
-import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 
@@ -48,15 +47,7 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
       return null;
     }
     ClientSerializationStreamReader reader = new ClientSerializationStreamReader(TYPE_SERIALIZER);
-    try {
-      reader.prepareToRead(encodedString);
-    } catch (IncompatibleRemoteServiceException irse) {
-      String message = irse.getMessage();
-      if (message == null || !message.contains("Expecting version")
-          && message.contains("unknown flag")) {
-        throw irse;
-      }
-    }
+    reader.prepareToRead(encodedString);
     Object obj = findType(clazz).read(reader);
     return obj != null ? (T) obj : null;
   }

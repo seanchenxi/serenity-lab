@@ -5,6 +5,10 @@ import com.google.gwt.event.shared.GwtEvent;
 
 public class StorageChangeEvent extends GwtEvent<StorageChangeEvent.Handler> {
 
+  public enum Level {
+    STRING, OBJECT
+  }
+  
   public enum ChangeType {
     CLEAR, PUT, REMOVE
   }
