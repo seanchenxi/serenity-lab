@@ -3,8 +3,9 @@
   <!--
       Define if to use memory cache or not. default value is "true".
   -->
-  <define-property name="storage.cache" values="true, false" fallback-value="true" />
-  <set-property name="storage.cache" values="true" />
+  <define-property name="storage.cache" values="true, false" />
+  <set-property-fallback name="storage.cache" value="true" />
+  <set-property name="storage.cache" value="true" />
   
   <!--
    - Configuration property define how to find types that will persist in web storage

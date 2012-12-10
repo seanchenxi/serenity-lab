@@ -5,11 +5,12 @@ import java.util.HashMap;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
+import com.google.gwt.user.client.rpc.impl.Serializer;
 
 final class StorageRPCSerializerImpl implements StorageSerializer {
 
   private final static HashMap<Class<?>, StorageValueType> TYPE_MAP = new HashMap<Class<?>, StorageValueType>();
-  private final static StorageTypeSerializer TYPE_SERIALIZER = GWT.create(StorageTypeSerializer.class);
+  private final static Serializer TYPE_SERIALIZER = GWT.create(StorageTypeSerializer.class);
   static {
     TYPE_MAP.put(boolean[].class, StorageValueType.BOOLEAN_VECTOR);
     TYPE_MAP.put(byte[].class, StorageValueType.BYTE_VECTOR);

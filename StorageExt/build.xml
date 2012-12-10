@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="GWT-Storage" default="jar" basedir=".">
+<project name="gwt-storage" default="jar" basedir=".">
 
   <!-- Configure path to GWT SDK -->
-  <property name="gwt.sdk" location="Lib" />
+  <property name="gwt.sdk" location="libs" />
 
   <target name="javac" description="Compile java source to bytecode">
-    <mkdir dir="bin"/>
+    <mkdir dir="build/classes"/>
     <javac srcdir="src" includes="**" encoding="utf-8" includeantruntime="false"
-        destdir="bin" source="1.5" target="1.5" nowarn="true"
+        destdir="build/classes" source="1.5" target="1.5" nowarn="true"
         debug="true" debuglevel="lines,vars,source">
       <classpath>
-      	<pathelement location="${gwt.sdk}/gwt-user.jar"/>
-      	<pathelement location="${gwt.sdk}/gwt-dev.jar"/>
+      	<fileset dir="${gwt.sdk}" includes="**/gwt-*.jar"/>
       </classpath>
     </javac>
-    <copy todir="bin">
-      <fileset dir="src" excludes="**/*.*"/>
+    <copy todir="build/classes">
+      <fileset dir="src" includes="**/*.*"/>
     </copy>
   </target>
 
-  <target name="jar" depends="javac" description="Create a jar file">
+  <target name="jar" depends="clean, javac" description="Create a jar file">
   	<mkdir dir="dist"/>
-  	<mkdir dir="bin/META-INF"/>
+  	<mkdir dir="build/classes/META-INF"/>
     <jar destfile="dist/${ant.project.name}-0.9.jar">
-		<metainf dir="bin/META-INF" />
+		<metainf dir="build/classes/META-INF" />
 		<manifest>
 			<attribute name="Implementation-Version" value="0.9" />
 			<attribute name="Built-Date" value="${Phenix.BuiltTime}"/>
 		</manifest>
-    	<fileset dir="bin" includes="**/*.*" />
+    	<fileset dir="build/classes" includes="**/*.*" />
     </jar>
+  	<delete dir="build" failonerror="false" />
   </target>
 
   <target name="clean" description="Cleans this project">
-    <delete dir="bin" failonerror="false" />
+    <delete dir="build" failonerror="false" />
   	<delete dir="dist" failonerror="false" />
   </target>
 
