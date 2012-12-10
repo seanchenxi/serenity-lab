@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="GWT-Storage" default="jar" basedir=".">
+
+  <!-- Configure path to GWT SDK -->
+  <property name="gwt.sdk" location="Lib" />
+
+  <target name="javac" description="Compile java source to bytecode">
+    <mkdir dir="bin"/>
+    <javac srcdir="src" includes="**" encoding="utf-8" includeantruntime="false"
+        destdir="bin" source="1.5" target="1.5" nowarn="true"
+        debug="true" debuglevel="lines,vars,source">
+      <classpath>
+      	<pathelement location="${gwt.sdk}/gwt-user.jar"/>
+      	<pathelement location="${gwt.sdk}/gwt-dev.jar"/>
+      </classpath>
+    </javac>
+    <copy todir="bin">
+      <fileset dir="src" excludes="**/*.*"/>
+    </copy>
+  </target>
+
+  <target name="jar" depends="javac" description="Create a jar file">
+  	<mkdir dir="dist"/>
+  	<mkdir dir="bin/META-INF"/>
+    <jar destfile="dist/${ant.project.name}-0.9.jar">
+		<metainf dir="bin/META-INF" />
+		<manifest>
+			<attribute name="Implementation-Version" value="0.9" />
+			<attribute name="Built-Date" value="${Phenix.BuiltTime}"/>
+		</manifest>
+    	<fileset dir="bin" includes="**/*.*" />
+    </jar>
+  </target>
+
+  <target name="clean" description="Cleans this project">
+    <delete dir="bin" failonerror="false" />
+  	<delete dir="dist" failonerror="false" />
+  </target>
+
+</project>
