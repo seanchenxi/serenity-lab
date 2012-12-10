@@ -18,6 +18,11 @@ public class StorageMemoryCache implements StorageCache {
   }
 
   @Override
+  public <T> boolean containsValue(T value) {
+    return map.containsValue(value);
+  }
+
+  @Override
   @SuppressWarnings("unchecked")
   public <T> T get(StorageKey<T> key) {
     Object val = map.get(key);

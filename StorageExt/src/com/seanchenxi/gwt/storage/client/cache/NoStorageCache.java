@@ -9,6 +9,11 @@ public class NoStorageCache implements StorageCache {
   }
 
   @Override
+  public <T> boolean containsValue(T value) {
+    return false;
+  }
+
+  @Override
   public <T> T get(StorageKey<T> key) {
     return null;
   }

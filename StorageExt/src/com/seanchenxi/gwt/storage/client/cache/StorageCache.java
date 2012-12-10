@@ -6,6 +6,8 @@ public interface StorageCache {
 
   void clear();
 
+  <T> boolean containsValue(T value);
+
   <T> T get(StorageKey<T> key);
 
   <T> T put(StorageKey<T> key, T value);
