@@ -106,7 +106,7 @@ public class SerenityUtil {
 	
 	public static boolean isLoggedIn() {
     for(String name : Cookies.getCookieNames()){
-      if(name != null && name.indexOf("logged") != -1 && name.indexOf("in") != -1){
+      if(name != null && name.contains("logged") && name.contains("in")){
         return true;
       }
     }
