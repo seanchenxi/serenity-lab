@@ -1,0 +1,96 @@
+/*
+ * Copyright 2013 Xi CHEN
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+@def titleshadow 0 0 6px rgba(0, 0, 0, 0.4);
+.listContainer{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.listTitle{
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    font-weight: bolder;
+    text-align: center;
+    line-height: 32px;
+    color: #333;
+}
+
+@if user.agent safari {
+    .listTitle{
+        -webkit-box-shadow: titleshadow;
+        box-shadow: titleshadow;
+    }
+} @elif user.agent gecko1_8 {
+    .listTitle{
+        -moz-box-shadow: titleshadow;
+        box-shadow: titleshadow;
+    }
+} @else {
+    .listTitle{
+        -ms-box-shadow: titleshadow;
+        -o-box-shadow: titleshadow;
+        box-shadow: titleshadow;
+    }
+}
+
+.listPagingControl{
+    text-align: right;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    height: 32px;
+    width: 160px;
+    line-height: 22px;
+}
+
+.listPagingInfoLbl{
+    text-align: left;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.listPagingControlLbl{
+    text-align: center;
+    display: inline-block;
+    border: 1px solid #999;
+    color: #999;
+    cursor: pointer;
+    text-shadow: 1px;
+    margin: 0 0 0 1px;
+    width: 18px;
+}
+
+.listPagingControlLbl:hover {
+    border: 1px solid #1E1E1E;
+    color: #1E1E1E;
+}
+
+.listScroller{
+    position: absolute;
+    top: 32px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.listBody{
+}
