@@ -1,0 +1,28 @@
+.contentItem{
+    display: block;
+    padding: 10px 15px 0 15px;
+    border-bottom: 1px solid #EBEBEB;
+}
+
+.highlight,
+.contentItem:hover {
+    background: #E7F2F8;
+    cursor: pointer;
+    color: #010101;
+}
+
+.contentItemTitle{
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 5px 0 0 0;
+}
+
+.contentItemBody{
+    padding:5px 0;
+}
+
+.contentItemMeta{
+    text-align: right;
+    color: #BBB;
+    padding: 0 0 5px 0;
+}

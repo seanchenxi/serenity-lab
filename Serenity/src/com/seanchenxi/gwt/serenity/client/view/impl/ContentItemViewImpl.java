@@ -21,6 +21,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -29,21 +31,38 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class ContentItemViewImpl extends Composite implements HasClickHandlers {
 
+    public interface Resources extends ClientBundle {
+
+        public interface Style extends CssResource {
+            final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/view/ContentItemView.css";
+            String contentItem();
+            String contentItemTitle();
+            String contentItemBody();
+            String contentItemMeta();
+            String highlight();
+        }
+
+        @ClientBundle.Source(Style.DEFAULT_CSS)
+        Style style();
+    }
+
   interface ContentItemViewImplUiBinder extends UiBinder<Widget, ContentItemViewImpl>{}
   
   private static final ContentItemViewImplUiBinder uiBinder = GWT.create(ContentItemViewImplUiBinder.class);
   private static final String TITLE_PREFIX = "<span class=\"unSelectable\">&Xi;&nbsp;</span>";
+  private static final String META_PREFIX = "<span class=\"unSelectable\">-&nbsp;-&nbsp;&nbsp;</span>";
   private static final String SUMMARY_POSTFIX = "...";
-  private static final String HILIGHT_STYLE = "hilight";
 
   @UiField HeadingElement title;
   @UiField HTML content;
   @UiField HTML meta;
+  @UiField Resources resource;
   
   private String id;
   
   public ContentItemViewImpl(){
     initWidget(uiBinder.createAndBindUi(this));
+    resource.style().ensureInjected();
   }
   
   public void setId(String id){
@@ -63,18 +82,18 @@ public class ContentItemViewImpl extends Composite implements HasClickHandlers {
   }
   
   public void setMeta(String metaInfo){
-    meta.setHTML(metaInfo);
+    meta.setHTML(META_PREFIX + metaInfo);
   }
 
   public boolean isHighlighted() {
-    return getStyleName().indexOf(HILIGHT_STYLE) != -1;
+    return getStyleName().indexOf(resource.style().highlight()) != -1;
   }
   
-  public void setHighlight(boolean hilight){
-    if(hilight){
-      addStyleName(HILIGHT_STYLE);
+  public void setHighlight(boolean highlight){
+    if(highlight){
+      addStyleName(resource.style().highlight());
     }else{
-      removeStyleName(HILIGHT_STYLE);
+      removeStyleName(resource.style().highlight());
     }
   }
   
