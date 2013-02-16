@@ -15,166 +15,77 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
-import java.util.Date;
-
-import com.github.gwtbootstrap.client.ui.PageHeader;
+import com.google.gwt.animation.client.Animation;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.i18n.shared.DateTimeFormat;
-import com.google.gwt.i18n.shared.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.layout.client.Layout.AnimationCallback;
-import com.google.gwt.layout.client.Layout.Layer;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.Window.Location;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.seanchenxi.gwt.serenity.client.SerenityUtil;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
 import com.seanchenxi.gwt.serenity.client.view.SerenityLayout;
+import com.seanchenxi.gwt.ui.widget.Heading;
 
-public class SerenityLayoutImpl extends LayoutPanel implements SerenityLayout {
-	
-  private class PositionViewInjector implements AcceptsOneWidget {
+public class SerenityLayoutImpl extends Composite implements SerenityLayout {
 
-    private IsWidget widget;
-    private double left, width;
-    
-    public PositionViewInjector(double left, double width){
-      this.left = left;
-      this.width = width;
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/view/SerenityLayout.css";
+      String headerContainer();
+      String sidebarContainer();
+      String contentListContainer();
+      String footerContainer();
+      String container();
+      String layout();
     }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
     
-    @Override
-    public void setWidget(IsWidget w) {
-      if(w != null && w.asWidget().getParent() != SerenityLayoutImpl.this){
-        add(widget = w);
-        setWidgetLeftWidth(widget, left, UNIT, width, UNIT);
-        setWidgetTopBottom(widget, HEADER_HEIGHT, UNIT, 0, UNIT);
-      }
-    }
   }
   
-  private class ArticleViewInjector implements AcceptsOneWidget { 
-    
-    private IsWidget article;
-    
-    @Override
-    public void setWidget(final IsWidget w) {
-      Scheduler.get().scheduleDeferred(new ScheduledCommand() { 
-        @Override
-        public void execute() {
-          ensureAnimateWrap();
-          if(article != null){
-            removedAndShow(w);
-          }else{
-            show(w);
-          }
-        }
-      });
-    }
-    
-    private void ensureAnimateWrap(){
-      if(contentwrap == null){
-        add(contentwrap = new LayoutPanel());
-        setWidgetLeftRight(contentwrap, (MENU_WIDTH + CONTENT_LIST_WIDTH), UNIT, 0, UNIT);
-        setWidgetTopBottom(contentwrap, (HEADER_HEIGHT >> 1), UNIT, 25, UNIT);
-      }
-    }
-    
-    private void removedAndShow(final IsWidget w){
-      contentwrap.setWidgetLeftWidth(article, contentwrap.getOffsetWidth() + 60, UNIT, CONTENT_WIDTH, UNIT);
-      contentwrap.animate(384, new AnimationCallback() {
-        @Override
-        public void onAnimationComplete() {
-          if(w == null){
-            contentwrap.clear();
-            setWidgetLeftRight(contentwrap, (MENU_WIDTH + CONTENT_LIST_WIDTH), UNIT, 0, UNIT);
-            article = null;
-          }else{
-            if(article != null)
-              article.asWidget().setVisible(false);
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-              @Override
-              public void execute() {
-                show(w);
-              }
-            });
-          }
-        }
-        
-        @Override
-        public void onLayout(Layer layer, double progress) {}
-      });
-    }
-    
-    private void show(IsWidget w){
-      if(w == null) return;
-      w.asWidget().setVisible(true);
-      if(!(article = w).asWidget().isAttached())
-        contentwrap.add(article);
-      contentwrap.setWidgetLeftWidth(article, contentwrap.getOffsetWidth() + 50, UNIT, CONTENT_WIDTH, UNIT);
-      contentwrap.forceLayout();
-      setWidgetLeftRight(contentwrap, getLeftMargin() - 5, UNIT, 0, UNIT);
-      contentwrap.setWidgetLeftWidth(article, 5, UNIT, CONTENT_WIDTH, UNIT);
-      contentwrap.animate(640);
-    }
-    
-    private double getLeftMargin(){
-      int clientWidth = Math.max(MIN_WIDTH, Window.getClientWidth());
-      if(clientWidth > 1500){
-        return CONTENT_LIST_WIDTH + MENU_WIDTH - 22;
-      }else{
-        return (clientWidth - CONTENT_WIDTH) >> 1;
-      }
-    }
-  }
+  interface SerenityLayoutImplUiBinder extends UiBinder<Widget, SerenityLayoutImpl> {}
+
+  private static SerenityLayoutImplUiBinder UIBINDER = GWT.create(SerenityLayoutImplUiBinder.class);
   
-	private static final Unit UNIT = Unit.PX;
-	private static final int MIN_WIDTH = 1024;
-	private static final int MIN_HEIGHT = 700;
-	private static final int HEADER_HEIGHT = 70;
-	private static final int MENU_WIDTH = 66;
-	private static final int CONTENT_LIST_WIDTH = 650;
-	private static final int CONTENT_WIDTH = 650;
-	
-	private FooterTemplate FOOTER_TEMPLATE = GWT.create(FooterTemplate.class);
-	private LayoutPanel contentwrap = null;
-	private AcceptsOneWidget sidebarContainer;
-	private AcceptsOneWidget contentListContainer;
-	private AcceptsOneWidget contentContainer;
+  @UiField
+  Resources resource;
+  @UiField
+  SimplePanel sidebarContainer;
+  @UiField
+  SimplePanel contentListContainer;
+  @UiField
+  SimplePanel footer;
+  @UiField
+  Heading header;
+
+  private static ArticleViewContainer articleViewContainer;
 	
 	public SerenityLayoutImpl() {
-		super();
-		initGUI();
+		initWidget(UIBINDER.createAndBindUi(this));
+    resource.style().ensureInjected();
+    header.setText(SerenityResources.MSG.page_Title());
+    header.setSubText(SerenityResources.MSG.page_subTitle());
 	}
 
-	private void initGUI() {
-	  initHeader();
-	  initFooter();
-		sidebarContainer = new PositionViewInjector(0, MENU_WIDTH);
-		contentListContainer = new PositionViewInjector(MENU_WIDTH, CONTENT_LIST_WIDTH);
-		contentContainer = new ArticleViewInjector();
-	}
-
-	@Override
-	public void show(){
-		RootLayoutPanel root = RootLayoutPanel.get();
-		Style rootStyle = root.getElement().getStyle();
-		rootStyle.setProperty("minWidth", MIN_WIDTH, UNIT);
-		rootStyle.setProperty("minHeight", MIN_HEIGHT, UNIT);
-		rootStyle.setTop(SerenityUtil.isLoggedIn() ? 28 : 0, UNIT);
-		root.add(this);
-	}
-
-	@Override
+  @Override
+  public void show() {
+    RootPanel.get().insert(this, 0);
+  }
+  
+  @Override
 	public AcceptsOneWidget getSidebarContainer() {
 		return sidebarContainer;
 	}
@@ -184,32 +95,131 @@ public class SerenityLayoutImpl extends LayoutPanel implements SerenityLayout {
 		return contentListContainer;
 	}
 
-	@Override
-	public AcceptsOneWidget getArticleContainer() {
-		return contentContainer;
-	}
-	
-	private void initHeader(){
-    PageHeader title = new PageHeader();
-    title.addStyleName("title");
-    title.setText(SerenityResources.MSG.page_Title());
-    title.setSubtext(SerenityResources.MSG.page_subTitle());
-    add(title);
-    setWidgetTopHeight(title, 0, UNIT, HEADER_HEIGHT, UNIT);	  
-	}
-	
-	private void initFooter(){
-    HTML footer = new HTML();
-    footer.setStyleName("footer");
-    footer.getElement().getStyle().setPadding(5, UNIT);
-    footer.getElement().getStyle().setPaddingLeft(MENU_WIDTH + CONTENT_LIST_WIDTH + 10, UNIT);
-    SafeHtmlBuilder shb = new SafeHtmlBuilder();
-    shb.append(FOOTER_TEMPLATE.copyright(DateTimeFormat.getFormat(PredefinedFormat.YEAR).format(new Date()), UriUtils.fromSafeConstant(SerenityUtil.getWpBaseUrl()), Location.getHost()));
-    shb.append(FOOTER_TEMPLATE.poweredBy(UriUtils.fromSafeConstant(SerenityResources.MSG.wordpress_URL()), SerenityResources.MSG.wordpress_URL(), SerenityUtil.getWpNaming()));
-    footer.setHTML(shb.toSafeHtml());
-    add(footer);
-    setWidgetBottomHeight(footer, 0, UNIT, 50, UNIT);
-    setWidgetLeftRight(footer, 0, UNIT, 0, UNIT);	  
-	}
-	
+  @Override
+  public AcceptsOneWidget getArticleContainer() {
+    if(articleViewContainer == null){
+      Window.addResizeHandler(articleViewContainer = new ArticleViewContainer());
+    }
+    return articleViewContainer;
+  }
+
+  private class ArticleViewContainer implements AcceptsOneWidget, ResizeHandler {
+
+    private final static int VIEW_MARGIN = 35;
+    private final static int MAX_WIDTH = 1000;
+    
+    private double width;
+    private double height;
+    private double top;
+    private double left;
+    private IsWidget article;
+    
+    private ArticleViewContainer(){
+      resetCoordinates();
+    }
+    
+    @Override
+    public void setWidget(final IsWidget w) {
+      Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+        @Override
+        public void execute() {
+          if(article != null){
+            removeAndShow(w);
+          }else{
+            show(w);
+          }
+        }
+      });      
+    }
+
+    private void show(IsWidget w) {
+      if(!(w instanceof ArticleViewImpl)){
+          removeAndShow(null);
+        return;
+      }
+      w.asWidget().setVisible(true);
+      
+      if(!(article = w).asWidget().isAttached())
+        RootPanel.get().add(article);
+      final Style style = article.asWidget().getElement().getStyle();
+      final int distance = Window.getClientHeight() - VIEW_MARGIN;
+      new ShowArticleAnimation(top, left, width, height, distance, style).run(300);
+    }
+
+    private void removeAndShow(final IsWidget w) {
+      final Widget oldWidget = Widget.asWidgetOrNull(article);
+      if(oldWidget == null){
+          if(w != null) show(w);
+          return;
+      }
+      new CloseArticleAnimation(oldWidget.getElement().getStyle()){
+          @Override
+          protected void onComplete(){
+              super.onComplete();
+              oldWidget.removeFromParent();
+              article = null;
+              if(w != null) show(w);
+          }
+      }.run(200);
+    }
+    
+    @Override
+    public void onResize(ResizeEvent event) {
+      Scheduler.get().scheduleDeferred(new Command() {
+        @Override
+        public void execute() {
+          resetCoordinates();
+        }
+      });
+    }
+
+    private void resetCoordinates() {
+      width = Math.min(Window.getClientWidth() - (VIEW_MARGIN * 2), MAX_WIDTH);
+      left = ((int)(Window.getClientWidth() - width)) >> 1;
+
+      top = Window.getClientHeight();
+      height = top - (VIEW_MARGIN * 2);
+    }
+  }
+  
+  private class ShowArticleAnimation extends Animation{
+
+    private final Style articleStyle;
+    private final double distance;
+    
+    private ShowArticleAnimation(double startTop, double startLeft, double startWidth, double startHeight, double distance, Style articleStyle){
+      this.articleStyle = articleStyle;
+      this.distance = distance;
+      this.articleStyle.setTop(startTop, Style.Unit.PX);
+      this.articleStyle.setLeft(startLeft, Style.Unit.PX);
+      this.articleStyle.setWidth(startWidth, Style.Unit.PX);
+      this.articleStyle.setHeight(startHeight, Style.Unit.PX);
+    }
+
+      @Override
+      protected void onStart(){
+          articleStyle.clearOpacity();
+          super.onStart();
+      }
+
+      @Override
+    protected void onUpdate(double progress) {
+      final double top = progress == 1 ? ArticleViewContainer.VIEW_MARGIN : (Window.getClientHeight() - (distance * progress));
+      articleStyle.setTop(top, Style.Unit.PX);  
+    }
+  }
+
+  private class CloseArticleAnimation extends Animation{
+
+        private final Style articleStyle;
+
+        private CloseArticleAnimation(Style articleStyle){
+            this.articleStyle = articleStyle;
+        }
+
+        @Override
+        protected void onUpdate(double progress) {
+            articleStyle.setOpacity(Math.max(0, 1 - progress));
+        }
+    }
 }

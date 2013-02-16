@@ -20,23 +20,42 @@ import java.util.Iterator;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
 
 public class ContentListViewImpl extends Composite implements ContentListView, ClickHandler {
 
-	interface ContentListViewImplUiBinder extends UiBinder<LayoutPanel, ContentListViewImpl>{}
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/view/ContentListView.css";
+      String listTitle();
+      String listPagingControl();
+      String listPagingInfoLbl();
+      String listPagingControlLbl();
+      String listScroller();
+      String listBody();
+      String listContainer();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+  
+	interface ContentListViewImplUiBinder extends UiBinder<HTMLPanel, ContentListViewImpl>{}
 	
-	private static ContentListViewImplUiBinder uiBinder = GWT.create(ContentListViewImplUiBinder.class);
+	private static ContentListViewImplUiBinder UIBINDER = GWT.create(ContentListViewImplUiBinder.class);
 
 	@UiField HTML titleField;
 	@UiField FlowPanel listBody;
@@ -44,12 +63,15 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	@UiField Label newer;
 	@UiField Label older;
 	@UiField ScrollPanel scroller;
-	
-	private Presenter presenter;
+  @UiField Resources resource;
+
+  private Presenter presenter;
 	private String highlightId;
 	
 	public ContentListViewImpl() {
-		initWidget(uiBinder.createAndBindUi(this));
+		initWidget(UIBINDER.createAndBindUi(this));
+    resource.style().ensureInjected();
+    scroller.getElement().getStyle().clearPosition();
 	}
 
 	@Override
@@ -121,12 +143,6 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	@UiHandler("older")
 	void olderClicked(ClickEvent e){
 		presenter.nextPage();
-	}
-	
-	@Override
-	protected void onLoad() {
-		super.onLoad();
-		getElement().getParentElement().addClassName("shadow top-corner-radius");
 	}
 	
 	private void enablePagingBtn(Label l, boolean enable){

@@ -15,24 +15,17 @@
 -->
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-			 xmlns:g="urn:import:com.google.gwt.user.client.ui" 
-			 xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations"
-			 xmlns:my="urn:import:com.seanchenxi.gwt.serenity.client.view">
-	<g:LayoutPanel>
-		<g:layer left="0px" right="0px" top="0px" height="32px">
-			<g:HTML styleName="list-title top-corner-radius" ui:field="titleField" />
-		</g:layer>
-		<g:layer left="0px" right="0px" top="32px" bottom="0px">
-			<g:ScrollPanel styleName="list-body" ui:field="scroller">
-				<g:FlowPanel ui:field="listBody" />
-			</g:ScrollPanel>
-		</g:layer>
-		<g:layer right="20px" top="4px" width="160px" height="22px">
-			<g:FlowPanel styleName="paging-control">
-				<g:HTML styleName="paging-info-lbl" ui:field="pagingInfoLbl" />
-				<g:HTML styleName="paging-control-lbl" ui:field="newer" HTML="&lt;" />
-				<g:HTML styleName="paging-control-lbl" ui:field="older" HTML="&gt;" />
-			</g:FlowPanel>
-		</g:layer>
-	</g:LayoutPanel>
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui">
+  <ui:with field="resource" type="com.seanchenxi.gwt.serenity.client.view.impl.ContentListViewImpl.Resources" />
+  <g:HTMLPanel styleName="{resource.style.listContainer}">
+    <g:ScrollPanel styleName="{resource.style.listScroller}" ui:field="scroller">
+      <g:FlowPanel styleName="{resource.style.listBody}" ui:field="listBody" />
+    </g:ScrollPanel>
+    <g:HTML styleName="{resource.style.listTitle}" ui:field="titleField" />
+    <g:FlowPanel styleName="{resource.style.listPagingControl}">
+      <g:HTML styleName="{resource.style.listPagingInfoLbl}" ui:field="pagingInfoLbl" />
+      <g:HTML styleName="{resource.style.listPagingControlLbl}" ui:field="newer" HTML="&lt;" />
+      <g:HTML styleName="{resource.style.listPagingControlLbl}" ui:field="older" HTML="&gt;" />
+    </g:FlowPanel>
+  </g:HTMLPanel>
 </ui:UiBinder>

@@ -1,0 +1,73 @@
+@def radius 4px;
+@def shadow 1px 1px 4px 2px rgba(0, 0, 0, 0.08);
+
+.layout{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+.container{
+    min-width: 1024px;
+}
+
+.headerContainer {
+    bottom: auto;
+    padding: 5px 10px;
+}
+
+.headerContainer h1{
+    font-size: 3.2em;
+    text-shadow: 0 1px 0 #FFFEFF;
+    line-height: 1.5;
+}
+
+.headerContainer small{
+    font-size: 0.5em;
+    color: #666;
+    padding-left: 10px;
+}
+
+.sidebarContainer{
+    width: 66px;
+    top: 70px;
+    right: auto;
+}
+
+.contentListContainer{
+    width: 666px;
+    top: 70px;
+    left: 66px;
+    right: auto;
+    background: #FFF;
+    background-color: rgba(255, 255, 255, 0.97);
+}
+
+@if user.agent safari {
+    .contentListContainer{
+        -webkit-border-top-left-radius: radius;
+        -webkit-border-top-right-radius: radius;
+        -webkit-box-shadow: shadow;
+    }
+} @elif user.agent gecko1_8 {
+    .contentListContainer{
+        -moz-border-top-left-radius: radius;
+        -moz-border-top-right-radius: radius;
+        -moz-box-shadow: shadow;
+    }
+} @else {
+    .contentListContainer{
+        border-top-left-radius: radius;
+        border-top-right-radius: radius;
+        box-shadow: shadow;
+    }
+}
+
+.footerContainer{
+    height: 50px;
+    left: 732px; /* sidebarContainer.width + contentListContainer.width */
+    top: auto;
+}
