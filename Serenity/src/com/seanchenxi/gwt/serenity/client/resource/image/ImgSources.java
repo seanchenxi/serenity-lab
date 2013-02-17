@@ -66,5 +66,5 @@ public interface ImgSources extends ClientBundle {
 	ImageResource icon_Search_black();
 	
 	@Source("avatar32.png")
-  ImageResource avatar32();
+    ImageResource avatar32();
 }

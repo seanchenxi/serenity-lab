@@ -84,10 +84,10 @@ public class SidebarActivity extends AbstractActivity implements Sidebar.Present
 	public void updateForPlace(SerenityPlace place) {
 		this.place = place;
 		if (place instanceof SearchPlace){
-			sidebar.setSeachValue(((SearchPlace) place).getSlug());
+			sidebar.setSearchValue(((SearchPlace) place).getSlug());
 			sidebar.updateSelectionForPlace("search", null);
 		} else {
-			sidebar.setSeachValue("");
+			sidebar.setSearchValue("");
 			if(place instanceof SlugPlace) {
 			  String prefix = place.getPrefix();
 			  if(place instanceof ArticlePlace){

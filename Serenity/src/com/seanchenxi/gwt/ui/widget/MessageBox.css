@@ -1,0 +1,46 @@
+@def containerCellPadding 0;
+@def containerCellSpacing 5;
+@def containerWidth 100%;
+@def containerHeight 100%;
+
+.messageBox {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #222;
+    background-color: rgba(25, 25, 25, 0.92);
+    color: #FFFFFF;
+}
+
+@if user.agent safari {
+    .messageBox {
+        \-webkit-border-radius: 4px;
+        \-webkit-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    }
+} @elif user.agent geck1_8{
+    .messageBox {
+        \-moz-border-radius: 4px;
+        \-moz-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    }
+} @else {
+    .messageBox {
+        border-radius: 4px;
+        box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    }
+}
+
+.messageBoxCaption{
+    cursor: move;
+    padding-left: 10px;
+    font-weight: bold;
+}
+
+.messageBoxIconCell{
+    vertical-align: middle;
+    text-align: center;
+    width: 50px;
+}
+
+.messageBoxButtonCell{
+    vertical-align: bottom;
+    text-align: center;
+    width: 25px;    
+}

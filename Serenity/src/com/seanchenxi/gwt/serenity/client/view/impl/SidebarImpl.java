@@ -136,7 +136,7 @@ public class SidebarImpl implements Sidebar {
 	}
 
 	@Override
-	public void setSeachValue(String slug) {
+	public void setSearchValue(String slug) {
 		searchBox.setSeachValue(slug);
 	}
 	

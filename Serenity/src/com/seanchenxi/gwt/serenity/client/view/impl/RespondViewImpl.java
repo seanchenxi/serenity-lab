@@ -15,8 +15,6 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
-import com.github.gwtbootstrap.client.ui.TextArea;
-import com.github.gwtbootstrap.client.ui.TextBox;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,6 +23,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
@@ -78,7 +78,7 @@ public class RespondViewImpl extends Composite implements RespondView {
   }
   
   @UiHandler("submit")
-  void onSubmintResponse(ClickEvent event){
+  void onSubmitResponse(ClickEvent event){
     if(presenter != null && articleId != -1 && isVisible()){
       if(validate()){
         presenter.reply(articleId, authorField.getValue(), emailField.getValue(), urlField.getValue(), commentField.getValue(), discussionId);

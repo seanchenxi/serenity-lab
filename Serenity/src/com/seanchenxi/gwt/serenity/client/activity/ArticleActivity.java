@@ -141,7 +141,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
 
   @Override
   public void cancel(int articleId, int discussionId) {
-    discussionListView.updateReponseViewPosition(discussionId); 
+    discussionListView.updateResponseViewPosition(discussionId); 
   }
 	
   @Override

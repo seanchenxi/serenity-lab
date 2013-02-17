@@ -15,49 +15,99 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.ui.widget;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLTable.CellFormatter;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Image;
-import com.seanchenxi.gwt.ui.resource.UIResources;
 
 public class MessageBox {
+
+  public interface Resources extends ClientBundle {
+    @Source(Style.DEFAULT_CSS)
+    Style messageBoxStyle();
+    
+    @Source("com/seanchenxi/gwt/ui/resource/image/messageBox/icon-error.gif")
+    ImageResource icon_MsgBox_error();
+
+    @Source("com/seanchenxi/gwt/ui/resource/image/messageBox/icon-info.gif")
+    ImageResource icon_MsgBox_info();
+
+    @Source("com/seanchenxi/gwt/ui/resource/image/messageBox/icon-question.gif")
+    ImageResource icon_MsgBox_question();
+
+    @Source("com/seanchenxi/gwt/ui/resource/image/messageBox/icon-warning.gif")
+    ImageResource icon_MsgBox_warning();
+  }
+
+  @CssResource.ImportedWithPrefix("mb")
+  public interface Style extends CssResource {
+    String DEFAULT_CSS = "com/seanchenxi/gwt/ui/widget/MessageBox.css";
+    
+    int containerCellPadding();
+    int containerCellSpacing();
+    String containerWidth();
+    String containerHeight();
+    
+    String messageBox();
+    String messageBoxCaption();
+    String messageBoxIconCell();
+    String messageBoxButtonCell();
+  }
   
   private final DialogBox dialog;
   private final FlexTable container;
   private final FlowPanel buttons;
+
+  private static Resources defaultResources;
+
+  private static Resources getDefaultResources() {
+    if (defaultResources == null) {
+      defaultResources = GWT.create(Resources.class);
+    }
+    return defaultResources;
+  }
   
   private MessageBox(){
     buttons = new FlowPanel();
     
     container = new FlexTable();
-    container.setSize("100%", "100%");
-    container.setCellPadding(0);
-    container.setCellSpacing(5);
+    container.setSize(getResourceStyle().containerWidth(), getResourceStyle().containerHeight());
+    container.setCellPadding(getResourceStyle().containerCellPadding());
+    container.setCellSpacing(getResourceStyle().containerCellSpacing());
+    
+    CellFormatter cellFormatter = container.getCellFormatter();
+    
     container.setHTML(0, 0, "");
+    cellFormatter.getElement(0, 0).setClassName(getResourceStyle().messageBoxIconCell());
     container.setHTML(0, 1, "");
+    
     container.setWidget(1, 0, buttons);
-    container.getFlexCellFormatter().setColSpan(1, 0, 2);  
-    CellFormatter cellFormatter = container.getCellFormatter();   
-    cellFormatter.setAlignment(0, 0, HasAlignment.ALIGN_CENTER, HasAlignment.ALIGN_MIDDLE);
-    cellFormatter.setWidth(0, 0, "50px");
-    cellFormatter.setAlignment(1, 0, HasAlignment.ALIGN_CENTER, HasAlignment.ALIGN_BOTTOM);
-    cellFormatter.setHeight(1, 0, "25px");
+    container.getFlexCellFormatter().setColSpan(1, 0, 2);
+    cellFormatter.getElement(1, 0).setClassName(getResourceStyle().messageBoxButtonCell());
     
     dialog = new DialogBox(false, true);
-    dialog.setStyleName("MessageBox");
+    dialog.setStyleName(getResourceStyle().messageBox());
+    dialog.getCaption().asWidget().setStyleName(getResourceStyle().messageBoxCaption());
     dialog.setWidget(container);
   }
-  
+
+  private Style getResourceStyle() {
+    final Style style = getDefaultResources().messageBoxStyle();
+    style.ensureInjected();
+    return style;
+  }
+
   private void setTitle(String title){
     dialog.setText(title);
   }
@@ -89,7 +139,7 @@ public class MessageBox {
     final MessageBox box = new MessageBox();
     box.setTitle(title);
     box.setMessage(message);
-    box.setIcon(UIResources.IMG.icon_MsgBox_warning());
+    box.setIcon(getDefaultResources().icon_MsgBox_warning());
     box.setSize("360px", "120px");
     Button ok = box.addButton(new Button("Ok"), cmd);
     box.container.setWidget(1, 0, ok); //Hook, cause, we only need one button here

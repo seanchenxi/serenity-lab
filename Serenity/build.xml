@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Serenity" default="deploy" basedir="." >
 
-	<property name="deploy.path" location="D:/Servers/xampp/htdocs/wordpress/wp-content/themes" />
-
+  <property name="deploy.path" location="D:/Servers/xampp/htdocs/wordpress/wp-content/themes" />
+  <property name="intellij.run.path" location="D:/Workspace/IDE/.IntelliJIdea/system/gwt/Serenity.8df3837/Serenity.3b4bc5dd/run" />
+  
 	<target name="deploy">
-		<delete dir="${deploy.path}/Serenity-G"/>
+		<delete dir="${deploy.path}/Serenity-X"/>
 		<copy todir="${deploy.path}" overwrite="yes">
 			<fileset dir="wp-themes" />
 		</copy>
-		<copy todir="${deploy.path}/Serenity-G" overwrite="yes">
-			<fileset dir="war" excludes="*WEB-INF/**, index.html" />
+    <copy todir="${deploy.path}/Serenity-X" overwrite="yes">
+      <fileset dir="war" excludes="*WEB-INF/**, index.html" />
+    </copy>
+		<copy todir="${deploy.path}/Serenity-X" overwrite="yes">
+			<fileset dir="${intellij.run.path}/www" excludes="*WEB-INF/**, index.html" />
 		</copy>
 	</target>
 
@@ -19,7 +23,7 @@
 		<copy todir="target" overwrite="yes">
 			<fileset dir="wp-themes" />
 		</copy>
-		<copy todir="target/Serenity-G" overwrite="yes">
+		<copy todir="target/Serenity-X" overwrite="yes">
 			<fileset dir="war" excludes="*WEB-INF/**, index.html" />
 		</copy>
 	</target>

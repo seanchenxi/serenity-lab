@@ -8,9 +8,7 @@
   <inherits name="com.seanchenxi.gwt.logging.Logging"/>
   <inherits name='com.seanchenxi.gwt.wordpress.WpJson'/>
   <inherits name="com.seanchenxi.gwt.ui.UI"/>
-  <inherits name="com.seanchenxi.gwt.util.UTIL" />
-  
-  <inherits name="com.github.gwtbootstrap.Bootstrap" />
+  <inherits name="com.seanchenxi.gwt.util.Util" />
   
   <entry-point class='com.seanchenxi.gwt.serenity.client.Serenity'/>
   
@@ -37,6 +35,8 @@
   <replace-with class="com.seanchenxi.gwt.serenity.client.view.impl.DiscussionListViewImpl">
     <when-type-is class="com.seanchenxi.gwt.serenity.client.view.DiscussionListView"/>
   </replace-with>
+
+  <set-configuration-property name="CssResource.style" value="stable-notype" />
   
   <source path='client'/>
   <source path='share'/>

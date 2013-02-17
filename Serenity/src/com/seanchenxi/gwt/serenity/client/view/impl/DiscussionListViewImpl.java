@@ -89,7 +89,7 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   }
 
   @Override
-  public void updateReponseViewPosition(int discussionId) {
+  public void updateResponseViewPosition(int discussionId) {
     if(respond == null) return;
     DiscussionViewImpl discussion = discussions.get(discussionId);
     if(discussion != null){
@@ -105,7 +105,7 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   
   @Override
   public void onReplyDiscussion(ReplyDiscussionEvent event) {
-    updateReponseViewPosition(event.getDiscussionId());
+    updateResponseViewPosition(event.getDiscussionId());
   }
 
   private void clearAll() {

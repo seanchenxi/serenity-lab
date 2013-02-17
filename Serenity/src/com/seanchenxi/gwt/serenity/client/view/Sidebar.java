@@ -25,7 +25,7 @@ public interface Sidebar extends IsWidget {
 	
 	void updateSelectionForPlace(String itemId, String slug);
 	
-	void setSeachValue(String slug);
+	void setSearchValue(String slug);
 	
 	void addCategory(String slug, String title);
 	
