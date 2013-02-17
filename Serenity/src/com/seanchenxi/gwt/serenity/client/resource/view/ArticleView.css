@@ -1,0 +1,179 @@
+@def radius 4px;
+@def boxShadow 1px 1px 4px 2px rgba(0, 0, 0, 0.08);
+@def meatshadow 0px 1px 6px rgba(0, 0, 0, 0.4);
+@def headerheight 60px;
+
+.article{
+    position: absolute;
+    background: #FFF;
+}
+
+.articleHeader{
+    position: absolute;
+    top:0;
+    left:0;
+    right: 0;
+    height: headerheight;
+}
+
+.articleTitle{
+    margin-top: 3px;
+    text-align: center;
+    font-size: 1.6em;
+    line-height: 1.6em;
+    color: #222;
+}
+
+.articleMeta{
+    clear: both;
+    text-align: center;
+    position: absolute;
+    bottom: 2px;
+    left:0;
+    right:0;
+    height:23px;
+    color:#FFF;
+    line-height: 23px;
+}
+
+.articleDate{
+    position: absolute;
+    height:100%;
+    left: 0;
+    width: 190px;
+}
+
+.articleComments{
+    position: absolute;
+    height:100%;
+    right: 0;
+    width: 190px;
+    cursor: pointer;
+}
+
+.articleCategories{
+    position: absolute;
+    height:100%;
+    left: 190px;
+    right: 190px;
+}
+
+.articleCategories a {
+    display: inline-block;
+    margin: 0 2px 0 0;
+    padding: 0 5px;
+    color: #FFF;
+    text-decoration: none;
+}
+
+.articleCategories a:hover{
+    color: #373737;
+}
+
+.articleContent{
+    
+}
+
+@sprite .articleTags{
+    gwt-image: 'tagImg';
+    margin: 10px 0;
+    padding-left: 18px;
+    width: auto;
+    display: block;
+}
+
+.articleTags div,.articleTags a {
+    display: inline-block;
+    margin: 0 3px 0 2px;
+}
+
+.articleBody{
+    position: absolute;
+    top: headerheight;
+    left:0;
+    right:0;
+    bottom:0;
+    padding: 10px 15px;
+}
+
+.articleClose{
+    position:absolute;
+    top:0;
+    right:0;
+    width:24px;
+    height:24px;
+    line-height: 24px;
+    cursor: pointer;
+    text-align: center;
+    color: #FFF;
+    background-color: #333;
+    opacity: 0.5;
+}
+
+.articleClose:hover{
+    font-weight: bolder;
+    opacity: 0.99;
+}
+
+@if user.agent safari {
+    .article{
+        \-webkit-border-radius: radius;
+        \-webkit-box-shadow: boxShadow;
+    }
+
+    .articleMeta{
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#333333), to(#0a0a0a)); /* older webkit syntax */
+        background: -webkit-linear-gradient(#333333, #0a0a0a);
+        \-webkit-box-shadow: meatshadow;
+    }
+
+    .articleCategories a:hover{
+        background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f9f9f9), to(#e5e5e5)); /* Older webkit syntax */
+        background: -webkit-linear-gradient(#f9f9f9, #e5e5e5);
+    }
+
+    .articleClose{
+        \-webkit-border-bottom-left-radius: radius;
+        \-webkit-border-top-right-radius: radius;
+    }
+} @elif user.agent gecko1_8 {
+    .article{
+        \-moz-border-radius: radius;
+        \-moz-box-shadow: boxShadow;
+    }
+
+    .articleMeta{
+        background: -moz-linear-gradient(#333333, #0a0a0a);
+        \-moz-box-shadow: meatshadow;
+    }
+
+    .articleCategories a:hover{
+        background: -moz-linear-gradient(#f9f9f9, #e5e5e5);
+    }
+
+    .articleClose{
+        \-moz-border-radius-bottomleft: radius;
+        \-moz-border-radius-topright: radius;
+    }
+} @else {
+    .article{
+        border-radius: radius;
+        box-shadow: boxShadow;
+    }
+
+    .articleMeta{
+        background: #333; /* Show a solid color for older browsers */
+        background: -o-linear-gradient(#333333, #0a0a0a);
+        box-shadow: meatshadow;
+    }
+
+    .articleCategories a:hover{
+        background: #f9f9f9; /* Show a solid color for older browsers */
+        background: -o-linear-gradient(#f9f9f9, #e5e5e5);
+    }
+
+    .articleClose{
+        border-bottom-left-radius: radius;
+        border-top-right-radius: radius;
+    }
+}

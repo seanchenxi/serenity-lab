@@ -186,6 +186,7 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
 
     private final Style articleStyle;
     private final double distance;
+    private final double height;
     
     private ShowArticleAnimation(double startTop, double startLeft, double startWidth, double startHeight, double distance, Style articleStyle){
       this.articleStyle = articleStyle;
@@ -193,7 +194,8 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
       this.articleStyle.setTop(startTop, Style.Unit.PX);
       this.articleStyle.setLeft(startLeft, Style.Unit.PX);
       this.articleStyle.setWidth(startWidth, Style.Unit.PX);
-      this.articleStyle.setHeight(startHeight, Style.Unit.PX);
+      this.articleStyle.setHeight(height = startHeight, Style.Unit.PX);
+      this.articleStyle.clearBottom();
     }
 
       @Override
@@ -205,7 +207,11 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
       @Override
     protected void onUpdate(double progress) {
       final double top = progress == 1 ? ArticleViewContainer.VIEW_MARGIN : (Window.getClientHeight() - (distance * progress));
-      articleStyle.setTop(top, Style.Unit.PX);  
+      articleStyle.setTop(top, Style.Unit.PX);
+      if(progress >= 1 || Window.getClientHeight() - top - height > ArticleViewContainer.VIEW_MARGIN){
+          articleStyle.clearHeight();
+          articleStyle.setBottom(ArticleViewContainer.VIEW_MARGIN, Style.Unit.PX);
+      }
     }
   }
 

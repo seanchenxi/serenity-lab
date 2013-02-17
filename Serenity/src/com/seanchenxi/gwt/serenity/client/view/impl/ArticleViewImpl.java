@@ -15,11 +15,13 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
-import com.github.gwtbootstrap.client.ui.Heading;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -37,13 +39,40 @@ import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.view.ArticleView;
 import com.seanchenxi.gwt.serenity.client.view.DiscussionListView;
 import com.seanchenxi.gwt.serenity.share.StringPool;
+import com.seanchenxi.gwt.ui.widget.Heading;
 
 public class ArticleViewImpl extends Composite implements ArticleView {
 
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {     
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/view/ArticleView.css";      
+      String article();
+      String articleHeader();
+      String articleTitle();
+      String articleMeta();
+      String articleDate();
+      String articleComments();
+      String articleCategories();
+      String articleContent();
+      String articleTags();
+      String articleBody();
+      String articleClose();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+
+    @ImageResource.ImageOptions(repeatStyle = ImageResource.RepeatStyle.None)
+    @ClientBundle.Source("com/seanchenxi/gwt/serenity/client/resource/view/tag.png")
+    ImageResource tagImg();
+  }
+  
 	interface ArticleViewImplUiBinder extends UiBinder<Widget, ArticleViewImpl>{}
 	
 	private static ArticleViewImplUiBinder uiBinder = GWT.create(ArticleViewImplUiBinder.class);
 	
+  @UiField Resources resource;
 	@UiField Heading titleField;
 	@UiField Label dateField;
 	@UiField FlowPanel categoryList;
@@ -51,7 +80,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	@UiField ScrollPanel scroller;
 	@UiField HTMLPanel mainField;
-	@UiField DivElement contentField;
+	@UiField HTML contentField;
 	@UiField FlowPanel tagList;
 	
 	private DiscussionListView discussion;
@@ -61,6 +90,8 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	public ArticleViewImpl(){
 		initWidget(uiBinder.createAndBindUi(this));
+        resource.style().ensureInjected();
+        scroller.getElement().getStyle().clearPosition();
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
       @Override
       public void onPreviewNativeEvent(NativePreviewEvent event) {
@@ -78,7 +109,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 		dateField.setText(StringPool.BLANK);
 		categoryList.clear();
 		commentCountField.setText(StringPool.BLANK);
-		contentField.setInnerHTML(StringPool.BLANK);
+		contentField.setHTML(StringPool.BLANK);
 		tagList.clear();
 		tagList.add(new HTML("<i>Tags:&nbsp;</i>"));
 		if(discussion != null){
@@ -96,6 +127,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@Override
 	public void setTitle(String title) {
 		titleField.setText(title);
+    getElement().setTitle(title);
 	}
 
 	@Override
@@ -105,7 +137,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 
 	@Override
 	public void setContent(String content) {
-		contentField.setInnerHTML(content);
+		contentField.setHTML(content);
 	}
 
 	@Override
@@ -136,7 +168,9 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	@Override
 	protected void onLoad() {
 		super.onLoad();
-		getElement().getParentElement().addClassName("shadow corner-radius");
+    getElement().getStyle().clearRight();
+    getElement().getStyle().clearBottom();
+		//getElement().getParentElement().addClassName("shadow corner-radius");
 		if(tagList.getWidgetCount() < 2){
 		  tagList.setVisible(false);
     }
@@ -152,8 +186,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	@UiHandler("commentCountField")
   void onClickCommentCount(ClickEvent e){
-	  int discussionPosition = contentField.getClientHeight() + tagList.getOffsetHeight();
+	  int discussionPosition = contentField.getOffsetHeight() + tagList.getOffsetHeight();
 	  scroller.setVerticalScrollPosition(discussionPosition);
-  }
-	
+  }  
 }

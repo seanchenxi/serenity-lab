@@ -1,45 +1,38 @@
-<!--
-   Copyright 2012 Xi CHEN
-  
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-  
-       http://www.apache.org/licenses/LICENSE-2.0
-  
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+  <!--
+     Copyright 2012 Xi CHEN
+    
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+    
+         http://www.apache.org/licenses/LICENSE-2.0
+    
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+  -->
+  <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-			 xmlns:b="urn:import:com.github.gwtbootstrap.client.ui" 
-			 xmlns:g="urn:import:com.google.gwt.user.client.ui" 
-			 xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations"
-			 xmlns:my="urn:import:com.seanchenxi.gwt.serenity.client.view">
-	<g:LayoutPanel>
-		<g:layer left="0px" right="0px" top="0px" height="60px">
-			<g:HTMLPanel styleName="post-header top-corner-radius">
-				<b:Heading styleName="post-title" size="2" ui:field="titleField" />
-				<div class="post-meta">
-					<g:Label styleName="date" ui:field="dateField" />
-					<g:Label styleName="comments" ui:field="commentCountField"/>
-					<g:FlowPanel styleName="categories" ui:field="categoryList" />
-				</div>
-			</g:HTMLPanel>
-		</g:layer>
-		<g:layer left="0px" right="0px" top="60px" bottom="0px">
-			<g:ScrollPanel styleName="bottom-corner-radius post-body" ui:field="scroller">
-				<g:HTMLPanel ui:field="mainField">
-					<div class="post-content" ui:field="contentField"></div>
-					<g:FlowPanel styleName="post-tags" ui:field="tagList" />
-				</g:HTMLPanel>
-			</g:ScrollPanel>
-		</g:layer>
-		<g:layer right="0px" top="0px" width="24px" height="24px">
-			<g:Label styleName="close-lbl" ui:field="closeLbl">X</g:Label>
-		</g:layer>
-	</g:LayoutPanel>
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:my="urn:import:com.seanchenxi.gwt.ui.widget">
+<ui:with field="resource" type="com.seanchenxi.gwt.serenity.client.view.impl.ArticleViewImpl.Resources" />
+<g:HTMLPanel styleName="{resource.style.article}">
+  <g:ScrollPanel styleName="{resource.style.articleBody}" ui:field="scroller">
+    <g:HTMLPanel ui:field="mainField">
+      <g:HTML styleName="{resource.style.articleContent}" ui:field="contentField" />
+      <g:FlowPanel styleName="{resource.style.articleTags}" ui:field="tagList" />
+    </g:HTMLPanel>
+  </g:ScrollPanel>
+  <g:HTMLPanel styleName="{resource.style.articleHeader}">
+    <my:Heading styleName="{resource.style.articleTitle}" level="2" ui:field="titleField" />
+    <g:HTMLPanel styleName="{resource.style.articleMeta}">
+      <g:Label styleName="{resource.style.articleDate}" ui:field="dateField" />
+      <g:Label styleName="{resource.style.articleComments}" ui:field="commentCountField"/>
+      <g:FlowPanel styleName="{resource.style.articleCategories}" ui:field="categoryList" />
+    </g:HTMLPanel>
+  </g:HTMLPanel>
+  <g:Label styleName="{resource.style.articleClose}" ui:field="closeLbl" text="X" />
+</g:HTMLPanel>
 </ui:UiBinder>
