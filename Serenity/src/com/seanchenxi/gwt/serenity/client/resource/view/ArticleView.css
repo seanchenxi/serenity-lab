@@ -74,12 +74,18 @@
     
 }
 
-@sprite .articleTags{
-    gwt-image: 'tagImg';
-    margin: 10px 0;
-    padding-left: 18px;
+.articleTags{
+    margin: 20px 0 10px 0;
+    text-align: center;
     width: auto;
     display: block;
+    font-size: 11px;
+}
+
+@sprite .articleTagIcon{
+    gwt-image: 'tagImg';
+    padding-left: 18px;
+    width: 30px;
 }
 
 .articleTags div,.articleTags a {

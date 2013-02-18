@@ -56,6 +56,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
       String articleCategories();
       String articleContent();
       String articleTags();
+      String articleTagIcon();
       String articleBody();
       String articleClose();
     }
@@ -71,6 +72,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	interface ArticleViewImplUiBinder extends UiBinder<Widget, ArticleViewImpl>{}
 	
 	private static ArticleViewImplUiBinder uiBinder = GWT.create(ArticleViewImplUiBinder.class);
+  private static HTML tagLbl = new HTML("Tags:");
 	
   @UiField Resources resource;
 	@UiField Heading titleField;
@@ -90,15 +92,15 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 	
 	public ArticleViewImpl(){
 		initWidget(uiBinder.createAndBindUi(this));
-        resource.style().ensureInjected();
-        scroller.getElement().getStyle().clearPosition();
+    resource.style().ensureInjected();
+    scroller.getElement().getStyle().clearPosition();
 		Event.addNativePreviewHandler(new NativePreviewHandler() {
       @Override
       public void onPreviewNativeEvent(NativePreviewEvent event) {
-        if(presenter != null && event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE && isAttached()){
-          presenter.closeView();
-          event.getNativeEvent().preventDefault();
-        }
+      if(presenter != null && event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE && isAttached()){
+        presenter.closeView();
+        event.getNativeEvent().preventDefault();
+      }
       }
     });
 	}
@@ -111,7 +113,8 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 		commentCountField.setText(StringPool.BLANK);
 		contentField.setHTML(StringPool.BLANK);
 		tagList.clear();
-		tagList.add(new HTML("<i>Tags:&nbsp;</i>"));
+    tagLbl.setStyleName(resource.style().articleTagIcon());
+		tagList.add(tagLbl);
 		if(discussion != null){
       mainField.remove(discussion);
       discussion = null;
