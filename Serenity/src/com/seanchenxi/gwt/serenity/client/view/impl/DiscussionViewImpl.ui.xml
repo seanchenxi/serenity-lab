@@ -16,12 +16,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<g:HTMLPanel>
-		<g:HTML ui:field="author"/>
+    <ui:with field="resource" type="com.seanchenxi.gwt.serenity.client.view.impl.DiscussionViewImpl.Resources" />
+	<g:HTMLPanel styleName="{resource.style.discussion}">
+		<g:HTML styleName="{resource.style.discussionMeta}" ui:field="author"/>
 		<g:HTMLPanel ui:field="contentWrap">
 			<g:HTML ui:field="content"/>
-			<g:HTML ui:field="counter"/>
-			<g:HTML styleName="discussion-reply" ui:field="reply" text="Reply&nbsp;&darr;" />
+			<g:HTML styleName="{resource.style.discussionCounter}" ui:field="counter"/>
+			<g:HTML styleName="{resource.style.discussionReply}" ui:field="reply" text="Reply&#160;&#8595;" />
 		</g:HTMLPanel>
 	</g:HTMLPanel>
 </ui:UiBinder>

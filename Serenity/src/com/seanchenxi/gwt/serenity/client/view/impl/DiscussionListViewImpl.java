@@ -100,10 +100,10 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   }
   
   @Override
-  public void addDiscussion(int id, String gravatar, String name, String url, String content, Date date, int parentId) {
+  public void addDiscussion(boolean isPending, int id, String gravatar, String name, String url, String content, Date date, int parentId) {
     DiscussionViewImpl discussion = new DiscussionViewImpl(id, showReply);
-    discussion.setAthorInfo(gravatar, name, url, date);
-    discussion.setMessage(content);
+    discussion.setAuthorInfo(gravatar, name, url, date);
+    discussion.setMessage(isPending, content);
     discussion.addReplyDiscussionHandler(this);
     
     DiscussionViewImpl parent;

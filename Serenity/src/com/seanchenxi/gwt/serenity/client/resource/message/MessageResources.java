@@ -15,32 +15,34 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.resource.message;
 
-import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.i18n.client.Messages;
 
-public interface MessageResources extends Constants {
+public interface MessageResources extends Messages {
 	
-	@DefaultStringValue("Submit")
+	@DefaultMessage("Submit")
 	String btn_submit();
 	
-	@DefaultStringValue("Name:")
+	@DefaultMessage("Name:")
 	String lbl_name();
 
-	@DefaultStringValue("Email:")
+	@DefaultMessage("Email:")
 	String lbl_email();
 	
-	@DefaultStringValue("Content:")
+	@DefaultMessage("Content:")
 	String lbl_content();
 	
-	@DefaultStringValue("http://wordpress.org")
+	@DefaultMessage("http://wordpress.org")
   String wordpress_URL();
 	
-	@DefaultStringValue("Wordpress")
+	@DefaultMessage("Wordpress")
   String wordpress_Name();
 
-	@DefaultStringValue("Serenity")
+	@DefaultMessage("Serenity")
   String page_Title();
 
-	@DefaultStringValue("非淡泊无以明志，非宁静无以致远")
+	@DefaultMessage("非淡泊无以明志，非宁静无以致远")
   String page_subTitle();
 
+  @DefaultMessage("Your comment is awaiting moderation.")
+  String msg_yourCommentIsAwaitingMod();
 }

@@ -1,0 +1,103 @@
+/*
+ * Copyright 2012 Xi CHEN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.discussion{
+
+}
+
+.discussionContent{
+    position: relative;
+    border: #CCC;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 10% 0 2.5%;
+    white-space: pre-line;
+    word-wrap: break-word;
+}
+
+.pendingDiscussion {
+    font-size: small;
+    font-style: oblique;
+    color: red;
+}
+
+.discussionMeta{
+    margin:0 0 2px 2px;
+    padding:0;
+    height:32px;
+    clear:both;
+}
+
+.discussionMeta h4 a{
+    text-decoration: none;
+}
+
+.discussionAuthor {
+    display: inline-block;
+    position: relative;
+    bottom: 5px;
+    padding: 0;
+}
+
+.discussionCounter{
+    position:absolute;
+    right:10px;
+    top:10px;
+    font-size:3.5em;
+    line-height:1em;
+    color:#F0F0F0;
+    color:rgba(0, 0, 0, 0.05);
+}
+
+.discussionDate{
+    display: inline-block;
+    position: relative;
+    font-size: 0.9em;
+    line-height: 1.3em;
+    color: #BCBCBC;
+    margin-left: 15px;
+    bottom: 5px;
+}
+
+.discussionReply{
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    background-color: #EEE;
+    color:#666;
+    width:56px;
+    margin-bottom:5px;
+}
+
+.odd{
+    background-color: #FEFEFE;
+    background-color: rgba(0, 0, 0, 0.024);
+}
+
+.even{
+
+}
+
+.avatar {
+    display: inline-block;
+    position: relative;
+    margin: 0 10px 0 0;
+    padding: 0;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
