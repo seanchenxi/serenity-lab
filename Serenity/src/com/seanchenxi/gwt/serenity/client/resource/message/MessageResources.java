@@ -45,4 +45,34 @@ public interface MessageResources extends Messages {
 
   @DefaultMessage("Your comment is awaiting moderation.")
   String msg_yourCommentIsAwaitingMod();
+
+  @DefaultMessage("Requires Information")
+  String msg_requiresInformation();
+
+  @DefaultMessage("Please correctly fill the required fields (name, email, message)")
+  String msg_pleaseFillRequiredFields();
+
+  @DefaultMessage("Cancel&nbsp;Reply&nbsp;&uarr;")
+  String anchor_CancelReply();
+
+  @DefaultMessage("Leave&nbsp;a&nbsp;Comment")
+  String lbl_respondTitle();
+
+  @DefaultMessage("Your email address will not be published. Required fields are marked *")
+  String lbl_respondDescription();
+
+  @DefaultMessage("Your name")
+  String lbl_respondYourName();
+
+  @DefaultMessage("Your email")
+  String lbl_respondYourMail();
+
+  @DefaultMessage("Your website")
+  String lbl_respondYourWebsite();
+
+  @DefaultMessage("Your message")
+  String lbl_respondYourMessage();
+
+  @DefaultMessage("Submit comment")
+  String btn_respondSubmit();
 }

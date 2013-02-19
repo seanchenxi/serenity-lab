@@ -64,7 +64,6 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
 
     @ClientBundle.Source(Style.DEFAULT_CSS)
     Style style();
-
   }
 
   interface Template extends SafeHtmlTemplates {
@@ -88,8 +87,7 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
   protected static final Template TEMPLATE = GWT.create(Template.class);
   protected static final DiscussionViewImplUiBinder uiBinder = GWT.create(DiscussionViewImplUiBinder.class);
 
-  private static Resources resources;
-
+  @UiField Resources resource;
   @UiField HTML author;
   @UiField HTMLPanel contentWrap;
   @UiField HTML content;
@@ -99,21 +97,10 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
   private int index;
   private int id;
   private int level;
-
-  public static Resources getResources(){
-    if(resources == null){
-      resources = GWT.create(Resources.class);
-      resources.style().ensureInjected();
-    }
-    return resources;
-  }
-
-  private static Resources.Style getStyle(){
-    return getResources().style();
-  }
   
   public DiscussionViewImpl(int id, boolean isReplyEnabled){
     initWidget(uiBinder.createAndBindUi(this));
+    resource.style().ensureInjected();
     getElement().setId(getStyle().discussion() + "-" + id);
     this.id = id;
     this.index = -1;
@@ -191,6 +178,10 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
       return UriUtils.fromString(gravatar + "?s=" + AVATAR_SIZE + "&d=mm");
     else
       return SerenityResources.IMG.avatar32().getSafeUri();
+  }
+
+  private Resources.Style getStyle(){
+    return resource.style();
   }
 
 }

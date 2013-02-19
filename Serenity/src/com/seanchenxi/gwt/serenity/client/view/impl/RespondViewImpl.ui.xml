@@ -15,36 +15,33 @@
 -->
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-  xmlns:o="urn:import:com.sun.org.apache.xpath.internal.operations">
-	<g:HTMLPanel>
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:with field="resource" type="com.seanchenxi.gwt.serenity.client.view.impl.RespondViewImpl.Resources" />
+    <g:HTMLPanel>
 		<h3>
-			Leave a Comment
-			<g:Anchor styleName="respond-cancel" ui:field="cancel" >Cancel&nbsp;Reply&nbsp;&uarr;</g:Anchor>
+			<span ui:field="titleLbl" />
+			<g:Anchor styleName="{resource.style.respondCancel}" ui:field="cancel" />
 		</h3>
-		
-		<p class="desc">
-			Your email address will not be published. Required fields are marked *
+		<p class="{resource.style.respondDescription}" ui:field="description" />
+		<p class="input-half">
+			<label class="{resource.style.respondLbl}" ui:field="nameLbl" />
+			<g:TextBox styleName="{resource.style.respondInput}" tabIndex="1" ui:field="authorField" />
 		</p>
 		<p class="input-half">
-			<g:Label>Your name</g:Label><span class="required">*</span>
-			<g:TextBox styleName="respond-input" tabIndex="1" ui:field="authorField" />
+			<label class="{resource.style.respondLbl}" ui:field="mailLbl" />
+			<input type="email" class="{resource.style.respondInput}" tabIndex="2" ui:field="emailField" />
 		</p>
 		<p class="input-half">
-			<g:Label>Your email</g:Label><span class="required">*</span>
-			<g:TextBox styleName="respond-input" tabIndex="2" ui:field="emailField" />
-		</p>
-		<p class="input-half">
-			<g:Label>Your website</g:Label>
-			<g:TextBox styleName="respond-input" tabIndex="2" ui:field="urlField" />
+			<label class="{resource.style.respondLbl}" ui:field="siteLbl" />
+			<input type="url" class="{resource.style.respondInput}" tabIndex="2" ui:field="urlField" />
 		</p>
 		<p id="message-box">
-			<g:Label>Your message</g:Label><span class="required">*</span>
-			<g:TextArea styleName="respond-input-textarea" tabIndex="3" ui:field="commentField" />
+			<label class="{resource.style.respondLbl}" ui:field="msgLbl" />
+			<g:TextArea styleName="{resource.style.respondTextarea}" tabIndex="3" ui:field="commentField" />
 		</p>
 		<p id="submit-form">
-			<g:Button ui:field="submit" tabIndex="4">Submit comment</g:Button>
+			<g:Button styleName="{resource.style.respondButton}" ui:field="submit" tabIndex="4" />
 		</p>
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+		<br/>
 	</g:HTMLPanel>
 </ui:UiBinder>

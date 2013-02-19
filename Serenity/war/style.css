@@ -63,8 +63,7 @@ ul li {
 
 p {
 	line-height: 1.5em;
-	margin-top: 3px;
-	margin-bottom: 5px;
+    margin: 0 0 9px;
 }
 
 a,a:visited {
@@ -76,6 +75,41 @@ a:hover {
 	color: #ED1E24;
 	text-decoration: none;
 }
+
+textarea,
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="search"]{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -webkit-transition: border linear .2s,box-shadow linear .2s;
+    -moz-transition: border linear .2s,box-shadow linear .2s;
+    -ms-transition: border linear .2s,box-shadow linear .2s;
+    -o-transition: border linear .2s,box-shadow linear .2s;
+    transition: border linear .2s,box-shadow linear .2s;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus{
+    border-color: rgba(82, 168, 236, 0.8);
+    outline: 0;
+    outline: thin dotted \9;
+    /* IE6-9 */
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
 
 .heading.title{
 	margin:10px;
@@ -138,262 +172,6 @@ h4 {
 	-webkit-border-bottom-right-radius: 4px;
 	-moz-border-radius-bottomleft: 4px;
 	-moz-border-radius-bottomright: 4px;
-}
-
-
-/*
- Discussion
-*/
-.discussions-title {
-	font-size: 1.4em;
-	font-weight: bolder;
-	line-height: 1.3em;
-	padding: 1.4em 0 0.1em;
-	margin-bottom:1.625em;
-	border-bottom:1px solid #CCC;
-	border-bottom:1px solid rgba(0, 0, 0, 0.1);
-}
-
-.discussion {
-	position: relative;
-	margin: 0 0 1.625em 0;
-}
-.discussion-meta {
-	margin:0 0 2px 2px;
-	padding:0;
-	height:32px;
-	clear:both;
-}
-
-.discussion-meta img.avatar {
-	display: inline-block;
-	position: relative;
-	margin: 0 10px 0 0;
-	padding: 0;
-	border-radius: 2px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-}
-
-.discussion-meta h4.discussion-author {
-	display: inline-block;
-	position: relative;
-	bottom: 5px;
-	padding: 0;
-}
-
-.discussion-meta h4 a{
-	text-decoration: none;
-}
-
-.discussion-date {
-	display: inline-block;
-	position: relative;
-	font-size: 0.9em;
-	line-height: 1.3em;
-	color: #BCBCBC;
-	margin-left: 15px;
-	bottom: 5px;
-}
-
-.discussion-content {
-	position: relative;
-	border: #CCC;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	padding: 10px 10% 0 2.5%;
-	white-space: pre-line;
-	word-wrap: break-word;
-}
-
-.discussion-content.odd {
-	background-color: #FEFEFE;
-	background-color: rgba(0, 0, 0, 0.024);
-}
-
-.discussion-content .pending-discussion {
-	font-size: small;
-	font-style: oblique;
-	color: red;
-}
-
-.discussion-content .discussion-counter{
-	position:absolute;
-	right:10px;
-	top:10px;
-	font-size:3.5em;
-	line-height:1em;
-	color:#F0F0F0; 
-	color:rgba(0, 0, 0, 0.05);
-}
-
-.discussion-content .discussion-reply{
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	cursor: pointer;
-	text-align: center;
-	background-color: #EEE;
-	color:#666;
-	width:56px;
-	margin-bottom:5px;
-}
-
-.discussion-content .discussion-reply:hover {
-	background-color: #888;
-	color: #FFF;
-}
-
-#respond.child-1,
-.discussion.child-1 {
-	margin-left:20px;
-}
-
-#respond.child-2,
-.discussion.child-2 {
-	margin-left:40px;
-}
-
-#respond.child-3,
-.discussion.child-3 {
-	margin-left:60px;
-}
-
-#respond.child-4,
-.discussion.child-4 {
-	margin-left:80px;
-}
-
-/*
- Respond
-*/
-#respond h3 {
-	margin-top: 1em;
-	border-bottom: 1px solid #CCC;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-	padding-bottom: 0.1em;
-}
-
-#respond a.respond-cancel {
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	cursor: pointer;
-	font-size: 12px;
-	font-weight: normal;
-	color:#666;
-	text-align: center;
-	text-decoration: none;
-	background-color: #EEE;
-	padding:2px 5px;
-	margin-bottom:5px;
-	margin-left:5px;
-}
-
-#respond a.respond-cancel:hover {
-	background-color: #888;
-	color: #FFF;
-}
-
-#respond .desc {
-	margin: 1em 0;
-}
-
-.respond-label {
-	display: block;
-	font-weight: bold;
-	padding-bottom: 0.25em;
-	margin-left: 6px;
-}
-
-.respond-input-textarea,.respond-input {
-	color: #333333;
-	font-size: 1em;
-	outline: medium none;
-	padding: 0.5em;
-	width: 250px;
-	line-height: 1.4em;
-	height: 1.4em;
-}
-
-.respond-input-textarea {
-	width: 450px;
-	height: 125px;
-	max-width: 600px;
-}
-
-/*
- Content list
-*/
-.list-title {
-	-moz-box-shadow: 0px 1px 1.5px #727272;
-	-webkit-box-shadow: 0px 1px 1.5px #727272;
-	box-shadow: 0px 1px 1.5px #727272;
-	border-bottom: 1px solid #E2E2E2;
-	font-weight: bolder;
-	text-align: center;
-	line-height: 30px;
-	color: #222;
-	background-color: #FFF;
-	background-color: rgba(255, 255, 255, 0.97);
-}
-
-.list-body {
-	background-color: #FFF;
-	background-color: rgba(255, 255, 255, 0.97);
-}
-
-.paging-control {
-	text-align: right;
-}
-
-.paging-info-lbl {
-	text-align: left;
-	display: inline-block;
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-.paging-control-lbl {
-	text-align: left;
-	display: inline-block;
-	padding: 1px 5px;
-	border: 1px solid #999;
-	color: #999;
-	cursor: pointer;
-	text-shadow: 1px;
-	margin: 0;
-}
-
-.paging-control-lbl:hover {
-	border: 1px solid #1E1E1E;
-	color: #1E1E1E;
-}
-
-.paging-control-lbl-disable:hover,.paging-control-lbl-disable {
-	color: #ECECEC;
-	border: 1px solid #ECECEC;
-	cursor: default;
-}
-
-.contentList {
-	background-color: #FFFFFF;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.contentList-title {
-	-moz-box-shadow: 0px 1px 1.5px #727272;
-	-webkit-box-shadow: 0px 1px 1.5px #727272;
-	box-shadow: 0px 1px 1.5px #727272;
-	border-bottom: 1px solid #E2E2E2;
-	padding: 3px;
-	font-weight: bolder;
-	text-align: center;
-	background: #FFF;
-}
-
-.paging-info-lbl {
-	margin-left: 5px;
-	margin-right: 5px;
 }
 
 .newer-lbl,.older-lbl {

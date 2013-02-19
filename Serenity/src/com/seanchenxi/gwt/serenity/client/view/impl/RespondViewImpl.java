@@ -17,31 +17,73 @@ package com.seanchenxi.gwt.serenity.client.view.impl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.InputElement;
+import com.google.gwt.dom.client.LabelElement;
+import com.google.gwt.dom.client.ParagraphElement;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.SerenityUtil;
+import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
 import com.seanchenxi.gwt.serenity.client.view.RespondView;
 import com.seanchenxi.gwt.serenity.share.StringPool;
 import com.seanchenxi.gwt.ui.widget.MessageBox;
 
 public class RespondViewImpl extends Composite implements RespondView {
 
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/view/RespondView.css";
+      String respond();
+      String respondCancel();
+      String respondDescription();
+      String respondLbl();
+      String respondInput();
+      String respondTextarea();
+      String respondButton();
+      String required();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+
 	interface RespondViewImplUiBinder extends UiBinder<Widget, RespondViewImpl>{}
 	
 	private static RespondViewImplUiBinder uiBinder = GWT.create(RespondViewImplUiBinder.class);
 
-	@UiField TextBox authorField;
-	@UiField TextBox emailField;
-	@UiField TextBox urlField;
-	@UiField TextArea commentField;
-	@UiField Anchor cancel;
+  @UiField Resources resource;
+
+  @UiField SpanElement titleLbl;
+  @UiField Anchor cancel;
+
+  @UiField ParagraphElement description;
+
+  @UiField LabelElement nameLbl;
+  @UiField TextBox authorField;
+
+  @UiField LabelElement mailLbl;
+  @UiField InputElement emailField;
+
+  @UiField LabelElement siteLbl;
+  @UiField InputElement urlField;
+
+  @UiField LabelElement msgLbl;
+  @UiField TextArea commentField;
+
+  @UiField Button submit;
 	
 	private int articleId;
 	private int discussionId;
@@ -50,7 +92,17 @@ public class RespondViewImpl extends Composite implements RespondView {
 	
 	public RespondViewImpl(){
 		initWidget(uiBinder.createAndBindUi(this));
-		getElement().setId("respond");
+    resource.style().ensureInjected();
+    titleLbl.setInnerHTML(SerenityResources.MSG.lbl_respondTitle());
+    cancel.setText(SerenityResources.MSG.anchor_CancelReply());
+    description.setInnerHTML(SerenityResources.MSG.lbl_respondDescription());
+    nameLbl.setInnerHTML(asRequired(SerenityResources.MSG.lbl_respondYourName()));
+    mailLbl.setInnerHTML(asRequired(SerenityResources.MSG.lbl_respondYourMail()));
+    siteLbl.setInnerHTML(SerenityResources.MSG.lbl_respondYourWebsite());
+    msgLbl.setInnerHTML(asRequired(SerenityResources.MSG.lbl_respondYourMessage()));
+    submit.setText(SerenityResources.MSG.btn_respondSubmit());
+    getElement().setId(resource.style().respond());
+    setStyleName(resource.style().respond());
 	}
 	
 	@Override
@@ -101,16 +153,16 @@ public class RespondViewImpl extends Composite implements RespondView {
     final String content = commentField.getValue();
     if(name.isEmpty() || content.isEmpty() || !SerenityUtil.isValidEmail(emailAdr)){
       MessageBox.alert(
-          "Requires Information", 
-          "Please correctly fill the required fields (name, email, message)", 
+          SerenityResources.MSG.msg_requiresInformation(),
+          SerenityResources.MSG.msg_pleaseFillRequiredFields(),
           new ScheduledCommand() { 
             @Override
             public void execute() {
               if(name.isEmpty()) {
                 authorField.setFocus(true);
               } else if(!SerenityUtil.isValidEmail(emailAdr)) {
-                emailField.setFocus(true);
-                emailField.selectAll();
+                emailField.focus();
+                emailField.select();
               } else if(content.isEmpty()) {
                 commentField.setFocus(true);
               } 
@@ -127,6 +179,10 @@ public class RespondViewImpl extends Composite implements RespondView {
     emailField.setValue(StringPool.BLANK);
     commentField.setValue(StringPool.BLANK);
     urlField.setValue(StringPool.BLANK);
+  }
+
+  private String asRequired(String label) {
+    return label + "<span class=\""+resource.style().required()+"\">*</span>";
   }
 
 }
