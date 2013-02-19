@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface DiscussionListView extends IsWidget {
 
   void intView(int discussionCount, boolean showReply);
-  void addDiscussion(int id, String gravatar, String name, String url, String content, Date date, int parentId);
+  void addDiscussion(boolean isPending, int id, String gravatar, String name, String url, String content, Date date, int parentId);
   void setRespondView(RespondView respondView);
   void updateResponseViewPosition(int discussionId);
   

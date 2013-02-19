@@ -99,7 +99,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       discussionListView.intView(discussionCount, commentOpened);
       for(Comment cmt : post.getComments()){
         Image.prefetch(cmt.getGravatarURL()); // prefetch gravatar  
-        discussionListView.addDiscussion(cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getURL(), cmt.getContent(), cmt.getDate(), cmt.getParentId());
+        discussionListView.addDiscussion(false, cmt.getId(), cmt.getGravatarURL(), cmt.getName(), cmt.getURL(), cmt.getContent(), cmt.getDate(), cmt.getParentId());
       }
       // check and show respond view
       if(commentOpened){
@@ -123,10 +123,7 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
       @Override
       public void onSuccess(Comment result) {
         String content = result.getContent();
-        if(result.getStatus().equals(CommentStatus.PENDING)){
-          content = "<p class=\"pending-discussion\">Your comment is awaiting moderation.</p>" + content;
-        }
-        discussionListView.addDiscussion(result.getId(), result.getGravatarURL(), result.getName(), result.getURL(), content, result.getDate(), result.getParentId());
+        discussionListView.addDiscussion(result.getStatus().equals(CommentStatus.PENDING), result.getId(), result.getGravatarURL(), result.getName(), result.getURL(), content, result.getDate(), result.getParentId());
       }
       
       @Override
