@@ -18,8 +18,11 @@ package com.seanchenxi.gwt.serenity.client.view.impl;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -32,7 +35,24 @@ import com.seanchenxi.gwt.serenity.share.StringPool;
 
 public class DiscussionListViewImpl extends Composite implements DiscussionListView, ReplyDiscussionEvent.Handler {
 
-  protected static final String SUB_PREFIX = "child-";
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/view/DiscussionListView.css";
+      String discussionsTitle();
+      String discussions();
+      String discussionsLvl0();
+      String discussionsLvl1();
+      String discussionsLvl2();
+      String discussionsLvl3();
+      String discussionsLvl4();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+
+  public static final String DISCUSSIONS_TITLE = " Comments:";
 
   private HTML title;
   private FlowPanel main;
@@ -42,19 +62,29 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
   private HashMap<Integer, DiscussionViewImpl> discussions;
   private int total;
   private boolean showReply = true;
+
+  private static Resources resources;
+
+  public static Resources getResources(){
+    if(resources == null){
+      resources = GWT.create(Resources.class);
+      resources.style().ensureInjected();
+    }
+    return resources;
+  }
   
   public DiscussionListViewImpl() {
     discussions = new HashMap<Integer, DiscussionViewImpl>();
     initWidget(main = new FlowPanel());
     main.add(title = new HTML());
-    title.setStyleName("discussions-title");
-    getElement().setId("discussions");
+    title.setStyleName(getResources().style().discussionsTitle());
+    setStyleName(getResources().style().discussions());
   }
 
   @Override
   public void intView(int discussionCount, boolean showReply) {
     clearAll();
-    this.title.setText((total = discussionCount) + " Comments:");
+    this.title.setText((total = discussionCount) + DISCUSSIONS_TITLE);
     this.showReply = showReply;
     Log.finest("[DiscussionListViewImpl] showReply="+showReply);
   }
@@ -76,9 +106,10 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
     discussion.setMessage(content);
     discussion.addReplyDiscussionHandler(this);
     
-    DiscussionViewImpl parent = null;
+    DiscussionViewImpl parent;
     if (parentId > 0 && (parent = discussions.get(parentId)) != null) {
       discussion.setLevel(parent.getLevel() + 1);
+      discussion.addStyleName(getLevelStyle(discussion.getLevel()));
       main.insert(discussion, main.getWidgetIndex(parent) + 1);
     } else {
       main.add(discussion);
@@ -90,15 +121,17 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
 
   @Override
   public void updateResponseViewPosition(int discussionId) {
-    if(respond == null) return;
+    Widget respondWidget = Widget.asWidgetOrNull(respond);
+    if(respondWidget == null)
+      return;
     DiscussionViewImpl discussion = discussions.get(discussionId);
     if(discussion != null){
       respond.setDiscussionId(discussion.getId());
-      Widget.asWidgetOrNull(respond).addStyleName("child-" + discussion.getLevel());
+      respondWidget.addStyleName(getLevelStyle(discussion.getLevel()));
       main.insert(respond, main.getWidgetIndex(discussion) + 1);
     }else{
       respond.setDiscussionId(0);
-      Widget.asWidgetOrNull(respond).setStyleName(StringPool.BLANK);
+      respondWidget.setStyleName(StringPool.BLANK);
       main.add(respond);
     }
   }
@@ -138,6 +171,21 @@ public class DiscussionListViewImpl extends Composite implements DiscussionListV
     }
   }
 
+  private String getLevelStyle(int level){
+    Resources.Style style = resources.style();
+    switch(level){
+      case 0:
+        return style.discussionsLvl0();
+      case 1:
+        return style.discussionsLvl1();
+      case 2:
+        return style.discussionsLvl2();
+      case 3:
+        return style.discussionsLvl3();
+      case 4:
+        return style.discussionsLvl4();
+    }
+    return style.discussionsLvl0();
+  }
 
-  
 }

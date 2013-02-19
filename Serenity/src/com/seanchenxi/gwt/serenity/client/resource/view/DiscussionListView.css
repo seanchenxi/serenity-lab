@@ -1,0 +1,34 @@
+.discussionsTitle{
+    font-size: 1.4em;
+    font-weight: bolder;
+    line-height: 1.3em;
+    padding: 1.4em 0 0.1em;
+    margin-bottom:1.625em;
+    border-bottom:1px solid #CCC;
+    border-bottom:1px solid rgba(0, 0, 0, 0.1);
+}
+
+.discussions{
+    position: relative;
+    margin: 0 0 1.625em 0;
+}
+
+.discussionsLvl0{
+
+}
+
+.discussionsLvl1{
+    margin-left: 20px;
+}
+
+.discussionsLvl2{
+    margin-left:40px;
+}
+
+.discussionsLvl3{
+    margin-left:60px;
+}
+
+.discussionsLvl4{
+    margin-left:80px;
+}
