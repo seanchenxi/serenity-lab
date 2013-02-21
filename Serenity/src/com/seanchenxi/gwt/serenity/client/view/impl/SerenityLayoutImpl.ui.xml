@@ -23,6 +23,6 @@
     <mu:Heading ui:field="header" level="1" styleName="{resource.style.layout} {resource.style.headerContainer}" />
     <g:SimplePanel ui:field="sidebarContainer" styleName="{resource.style.layout} {resource.style.sidebarContainer}" />
     <g:SimplePanel ui:field="contentListContainer" styleName="{resource.style.layout} {resource.style.contentListContainer}"/>
-    <g:SimplePanel ui:field="footer" styleName="{resource.style.layout} {resource.style.footerContainer}"/>
+    <g:HTML ui:field="footer" styleName="{resource.style.layout} {resource.style.footerContainer}"/>
   </g:HTMLPanel>
 </ui:UiBinder>

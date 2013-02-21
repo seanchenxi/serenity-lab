@@ -15,24 +15,34 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
+import java.util.Date;
+
 import com.google.gwt.animation.client.Animation;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.safehtml.client.SafeHtmlTemplates;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeUri;
+import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
 import com.seanchenxi.gwt.serenity.client.view.SerenityLayout;
 import com.seanchenxi.gwt.ui.widget.Heading;
@@ -55,10 +65,23 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
     Style style();
     
   }
-  
+
+  interface FooterTemplate extends SafeHtmlTemplates {
+
+    @Template("<p>Copyright &copy; 2007 - {0} <a href=\"{1}\" title=\"{2}\">SeanChenXi.com</a></p>")
+    SafeHtml copyright(String year, SafeUri url, String title);
+
+    @Template("<p>Proudly powered by <a target=\"_blank\" href=\"{0}\" title=\"{1}\">{2}</a></p>")
+    SafeHtml poweredBy(SafeUri url, String title, String name);
+
+    @Template("<p>Theme by <a target=\"_blank\" href=\"{0}\" title=\"{1}\">{2}</a></p>")
+    SafeHtml themeBy(SafeUri url, String title, String name);
+  }
+
   interface SerenityLayoutImplUiBinder extends UiBinder<Widget, SerenityLayoutImpl> {}
 
   private static SerenityLayoutImplUiBinder UIBINDER = GWT.create(SerenityLayoutImplUiBinder.class);
+  private static FooterTemplate FOOTER_TEMPLATE = GWT.create(FooterTemplate.class);
   
   @UiField
   Resources resource;
@@ -67,7 +90,7 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
   @UiField
   SimplePanel contentListContainer;
   @UiField
-  SimplePanel footer;
+  HTML footer;
   @UiField
   Heading header;
 
@@ -78,6 +101,10 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
     resource.style().ensureInjected();
     header.setText(SerenityResources.MSG.page_Title());
     header.setSubText(SerenityResources.MSG.page_subTitle());
+    SafeHtmlBuilder shb = new SafeHtmlBuilder();
+    shb.append(FOOTER_TEMPLATE.copyright(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.YEAR).format(new Date()), UriUtils.fromSafeConstant(SerenityUtil.getWpBaseUrl()), Window.Location.getHost()));
+    shb.append(FOOTER_TEMPLATE.poweredBy(UriUtils.fromSafeConstant(SerenityResources.MSG.wordpress_URL()), SerenityResources.MSG.wordpress_URL(), SerenityUtil.getWpNaming()));
+    footer.setHTML(shb.toSafeHtml());
 	}
 
   @Override
