@@ -54,8 +54,10 @@ public class ArticleViewImpl extends Composite implements ArticleView {
       String articleDate();
       String articleComments();
       String articleCategories();
+      String articleCategoryAnchor();
       String articleContent();
       String articleTags();
+      String articleTagAnchor();
       String articleTagIcon();
       String articleBody();
       String articleClose();
@@ -64,7 +66,7 @@ public class ArticleViewImpl extends Composite implements ArticleView {
     @ClientBundle.Source(Style.DEFAULT_CSS)
     Style style();
 
-    @ImageResource.ImageOptions(repeatStyle = ImageResource.RepeatStyle.None)
+    @ImageResource.ImageOptions(repeatStyle = ImageResource.RepeatStyle.None, height = 16, width = 16)
     @ClientBundle.Source("com/seanchenxi/gwt/serenity/client/resource/view/tag.png")
     ImageResource tagImg();
   }
@@ -145,12 +147,16 @@ public class ArticleViewImpl extends Composite implements ArticleView {
 
 	@Override
 	public void addCategory(String anchorHref, String name) {
-		categoryList.add(new Anchor(name, anchorHref));
+    Anchor anchor = new Anchor(name, anchorHref);
+    anchor.setStyleName(resource.style().articleCategoryAnchor());
+    categoryList.add(anchor);
 	}
 
 	@Override
 	public void addTag(String anchorHref, String name) {
-		tagList.add(new Anchor(name, anchorHref));
+    Anchor anchor = new Anchor(name, anchorHref);
+    anchor.setStyleName(resource.style().articleTagAnchor());
+    tagList.add(anchor);
 	}
 	
 	@Override
