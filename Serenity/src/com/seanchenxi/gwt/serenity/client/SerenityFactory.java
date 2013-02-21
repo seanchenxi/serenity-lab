@@ -34,9 +34,10 @@ public class SerenityFactory {
 	private final SerenityLayout layout;
 	private final Sidebar sidebar;
 	private final ContentListView contentList;
-	private final ArticleView article;
-	private final DiscussionListView discussion;
-	private final RespondView respond;
+
+	private ArticleView article;
+	private DiscussionListView discussion;
+	private RespondView respond;
 
 	public SerenityFactory() {	
 		eventBus = GWT.create(SimpleEventBus.class);
@@ -45,9 +46,6 @@ public class SerenityFactory {
 		layout = GWT.create(SerenityLayout.class);
 		sidebar = GWT.create(Sidebar.class);
 		contentList = GWT.create(ContentListView.class);
-		article = GWT.create(ArticleView.class);
-		discussion = GWT.create(DiscussionListView.class);
-		respond = GWT.create(RespondView.class);
 	}
 
 	public EventBus getEventBus() {
@@ -71,15 +69,15 @@ public class SerenityFactory {
 	}
 
 	public ArticleView getArticleView() {
-		return article;
+		return article != null ? article : (article = GWT.create(ArticleView.class));
 	}
 	
 	public RespondView getRespondView() {
-    return respond;
+    return respond != null ? respond : (respond = GWT.create(RespondView.class));
   }
 	
 	public DiscussionListView getDiscussionListView() {
-    return discussion;
+    return discussion != null ? discussion : (discussion = GWT.create(DiscussionListView.class));
   }
 
 }

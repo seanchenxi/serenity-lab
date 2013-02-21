@@ -16,6 +16,8 @@
 package com.seanchenxi.gwt.serenity.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -51,8 +53,18 @@ public class ArticleActivity extends AbstractActivity implements ArticleView.Pre
 	}
 	
 	@Override
-	public void start(AcceptsOneWidget panel, EventBus eventBus) {
-		fetchContentAndShow(panel);
+	public void start(final AcceptsOneWidget panel, EventBus eventBus) {
+    GWT.runAsync(ArticleView.class, new RunAsyncCallback() {
+      @Override
+      public void onFailure(Throwable throwable){
+        Log.severe("Error while fetching article view", throwable);
+      }
+
+      @Override
+      public void onSuccess(){
+        fetchContentAndShow(panel);
+      }
+    });
 	}
 	
 	private void fetchContentAndShow(final AcceptsOneWidget panel) {
