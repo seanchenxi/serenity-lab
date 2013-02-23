@@ -20,10 +20,9 @@ import java.util.Date;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.resources.client.TextResource;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -41,7 +40,6 @@ import com.seanchenxi.gwt.serenity.client.SerenityUtil;
 import com.seanchenxi.gwt.serenity.client.event.ReplyDiscussionEvent;
 import com.seanchenxi.gwt.serenity.client.event.ReplyDiscussionEvent.HasReplyDiscussionHandlers;
 import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
-import com.seanchenxi.gwt.serenity.client.resource.message.MessageResources;
 
 public class DiscussionViewImpl extends Composite implements HasReplyDiscussionHandlers {
 
@@ -64,6 +62,9 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
 
     @ClientBundle.Source(Style.DEFAULT_CSS)
     Style style();
+
+    @ClientBundle.Source("com/seanchenxi/gwt/serenity/client/resource/image/avatar32.png")
+    ImageResource avatar32();
   }
 
   interface Template extends SafeHtmlTemplates {
@@ -177,7 +178,7 @@ public class DiscussionViewImpl extends Composite implements HasReplyDiscussionH
     if(gravatar != null && !gravatar.isEmpty())
       return UriUtils.fromString(gravatar + "?s=" + AVATAR_SIZE + "&d=mm");
     else
-      return SerenityResources.IMG.avatar32().getSafeUri();
+      return resource.avatar32().getSafeUri();
   }
 
   private Resources.Style getStyle(){
