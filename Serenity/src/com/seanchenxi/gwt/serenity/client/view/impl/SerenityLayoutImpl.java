@@ -98,13 +98,18 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
 	
 	public SerenityLayoutImpl() {
 		initWidget(UIBINDER.createAndBindUi(this));
+    getElement().setId("main");
     resource.style().ensureInjected();
     header.setText(SerenityResources.MSG.page_Title());
     header.setSubText(SerenityResources.MSG.page_subTitle());
+    header.getElement().setId("header");
+    sidebarContainer.getElement().setId("sidebar");
+    contentListContainer.getElement().setId("contents");
     SafeHtmlBuilder shb = new SafeHtmlBuilder();
     shb.append(FOOTER_TEMPLATE.copyright(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.YEAR).format(new Date()), UriUtils.fromSafeConstant(SerenityUtil.getWpBaseUrl()), Window.Location.getHost()));
     shb.append(FOOTER_TEMPLATE.poweredBy(UriUtils.fromSafeConstant(SerenityResources.MSG.wordpress_URL()), SerenityResources.MSG.wordpress_URL(), SerenityUtil.getWpNaming()));
     footer.setHTML(shb.toSafeHtml());
+    footer.getElement().setId("footer");
 	}
 
   @Override
