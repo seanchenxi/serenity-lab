@@ -132,21 +132,3 @@ h4 {
 	-o-user-select: none;
 	user-select: none;
 }
-
-.popSearchBox {
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
-	-webkit-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	background-color: #222;
-	background-color: rgba(25, 25, 25, 0.92);
-	color: #FFFFFF;
-}
-
-.popSearchBox {
-	width: auto;
-	height: auto;
-}

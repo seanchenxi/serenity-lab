@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.ui.widget;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
@@ -26,6 +27,8 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -37,20 +40,44 @@ import com.seanchenxi.gwt.ui.event.SearchEvent.HasSearchHandlers;
 public class SearchBox extends PopupPanel implements FocusHandler,
 		KeyUpHandler, ClickHandler, HasSearchHandlers, SearchEvent.Handler {
 
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/ui/widget/SearchBox.css";
+      String popSearchBox();
+      String popSearchField();
+      String popSearchButton();
+      String popSearchContainer();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+
+  private static Resources resources;
+
   private TextBox field;
 	private Button button;
+
+  public static Resources getResources(){
+    if(resources == null){
+      resources = GWT.create(Resources.class);
+      resources.style().ensureInjected();
+    }
+    return resources;
+  }
 
 	public SearchBox() {
 		super(true, true);
     HorizontalPanel container = new HorizontalPanel();
     setWidget(container);
-		setStyleName("popSearchBox");
+		setStyleName(getResources().style().popSearchBox());
 		container.setVerticalAlignment(HasAlignment.ALIGN_MIDDLE);
 		container.add(field = new TextBox());
 		container.add(button = new Button("Search"));
-		container.getElement().getStyle().setMargin(0.6, Unit.EM);
-		field.getElement().getStyle().setMargin(0, Unit.PX);
-		field.getElement().getStyle().setMarginRight(0.6, Unit.EM);
+    container.setStyleName(getResources().style().popSearchContainer());
+    field.setStyleName(getResources().style().popSearchField());
+    button.setStyleName(getResources().style().popSearchButton());
 		initAllHandlers();
 	}
 	
