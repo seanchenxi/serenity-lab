@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.widget;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -27,6 +28,8 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Image;
@@ -37,7 +40,19 @@ import com.seanchenxi.gwt.logging.api.Log;
 
 public class NavigationItem extends Composite implements HasClickHandlers {
 
-	private static final String DEPENDENT_STYLENAME_SELECTED_ITEM = "selected";
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/widget/NavigationItem.css";
+      String navigationItem();
+      String selected();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+
+  private static Resources resources;
 
 	private String id;
 	private Image img;
@@ -50,12 +65,20 @@ public class NavigationItem extends Composite implements HasClickHandlers {
 	private NavigationItemHandler handler;
 	private NavigationBar navBar;
 
+  public static Resources getResources(){
+    if(resources == null){
+      resources = GWT.create(Resources.class);
+      resources.style().ensureInjected();
+    }
+    return resources;
+  }
+
 	public NavigationItem(ImageResource imgSrc) {
 		handler = new NavigationItemHandler();
 		img = new Image(imgSrc);
 
 		initWidget(new SimplePanel(img));
-		setStyleName("navItem");
+		setStyleName(getResources().style().navigationItem());
 		addClickHandler(handler);
 	}
 
@@ -132,9 +155,9 @@ public class NavigationItem extends Composite implements HasClickHandlers {
 
 	public void setSelectionStyle(boolean selected) {
 		if (selected) {
-			addStyleDependentName(DEPENDENT_STYLENAME_SELECTED_ITEM);
+      addStyleName(getResources().style().selected());
 		} else {
-			removeStyleDependentName(DEPENDENT_STYLENAME_SELECTED_ITEM);
+			removeStyleName(getResources().style().selected());
 		}
 	}
 

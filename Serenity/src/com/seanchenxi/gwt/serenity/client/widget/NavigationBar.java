@@ -17,6 +17,7 @@ package com.seanchenxi.gwt.serenity.client.widget;
 
 import java.util.ArrayList;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -28,6 +29,8 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -35,16 +38,37 @@ import com.google.gwt.user.client.ui.FlowPanel;
 public class NavigationBar extends Composite implements ClickHandler,
 		HasSelectionHandlers<NavigationItem>, HasKeyUpHandlers {
 
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/widget/NavigationBar.css";
+      String navigationBar();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+
+  private static Resources resources;
+
 	private FlowPanel panel;
 
 	private ArrayList<NavigationItem> items;
 	private NavigationItem selectedItem = null;
 
+  public static Resources getResources(){
+    if(resources == null){
+      resources = GWT.create(Resources.class);
+      resources.style().ensureInjected();
+    }
+    return resources;
+  }
+
 	public NavigationBar() {
 		items = new ArrayList<NavigationItem>();
 		initWidget(panel = new FlowPanel());
-		setSize("100%", "100%");
 		sinkEvents(Event.KEYEVENTS);
+    setStyleName(getResources().style().navigationBar());
 	}
 
 	public void addItem(final NavigationItem item) {

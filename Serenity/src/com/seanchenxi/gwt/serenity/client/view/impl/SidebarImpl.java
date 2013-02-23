@@ -15,10 +15,14 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.view.impl;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.i18n.client.Constants;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
@@ -33,18 +37,51 @@ import com.seanchenxi.gwt.ui.widget.SearchBox;
 
 public class SidebarImpl implements Sidebar {
 
+  public interface IDS extends Constants {
+    @DefaultStringValue("home")
+    String home();
+    @DefaultStringValue("search")
+    String search();
+    @DefaultStringValue("category")
+    String category();
+    @DefaultStringValue("about")
+    String about();
+  }
+
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/view/SideBar.css";
+      String sideBar();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+
+  private static final IDS ids = GWT.create(IDS.class);
+  private static Resources resources;
+
 	private Presenter presenter;
 	
 	private NavigationBar menu;
 	private PopupLabelBox catPopup;
 	private SearchBox searchBox;
+
+  public static Resources getResources(){
+    if(resources == null){
+      resources = GWT.create(Resources.class);
+      resources.style().ensureInjected();
+    }
+    return resources;
+  }
 	
 	public SidebarImpl(){
 		menu = new NavigationBar();
-		menu.addStyleName("sidebar");
+		menu.addStyleName(getResources().style().sideBar());
 
 		NavigationItem item = new NavigationItem(SerenityResources.IMG.icon_Home_black());
-		item.setId("home");
+		item.setId(ids.home());
 		menu.addItem(item);
 		
 		searchBox = new SearchBox();
@@ -56,7 +93,7 @@ public class SidebarImpl implements Sidebar {
 			}
 		});
 		item = new NavigationItem(SerenityResources.IMG.icon_Search_black());
-		item.setId("search");
+		item.setId(ids.search());
 		item.addClickHandler(new ClickHandler() {			
 			@Override
 			public void onClick(ClickEvent event) {
@@ -74,22 +111,22 @@ public class SidebarImpl implements Sidebar {
 		
 		item = new NavigationItem(SerenityResources.IMG.icon_Grid_black());
 		item.setLabelBox(catPopup = new PopupLabelBox(1));
-		item.setId("category");
+		item.setId(ids.category());
 		menu.addItem(item);
 		
 		item = new NavigationItem(SerenityResources.IMG.icon_Info_black());
-    item.setId("about");
+    item.setId(ids.about());
     menu.addItem(item);
 		
 		menu.addSelectionHandler(new SelectionHandler<NavigationItem>() {	
 			@Override
 			public void onSelection(SelectionEvent<NavigationItem> event) {
 				NavigationItem item = event.getSelectedItem();
-				if("home".equalsIgnoreCase(item.getId())){
+				if(ids.home().equalsIgnoreCase(item.getId())){
 					presenter.goToHome();
-				}else if("about".equalsIgnoreCase(item.getId())){
+				}else if(ids.about().equalsIgnoreCase(item.getId())){
 					presenter.goToAbout();
-				}else if("category".equalsIgnoreCase(item.getId())){
+				}else if(ids.category().equalsIgnoreCase(item.getId())){
 					String slug = item.getLabelBox().getSelectedLabel();
 					if(slug != null){
 						presenter.goToCategory(slug);
