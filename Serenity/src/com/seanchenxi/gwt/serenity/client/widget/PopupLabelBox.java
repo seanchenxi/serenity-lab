@@ -17,6 +17,7 @@ package com.seanchenxi.gwt.serenity.client.widget;
 
 import java.util.Iterator;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,6 +26,8 @@ import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
@@ -35,12 +38,35 @@ import com.google.gwt.user.client.ui.Widget;
 public class PopupLabelBox extends PopupPanel implements ClickHandler,
 		HasSelectionHandlers<Label> {
 
-	private FlexTable table;
+  public interface Resources extends ClientBundle {
+
+    public interface Style extends CssResource {
+      final static String DEFAULT_CSS = "com/seanchenxi/gwt/serenity/client/resource/widget/PopupLabelBox.css";
+      String popLabelBox();
+      String popLabelBoxLabel();
+      String selected();
+    }
+
+    @ClientBundle.Source(Style.DEFAULT_CSS)
+    Style style();
+  }
+
+  private static Resources resources;
+
+  private FlexTable table;
 	private int row = 0, col = 0;
 	private int columns;
 
 	private Label selectedLabel;
 	private String preSelection;
+
+  public static Resources getResources(){
+    if(resources == null){
+      resources = GWT.create(Resources.class);
+      resources.style().ensureInjected();
+    }
+    return resources;
+  }
 
 	public PopupLabelBox(int columns) {
 		super(true, true);
@@ -50,7 +76,7 @@ public class PopupLabelBox extends PopupPanel implements ClickHandler,
 		setWidget(new ScrollPanel(table));
 		setGlassEnabled(false);
 		setAutoHideOnHistoryEventsEnabled(true);
-		setStyleName("popLabelBox");
+		setStyleName(getResources().style().popLabelBox());
 	}
 
 	public void showRelativeTo(Widget w) {
@@ -63,7 +89,7 @@ public class PopupLabelBox extends PopupPanel implements ClickHandler,
 	public void addLabel(String id, String text) {
 		Label label = new Label(text);
 		label.getElement().setId(id);
-		label.setStyleName("popLabelBox-label");
+		label.setStyleName(getResources().style().popLabelBoxLabel());
 		label.addClickHandler(this);
 		table.setWidget(row, col, label);
 		table.getCellFormatter().setVerticalAlignment(row, col, HasAlignment.ALIGN_MIDDLE);
@@ -93,11 +119,11 @@ public class PopupLabelBox extends PopupPanel implements ClickHandler,
 		if(label == selectedLabel) 
 			return false;
 		if (selectedLabel != null) {
-			selectedLabel.removeStyleName("selected");
+			selectedLabel.removeStyleName(getResources().style().selected());
 		}
 		selectedLabel = label;
 		if(selectedLabel != null){
-			selectedLabel.addStyleName("selected");
+			selectedLabel.addStyleName(getResources().style().selected());
 		}
 		return true;
 	}

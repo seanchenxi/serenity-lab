@@ -1,0 +1,53 @@
+/*
+ * Copyright 2012 Xi CHEN
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.popLabelBox{
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: #222;
+    background-color: rgba(25, 25, 25, 0.92);
+    color: #FFFFFF;
+    min-width:120px;
+    max-width: 250px;
+    min-height: 120px;
+    max-height: 320px;
+}
+
+.popLabelBoxLabel{
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.selected{
+
+}
+
+.popLabelBoxLabel:hover,.popLabelBoxLabel.selected {
+    background: #f9f9f9; /* Show a solid color for older browsers */
+    background: -moz-linear-gradient(#f9f9f9, #e5e5e5);
+    background: -o-linear-gradient(#f9f9f9, #e5e5e5);
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f9f9f9), to(#e5e5e5)); /* Older webkit syntax */
+    background: -webkit-linear-gradient(#f9f9f9, #e5e5e5);
+    color: #373737;
+}

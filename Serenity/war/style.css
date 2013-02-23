@@ -133,7 +133,7 @@ h4 {
 	user-select: none;
 }
 
-.popSearchBox,.popLabelBox {
+.popSearchBox {
 	border-radius: 4px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -146,31 +146,7 @@ h4 {
 	color: #FFFFFF;
 }
 
-.popLabelBox {
-	min-width:120px;
-	max-width: 250px;
-	min-height: 120px;
-	max-height: 320px;
-}
-
 .popSearchBox {
 	width: auto;
 	height: auto;
-}
-
-.popLabelBox-label {
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	cursor: pointer;
-	text-align: center;
-}
-
-.popLabelBox-label:hover,.popLabelBox-label.selected {
-	background: #f9f9f9; /* Show a solid color for older browsers */
-	background: -moz-linear-gradient(#f9f9f9, #e5e5e5);
-	background: -o-linear-gradient(#f9f9f9, #e5e5e5);
-	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#f9f9f9), to(#e5e5e5)); /* Older webkit syntax */
-	background: -webkit-linear-gradient(#f9f9f9, #e5e5e5);
-	color: #373737;
 }
