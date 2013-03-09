@@ -6,6 +6,8 @@
 .article{
     position: absolute;
     background: #FFF;
+    border-radius: radius;
+    box-shadow: boxShadow;
 }
 
 .articleHeader{
@@ -122,6 +124,8 @@
     color: #FFF;
     background-color: #333;
     opacity: 0.5;
+    border-bottom-left-radius: radius;
+    border-top-right-radius: radius;
 }
 
 .articleClose:hover{
@@ -184,10 +188,5 @@
     .articleCategories a:hover{
         background: #f9f9f9; /* Show a solid color for older browsers */
         background: -o-linear-gradient(#f9f9f9, #e5e5e5);
-    }
-
-    .articleClose{
-        border-bottom-left-radius: radius;
-        border-top-right-radius: radius;
     }
 }

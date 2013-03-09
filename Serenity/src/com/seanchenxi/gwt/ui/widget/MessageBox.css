@@ -8,6 +8,8 @@
     background-color: #222;
     background-color: rgba(25, 25, 25, 0.92);
     color: #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
 }
 
 @if user.agent safari {
@@ -19,6 +21,11 @@
     .messageBox {
         \-moz-border-radius: 4px;
         \-moz-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
+    }
+} @elif user.agent opera{
+    .messageBox {
+        \-o-border-radius: 4px;
+        \-o-box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
     }
 } @else {
     .messageBox {

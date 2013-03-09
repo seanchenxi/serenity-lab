@@ -97,6 +97,7 @@ public class SerenityLayoutImpl extends Composite implements SerenityLayout {
   private static ArticleViewContainer articleViewContainer;
 	
 	public SerenityLayoutImpl() {
+    SerenityResources.COMMON.commonCSS().ensureInjected();
 		initWidget(UIBINDER.createAndBindUi(this));
     resource.style().ensureInjected();
     header.setText(SerenityResources.MSG.page_Title());

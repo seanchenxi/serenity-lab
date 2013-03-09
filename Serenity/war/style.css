@@ -1,25 +1,38 @@
-/* 
-Theme Name: Serenity-X
-Theme URI: http://seanchenxi.com/
-Description: CHEN Xi's GWT made Wordpress Theme
-Version: 1
-Author: CHEN Xi	
-Author URI: http://seanchenxi.com/
+/*
+ *    Copyright 2013 Xi CHEN
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ *
+ *
+ *    Theme Name: Serenity-X
+ *    Theme URI: http://seanchenxi.com/
+ *    Description: CHEN Xi's GWT made Wordpress Theme
+ *    Version: 1
+ *    Author: CHEN Xi	
+ *    Author URI: http://seanchenxi.com/
 */
-
 @charset "utf-8";
-
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td
 {
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 100%;
-	font-style: inherit;
-	font-weight: inherit;
-	border: 0;
-	margin: 0;
-	outline: 0;
-	padding: 0;
+	font-style: normal;
+	font-weight: normal;
 	vertical-align: baseline;
+    border: 0;
+    margin: 0;
+    outline: 0;
+    padding: 0;
 }
 
 body {
@@ -28,107 +41,4 @@ body {
 	text-align: left;
 	min-width: 1024px;
 	background: #E2E2E2 url(images/bg.png) repeat scroll 0 0;
-}
-
-::-moz-selection {
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	background: #555;
-	color: #FFF;
-	text-shadow: 1px 1px #222;
-}
-
-::selection {
-	border-radius: 4px;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	background: #555;
-	color: #FFF;
-	text-shadow: 1px 1px #222;
-}
-
-h1,h2,h3,h4,h5,h6{
-    font-weight: bold;
-}
-
-h1,h2,h3,h4,h5,h6,div,p {
-	display: block;
-}
-
-ol li,
-ul li {
-	margin-left: 20px;
-}
-
-p {
-	line-height: 1.5em;
-    margin: 0 0 9px;
-}
-
-a,a:visited {
-	color: #0071BB;
-	text-decoration: underline;
-}
-
-a:hover {
-	color: #ED1E24;
-	text-decoration: none;
-}
-
-textarea,
-input[type="text"],
-input[type="email"],
-input[type="url"],
-input[type="search"]{
-    background-color: #fff;
-    border: 1px solid #ccc;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-    -webkit-transition: border linear .2s,box-shadow linear .2s;
-    -moz-transition: border linear .2s,box-shadow linear .2s;
-    -ms-transition: border linear .2s,box-shadow linear .2s;
-    -o-transition: border linear .2s,box-shadow linear .2s;
-    transition: border linear .2s,box-shadow linear .2s;
-}
-
-textarea:focus,
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus{
-    border-color: rgba(82, 168, 236, 0.8);
-    outline: 0;
-    outline: thin dotted \9;
-    /* IE6-9 */
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-}
-
-h3 {
-	font-size: 1.4em;
-	font-weight: bolder;
-	line-height: 1.3em;
-	padding: 1.4em 0 0.5em;
-}
-
-h4 {
-	font-size: 1.3em;
-	font-weight: bolder;
-	line-height: 1.2em;
-	padding: 1.3em 0 0.3em;
-}
-
-.unSelectable {
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-o-user-select: none;
-	user-select: none;
 }
