@@ -90,7 +90,7 @@ public abstract class ContentListActivity extends AbstractActivity implements Co
 		clientFactory.getPlaceController().goTo(nextPlace(slug, page - 1));
 	}
 	
-	public void hilightContent(String contentSlug) {
+	public void highlightContent(String contentSlug) {
 		clientFactory.getContentList().highlightContentItem(contentSlug);
 	}
 	
