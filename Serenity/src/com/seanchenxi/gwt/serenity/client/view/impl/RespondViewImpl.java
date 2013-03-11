@@ -91,6 +91,7 @@ public class RespondViewImpl extends Composite implements RespondView {
 	private Presenter presenter;
 	
 	public RespondViewImpl(){
+    SerenityResources.COMMON.formCSS().ensureInjected();
 		initWidget(uiBinder.createAndBindUi(this));
     resource.style().ensureInjected();
     titleLbl.setInnerHTML(SerenityResources.MSG.lbl_respondTitle());

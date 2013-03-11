@@ -51,7 +51,7 @@ public class ContentListActivityMapper implements ActivityMapper {
 			if (activity == null) {
 				activity = new RecentContentsActivity(0, clientFactory);
 			}
-			activity.hilightContent(((ArticlePlace) place).getSlug());
+			activity.highlightContent(((ArticlePlace) place).getSlug());
 			return activity;
 		} else if (place instanceof HasPaging) {
 			String slug = null;
@@ -63,7 +63,7 @@ public class ContentListActivityMapper implements ActivityMapper {
 				if (activity != null
 						&& slug.equalsIgnoreCase(activity.getSlug())
 						&& activity.getPage() == page) {
-					activity.hilightContent("");
+					activity.highlightContent("");
 					return activity;
 				}
 				if (place instanceof CategoryPlace) {
@@ -80,7 +80,7 @@ public class ContentListActivityMapper implements ActivityMapper {
 				Log.finest("[ContentListActivityMapper] getActivity from HomePlace " + page);
 				if (activity instanceof RecentContentsActivity
 						&& activity.getPage() == page) {
-					activity.hilightContent("");
+					activity.highlightContent("");
 					return activity;
 				}
 				return activity = new RecentContentsActivity(page, clientFactory);
@@ -88,7 +88,7 @@ public class ContentListActivityMapper implements ActivityMapper {
 		}else if(place instanceof AboutPlace){
       String slug = ((AboutPlace) place).getSlug();
       if(activity instanceof AboutContentsActivity){
-        activity.hilightContent(slug);
+        activity.highlightContent(slug);
         return activity;
       }
       return activity = new AboutContentsActivity(slug, 0, clientFactory);

@@ -1,0 +1,108 @@
+/*
+ * Copyright 2013 Xi CHEN
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+@def radius 4px;
+
+.unSelectable {
+    user-select: none;
+}
+
+::selection {
+    background: #555;
+    color: #FFF;
+    text-shadow: 1px 1px #222;
+    border-radius: radius;
+}
+
+@if user.agent safari {
+    ::selection {
+        -webkit-border-radius: radius;        
+    }
+    .unSelectable {
+        -webkit-user-select: none;
+    }
+} @elif user.agent gecko1_8 {
+    ::selection {
+        -moz-border-radius: radius;
+    }
+    
+    ::-moz-selection {
+        border-radius: radius;
+        -moz-border-radius: radius;
+        background: #555;
+        color: #FFF;
+        text-shadow: 1px 1px #222;
+    }
+
+    .unSelectable {
+        -moz-user-select: none;
+    }
+} @else {
+    ::selection {
+        -o-border-radius: radius;
+        -ms-border-radius: radius;
+    }
+
+    .unSelectable {
+        -khtml-user-select: none;
+        -ms-user-select: none;
+        -o-user-select: none;
+        user-select: none;
+    }
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: bold;
+}
+
+h1,h2,h3,h4,h5,h6,
+div,p {
+    display: block;
+}
+
+h3 {
+    font-size: 1.4em;
+    font-weight: bolder;
+    line-height: 1.3em;
+    padding: 1.4em 0 0.5em;
+}
+
+h4 {
+    font-size: 1.3em;
+    font-weight: bolder;
+    line-height: 1.2em;
+    padding: 1.3em 0 0.3em;
+}
+
+ol li,
+ul li {
+    margin-left: 20px;
+}
+
+p {
+    line-height: 1.5em;
+    margin: 0 0 9px;
+}
+
+a,
+a:visited {
+    color: #0071BB;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #ED1E24;
+    text-decoration: none;
+}

@@ -34,28 +34,29 @@
     text-align: center;
     line-height: 32px;
     color: #333;
+    box-shadow: titleshadow;
+    border-radius: topRadius;
 }
 
 @if user.agent safari {
     .listTitle{
-        -webkit-box-shadow: titleshadow;
-        box-shadow: titleshadow;
-        -webkit-border-radius: topRadius;
-        border-radius: topRadius;
+        \-webkit-box-shadow: titleshadow;
+        \-webkit-border-radius: topRadius;
     }
 } @elif user.agent gecko1_8 {
     .listTitle{
-        -moz-box-shadow: titleshadow;
-        box-shadow: titleshadow;
-        -moz-border-radius: topRadius;
-        border-radius: topRadius;
+        \-moz-box-shadow: titleshadow;
+        \-moz-border-radius: topRadius;
+    }
+} @elif user.agent opera {
+    .listTitle{
+        \-o-box-shadow: titleshadow;
+        \-o-border-radius: topRadius;
     }
 } @else {
     .listTitle{
-        -ms-box-shadow: titleshadow;
-        -o-box-shadow: titleshadow;
-        box-shadow: titleshadow;
-        border-radius: topRadius;
+        \-ms-box-shadow: titleshadow;
+        \-ms-border-radius: topRadius;
     }
 }
 

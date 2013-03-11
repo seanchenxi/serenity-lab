@@ -6,6 +6,8 @@
 .article{
     position: absolute;
     background: #FFF;
+    border-radius: radius;
+    box-shadow: boxShadow;
 }
 
 .articleHeader{
@@ -34,6 +36,8 @@
     height:23px;
     color:#FFF;
     line-height: 23px;
+    background: #333; /* Show a solid color for older browsers */
+    box-shadow: meatshadow;
 }
 
 .articleDate{
@@ -68,6 +72,7 @@
 
 .articleCategories a:hover{
     color: #373737;
+    background: #f9f9f9; /* Show a solid color for older browsers */
 }
 
 .articleCategoryAnchor{
@@ -122,6 +127,8 @@
     color: #FFF;
     background-color: #333;
     opacity: 0.5;
+    border-bottom-left-radius: radius;
+    border-top-right-radius: radius;
 }
 
 .articleClose:hover{
@@ -169,25 +176,17 @@
         \-moz-border-radius-bottomleft: radius;
         \-moz-border-radius-topright: radius;
     }
-} @else {
+} @elif opera {
     .article{
-        border-radius: radius;
-        box-shadow: boxShadow;
+        -o-border-radius: radius;
+        -o-box-shadow: boxShadow;
     }
 
-    .articleMeta{
-        background: #333; /* Show a solid color for older browsers */
-        background: -o-linear-gradient(#333333, #0a0a0a);
-        box-shadow: meatshadow;
+    .articleMeta{       
+        background: -o-linear-gradient(#333333, #0a0a0a);        
     }
 
-    .articleCategories a:hover{
-        background: #f9f9f9; /* Show a solid color for older browsers */
+    .articleCategories a:hover{        
         background: -o-linear-gradient(#f9f9f9, #e5e5e5);
-    }
-
-    .articleClose{
-        border-bottom-left-radius: radius;
-        border-top-right-radius: radius;
     }
 }

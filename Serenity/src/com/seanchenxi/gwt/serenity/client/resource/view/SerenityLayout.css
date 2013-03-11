@@ -44,25 +44,34 @@
     right: auto;
     background: #FFF;
     background-color: rgba(255, 255, 255, 0.97);
+    border-top-left-radius: radius;
+    border-top-right-radius: radius;
+    box-shadow: shadow;
 }
 
 @if user.agent safari {
     .contentListContainer{
-        -webkit-border-top-left-radius: radius;
-        -webkit-border-top-right-radius: radius;
-        -webkit-box-shadow: shadow;
+        \-webkit-border-top-left-radius: radius;
+        \-webkit-border-top-right-radius: radius;
+        \-webkit-box-shadow: shadow;
     }
 } @elif user.agent gecko1_8 {
     .contentListContainer{
-        -moz-border-top-left-radius: radius;
-        -moz-border-top-right-radius: radius;
-        -moz-box-shadow: shadow;
+        \-moz-border-top-left-radius: radius;
+        \-moz-border-top-right-radius: radius;
+        \-moz-box-shadow: shadow;
+    }
+} @elif user.agent opera {
+    .contentListContainer{
+        \-o-border-top-left-radius: radius;
+        \-o-border-top-right-radius: radius;
+        \-o-box-shadow: shadow;
     }
 } @else {
     .contentListContainer{
-        border-top-left-radius: radius;
-        border-top-right-radius: radius;
-        box-shadow: shadow;
+        \-ms-border-top-left-radius: radius;
+        \-ms-border-top-right-radius: radius;
+        \-ms-box-shadow: shadow;
     }
 }
 
