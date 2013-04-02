@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
 
 public class ContentListViewImpl extends Composite implements ContentListView, ClickHandler {
@@ -47,6 +48,7 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
       String listScroller();
       String listBody();
       String listContainer();
+      String listPagingControlLblDisable();
     }
 
     @ClientBundle.Source(Style.DEFAULT_CSS)
@@ -72,6 +74,8 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 		initWidget(UIBINDER.createAndBindUi(this));
     resource.style().ensureInjected();
     scroller.getElement().getStyle().clearPosition();
+    newer.addStyleName(SerenityResources.COMMON.commonCSS().unSelectable());
+    older.addStyleName(SerenityResources.COMMON.commonCSS().unSelectable());
 	}
 
 	@Override
@@ -147,9 +151,9 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 	
 	private void enablePagingBtn(Label l, boolean enable){
 		if(enable){
-			l.removeStyleDependentName("disable");
+			l.removeStyleName(resource.style().listPagingControlLblDisable());
 		}else{
-			l.addStyleDependentName("disable");
+      l.addStyleName(resource.style().listPagingControlLblDisable());
 		}
 	}
 }

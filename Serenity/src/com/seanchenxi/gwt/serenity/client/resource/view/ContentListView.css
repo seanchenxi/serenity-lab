@@ -92,6 +92,13 @@
     color: #1E1E1E;
 }
 
+.listPagingControlLblDisable,
+.listPagingControlLblDisable:hover{
+    border: 1px solid #CCC;
+    color: #CCC;
+    cursor:default;
+}
+
 .listScroller{
     position: absolute;
     top: 32px;
