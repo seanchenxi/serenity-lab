@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <project name="Serenity" default="deploy" basedir=".">
 
-    <property name="gwt.args" value="-war war -strict -localWorkers 2 -logLevel WARN" />
-    <property name="gwt.sdk.home" value="D:/Workspace/MavenRepo/repository/com/google/gwt"/>
-    <property name="deploy.path" location="D:/Servers/xampp/htdocs/wordpress/wp-content/themes"/>
-    <property name="intellij.run.path"
-              location="D:/Workspace/IDE/.IntelliJIdea/system/gwt/Serenity.8df3837/Serenity.3b4bc5dd/run"/>
+    <property file="serenity.properties"/>
+
+    <property name="deploy.path" location="${xampp.path}/wordpress/wp-content/themes"/>
+    <property name="intellij.run.path"  location="D:/Workspace/IDE/.IntelliJIdea/system/gwt/Serenity.8df3837/Serenity.3b4bc5dd/run"/>
+
+    <path id="gwt.sdk">
+        <pathelement location="${mvn.repository}/com/google/gwt/gwt-dev/${gwt.version}/gwt-dev-${gwt.version}.jar"/>
+        <pathelement location="${mvn.repository}/com/google/gwt/gwt-user/${gwt.version}/gwt-user-${gwt.version}.jar"/>
+    </path>
 
     <path id="serenity.sourcepath" location="src" />
 
     <path id="serenity.classpath">
+        <path refid="gwt.sdk" />
         <pathelement location="lib/gwt4wp.jar"/>
         <pathelement location="war/WEB-INF/classes"/>
-        <pathelement location="${gwt.sdk.home}/gwt-dev/2.5.1/gwt-dev-2.5.1.jar"/>
-        <pathelement location="${gwt.sdk.home}/gwt-user/2.5.1/gwt-user-2.5.1.jar"/>
-        <pathelement location="${basedir}/../../../MavenRepo/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar"/>
-        <pathelement location="${basedir}/../../../MavenRepo/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar"/>
-        <pathelement location="${basedir}/../../../MavenRepo/repository/org/json/json/20090211/json-20090211.jar"/>
+        <pathelement location="${mvn.repository}/javax/validation/validation-api/${javax.validation.version}/validation-api-${javax.validation.version}.jar"/>
+        <pathelement location="${mvn.repository}/javax/validation/validation-api/${javax.validation.version}/validation-api-${javax.validation.version}-sources.jar"/>
+        <pathelement location="${mvn.repository}/org/json/json/${org.json.version}/json-${org.json.version}.jar"/>
     </path>
 
     <property name="build.path" location="war/WEB-INF/classes" />
@@ -40,6 +43,7 @@
     </target>
 
     <target name="gwtc" depends="javac" description="Run GWT compiler">
+        <echo message="Compiling ${ant.project.name} GWT Sources ..."/>
         <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
             <classpath>
                 <path refid="serenity.sourcepath"/>
