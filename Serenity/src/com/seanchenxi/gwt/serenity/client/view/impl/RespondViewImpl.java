@@ -95,7 +95,7 @@ public class RespondViewImpl extends Composite implements RespondView {
 		initWidget(uiBinder.createAndBindUi(this));
     resource.style().ensureInjected();
     titleLbl.setInnerHTML(SerenityResources.MSG.lbl_respondTitle());
-    cancel.setText(SerenityResources.MSG.anchor_CancelReply());
+    cancel.setHTML(SerenityResources.MSG.anchor_CancelReply());
     description.setInnerHTML(SerenityResources.MSG.lbl_respondDescription());
     nameLbl.setInnerHTML(asRequired(SerenityResources.MSG.lbl_respondYourName()));
     mailLbl.setInnerHTML(asRequired(SerenityResources.MSG.lbl_respondYourMail()));
