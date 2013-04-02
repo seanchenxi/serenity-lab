@@ -1,30 +1,80 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<project name="Serenity" default="deploy" basedir="." >
+<project name="Serenity" default="deploy" basedir=".">
 
-  <property name="deploy.path" location="D:/Servers/xampp/htdocs/wordpress/wp-content/themes" />
-  <property name="intellij.run.path" location="D:/Workspace/IDE/.IntelliJIdea/system/gwt/Serenity.8df3837/Serenity.3b4bc5dd/run" />
-  
-	<target name="deploy">
-		<delete dir="${deploy.path}/Serenity-X"/>
-		<copy todir="${deploy.path}" overwrite="yes">
-			<fileset dir="wp-themes" />
-		</copy>
-    <copy todir="${deploy.path}/Serenity-X" overwrite="yes">
-      <fileset dir="war" excludes="*WEB-INF/**, index.html" />
-    </copy>
-		<copy todir="${deploy.path}/Serenity-X" overwrite="yes">
-			<fileset dir="${intellij.run.path}/www" excludes="*WEB-INF/**, index.html" />
-		</copy>
-	</target>
+    <property name="gwt.args" value="-war war -strict -localWorkers 2 -logLevel WARN" />
+    <property name="gwt.sdk.home" value="D:/Workspace/MavenRepo/repository/com/google/gwt"/>
+    <property name="deploy.path" location="D:/Servers/xampp/htdocs/wordpress/wp-content/themes"/>
+    <property name="intellij.run.path"
+              location="D:/Workspace/IDE/.IntelliJIdea/system/gwt/Serenity.8df3837/Serenity.3b4bc5dd/run"/>
 
-	<target name="packaging">
-		<delete dir="target"/>
-		<mkdir dir="target" />
-		<copy todir="target" overwrite="yes">
-			<fileset dir="wp-themes" />
-		</copy>
-		<copy todir="target/Serenity-X" overwrite="yes">
-			<fileset dir="war" excludes="*WEB-INF/**, index.html" />
-		</copy>
-	</target>
+    <path id="serenity.sourcepath" location="src" />
+
+    <path id="serenity.classpath">
+        <pathelement location="lib/gwt4wp.jar"/>
+        <pathelement location="war/WEB-INF/classes"/>
+        <pathelement location="${gwt.sdk.home}/gwt-dev/2.5.1/gwt-dev-2.5.1.jar"/>
+        <pathelement location="${gwt.sdk.home}/gwt-user/2.5.1/gwt-user-2.5.1.jar"/>
+        <pathelement location="${basedir}/../../../MavenRepo/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar"/>
+        <pathelement location="${basedir}/../../../MavenRepo/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar"/>
+        <pathelement location="${basedir}/../../../MavenRepo/repository/org/json/json/20090211/json-20090211.jar"/>
+    </path>
+
+    <property name="build.path" location="war/WEB-INF/classes" />
+
+    <target name="clean" description="Cleans this project">
+        <echo message="Cleaning ${ant.project.name} build paths ..." />
+        <delete dir="${build.path}" failonerror="yes" />
+        <delete dir="war/serenity" failonerror="yes" />
+        <delete dir="gwt-unitCache" failonerror="yes" />
+    </target>
+
+    <target name="javac" depends="clean" description="Compile java source to bytecode">
+        <mkdir dir="${build.path}"/>
+        <echo message="Compiling ${ant.project.name} Java Sources ..."/>
+        <javac srcdir="src" includes="**" encoding="utf-8"
+               destdir="${build.path}" includeantruntime="false"
+               source="1.6" target="1.6" nowarn="true"
+               debug="true" debuglevel="lines,vars,source">
+            <classpath refid="serenity.classpath"/>
+        </javac>
+    </target>
+
+    <target name="gwtc" depends="javac" description="Run GWT compiler">
+        <java failonerror="true" fork="true" classname="com.google.gwt.dev.Compiler">
+            <classpath>
+                <path refid="serenity.sourcepath"/>
+                <path refid="serenity.classpath"/>
+            </classpath>
+            <jvmarg value="-Xss16M"/>
+            <jvmarg value="-Xmx768M"/>
+            <jvmarg value="-Xverify:none"/>
+            <jvmarg value="-XX:PermSize=384m"/>
+            <arg line="${gwt.args}"/>
+            <arg value="com.seanchenxi.gwt.serenity.Serenity"/>
+        </java>
+    </target>
+
+    <target name="deploy">
+        <delete dir="${deploy.path}/Serenity-X"/>
+        <copy todir="${deploy.path}" overwrite="yes">
+            <fileset dir="wp-themes"/>
+        </copy>
+        <copy todir="${deploy.path}/Serenity-X" overwrite="yes">
+            <fileset dir="war" excludes="*WEB-INF/**, index.html"/>
+        </copy>
+        <copy todir="${deploy.path}/Serenity-X" overwrite="yes">
+            <fileset dir="${intellij.run.path}/www" excludes="*WEB-INF/**, index.html"/>
+        </copy>
+    </target>
+
+    <target name="packaging" depends="gwtc">
+        <delete dir="target"/>
+        <mkdir dir="target"/>
+        <copy todir="target" overwrite="yes">
+            <fileset dir="wp-themes"/>
+        </copy>
+        <copy todir="target/Serenity-X" overwrite="yes">
+            <fileset dir="war" excludes="*WEB-INF/**, index.html"/>
+        </copy>
+    </target>
 </project>
