@@ -176,7 +176,7 @@
         \-moz-border-radius-bottomleft: radius;
         \-moz-border-radius-topright: radius;
     }
-} @elif opera {
+} @elif user.agent opera {
     .article{
         -o-border-radius: radius;
         -o-box-shadow: boxShadow;
