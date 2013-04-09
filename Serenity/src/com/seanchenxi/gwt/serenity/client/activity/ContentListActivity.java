@@ -15,7 +15,10 @@
  *******************************************************************************/
 package com.seanchenxi.gwt.serenity.client.activity;
 
+import java.util.Iterator;
+
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
@@ -34,6 +37,33 @@ import com.seanchenxi.gwt.wordpress.json.api.model.Post;
 import com.seanchenxi.gwt.wordpress.json.api.service.JCoreService;
 
 public abstract class ContentListActivity extends AbstractActivity implements ContentListView.Presenter {
+
+  private class ShowItemCommande implements Scheduler.RepeatingCommand{
+
+    private final ContentListView view;
+    private final Iterator<Post> postIt;
+
+    private ShowItemCommande(ContentListView view, PagingPostList result){
+      this.postIt = result.getList().iterator();
+      this.view = view;
+    }
+
+    @Override
+    public boolean execute(){
+      boolean goOn;
+      if(postIt.hasNext()){
+        Post post = postIt.next();
+        view.addContent(post.getSlug(), post.getTitle(), post.getExcerpt(),  SerenityUtil.toDateTimeString(post.getCreatedDate()));
+        goOn =  postIt.hasNext();
+      }else{
+        goOn = false;
+      }
+      if(!goOn){
+        view.hideMask();
+      }
+      return goOn;
+    }
+  }
 	
 	protected SerenityFactory clientFactory;
 	private int total, size;
@@ -53,6 +83,7 @@ public abstract class ContentListActivity extends AbstractActivity implements Co
 		initArticleCloseHandler(eventBus);
 		ContentListView view = clientFactory.getContentList();
 		view.bindPresenter(this);
+    view.showMask();
 		fetchContents(slug, getOffset(), size, view);
 		panel.setWidget(view);
 	}
@@ -157,11 +188,7 @@ public abstract class ContentListActivity extends AbstractActivity implements Co
 				total = result.getTotal();
 				view.clearContentList();
 				view.setPagingInfo(title, offset, result.getCount(), result.getTotal());
-				String meta;
-				for(Post post : result.getList()){
-				  meta = SerenityUtil.toDateTimeString(post.getCreatedDate());
-					view.addContent(post.getSlug(), post.getTitle(), post.getExcerpt(), meta);
-				}
+				Scheduler.get().scheduleIncremental(new ShowItemCommande(view, result));
 			}
 		}
 	}

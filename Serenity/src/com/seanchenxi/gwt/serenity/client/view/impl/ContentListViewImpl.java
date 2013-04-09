@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.seanchenxi.gwt.serenity.client.resource.SerenityResources;
 import com.seanchenxi.gwt.serenity.client.view.ContentListView;
+import com.seanchenxi.gwt.ui.widget.Mask;
 
 public class ContentListViewImpl extends Composite implements ContentListView, ClickHandler {
 
@@ -103,8 +104,18 @@ public class ContentListViewImpl extends Composite implements ContentListView, C
 			}
 		}
 	}
-	
-	@Override
+
+  @Override
+  public void showMask(){
+    Mask.showMaskFor(this);
+  }
+
+  @Override
+  public void hideMask(){
+    Mask.hideMask();
+  }
+
+  @Override
 	public void addContent(String slug, String title, String excerpt, String meta){
 	  ContentItemViewImpl ss = new ContentItemViewImpl();
 		ss.setId(slug);

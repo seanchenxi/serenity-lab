@@ -24,7 +24,10 @@ public interface ContentListView extends IsWidget {
   void setPagingInfo(String title, int offset, int count, int total);
   void addContent(String slug, String title, String excerpt, String meta);
   void highlightContentItem(String contentSlug);
-  
+
+  void showMask();
+  void hideMask();
+
   public interface Presenter {
     void goForArticle(String slug);
     void nextPage();
